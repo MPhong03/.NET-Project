@@ -44,6 +44,7 @@
                 var responseDto = JsonConvert.DeserializeObject<ReponseDto>(responseContent);
 
                 await localStorage.SetItemAsync("token", responseDto.token);
+                await localStorage.SetItemAsync("email", userDto.Email);
 
                 Console.WriteLine("Token: " + localStorage.GetItemAsStringAsync("token"));
 
