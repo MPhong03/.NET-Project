@@ -1,0 +1,67 @@
+﻿@page "/register"
+@using DotNETProject.Shared;
+@using Newtonsoft.Json;
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+
+<h3>Register</h3>
+
+<form @onsubmit="RegisterUser">
+    <div class="form-group">
+        <label for="username">User Name</label>
+        <input type="text" class="form-control" id="username" @bind="userDto.UserName">
+    </div>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" @bind="userDto.Email">
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" @bind="userDto.Password">
+    </div>
+    <button type="submit" class="btn btn-primary">Register</button>
+</form>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <p class="text-danger">@errorMessage</p>
+}
+
+@code {
+    private UserDto userDto = new UserDto();
+    private string errorMessage = "";
+
+    private async Task RegisterUser()
+    {
+        try
+        {
+            var content = new StringContent(JsonConvert.SerializeObject(userDto), System.Text.Encoding.UTF8, "application/json");
+            var response = await HttpClient.PostAsync("/api/auth/register", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                NavigationManager.NavigateTo("/login");
+            }
+            else
+            {
+                // Registration failed, handle errors
+                if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    // User already exists or other validation errors
+                    errorMessage = "Registration failed. Please check your input.";
+                }
+                else
+                {
+                    // Handle other error cases
+                    errorMessage = "An error occurred during registration.";
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An error occurred: " + ex.Message;
+        }
+    }
+
+}
+

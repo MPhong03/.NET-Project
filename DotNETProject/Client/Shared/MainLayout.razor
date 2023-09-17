@@ -1,0 +1,57 @@
+﻿@using Blazored.LocalStorage
+@inherits LayoutComponentBase
+@inject ILocalStorageService localStorage
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        @*<div class="top-row px-4">
+            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+            <a href="/register" target="_blank">Register</a>
+            <a href="/login" target="_blank">Login</a>
+        </div>*@
+
+        <div class="top-row px-4">
+            @if (!isLoggedIn)
+            {
+                <NavLink href="/register">Register</NavLink>
+                <NavLink href="/login">Login</NavLink>
+            }
+            else
+            {
+                <NavLink href="/swagger">API</NavLink>
+                <NavLink href="#" @onclick="Logout">Logout</NavLink>
+            }
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+
+@code {
+    private bool isLoggedIn = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Nếu đã đăng nhập, set isLoggedIn thành true
+        isLoggedIn = await CheckIfLoggedIn();
+    }
+
+    private async Task<bool> CheckIfLoggedIn()
+    {
+        // Thực hiện kiểm tra đăng nhập ở đây, có thể dựa vào việc kiểm tra token trong Local Storage
+        var token = await localStorage.GetItemAsStringAsync("token");
+        return !string.IsNullOrEmpty(token);
+    }
+
+    private async Task Logout()
+    {
+        await localStorage.RemoveItemAsync("token");
+        isLoggedIn = false;
+    }
+}
