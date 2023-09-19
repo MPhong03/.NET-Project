@@ -5,8 +5,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using DotNETProject.Server.Data;
-using DotNETProject.Server.Models;
 using DotNETProject.Shared;
+using DotNETProject.Server.Models;
+using Azure.Core;
+using DotNETProject.Server.Services;
 
 namespace DotNETProject.Server.Controllers
 {
@@ -17,11 +19,13 @@ namespace DotNETProject.Server.Controllers
         //public static User user = new User();
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
+        private readonly EmailService _emailService;
 
-        public AuthController(ApplicationDbContext context, IConfiguration configuration)
+        public AuthController(ApplicationDbContext context, IConfiguration configuration, EmailService emailService)
         {
             _context = context;
             _configuration = configuration;
+            _emailService = emailService;
         }
 
         [HttpPost("register")]
@@ -91,6 +95,91 @@ namespace DotNETProject.Server.Controllers
             return Ok(new ReponseDto("Login successfully!", token));
         }
 
+        [HttpPost("forgot-password")]
+        public async Task<ActionResult<string>> forgotPassword(EmailDto request)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == request.Email);
+
+            if (user == null)
+            {
+                return BadRequest("User not found!");
+            }
+
+            // Send OTP
+
+            try
+            {
+                string otp = GenerateRandomOTP();
+                user.Otp = otp;
+                user.ResetPasswordExpiry = DateTime.Now.AddMinutes(30);
+                await _context.SaveChangesAsync();
+
+                await _emailService.SendOTP(user.Email, otp);
+
+                return Ok("OTP sent successfully!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal Server Error");
+            }
+        }
+        [HttpPost("verify-otp")]
+        public async Task<ActionResult<string>> verifyOTP(OTPDto request) 
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == request.Email);
+
+            if (user == null)
+            {
+                return BadRequest("User not found!");
+            }
+
+            if (!((user.Otp).Equals(request.Otp)))
+            {
+                return BadRequest("Wrong OTP!");
+            }
+
+            if ((user.ResetPasswordExpiry) < DateTime.Now)
+            {
+                return BadRequest("OTP has expired");
+            }
+
+            user.IsPermit = true;
+            
+            await _context.SaveChangesAsync();
+
+            return Ok("You have permission to change password!");
+        }
+        [HttpPost("reset-password")]
+        public async Task<ActionResult<string>> resetPassword(ResetPasswordDto request)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == request.Email);
+
+            if (user == null)
+            {
+                return BadRequest("User not found!");
+            }
+
+            if (user.IsPermit == false)
+            {
+                return BadRequest("You don't have permission to change password!");
+            }
+
+            if (!((request.Password).Equals(request.PasswordConfirm)))
+            {
+                return BadRequest("Wrong password confirm");
+            }
+
+            CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
+
+            user.PasswordSalt = passwordSalt;
+            user.PasswordHash = passwordHash;
+
+            user.IsPermit = false;
+
+            await _context.SaveChangesAsync();
+
+            return Ok("Successfully changed password!");
+        }
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())
@@ -130,6 +219,20 @@ namespace DotNETProject.Server.Controllers
             var jwt = new JwtSecurityTokenHandler().WriteToken(token);
 
             return jwt;
+        }
+
+        private string GenerateRandomOTP(int length = 6)
+        {
+            const string allowedChars = "0123456789";
+            Random random = new Random();
+            char[] otp = new char[length];
+
+            for (int i = 0; i < length; i++)
+            {
+                otp[i] = allowedChars[random.Next(0, allowedChars.Length)];
+            }
+
+            return new string(otp);
         }
     }
 }

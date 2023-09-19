@@ -1,6 +1,5 @@
 ﻿using DotNETProject.Server.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace DotNETProject.Server.Data
 {
