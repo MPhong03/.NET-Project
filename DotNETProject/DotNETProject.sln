@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNETProject.Server", "Server\DotNETProject.Server.csproj", "{ABB0B893-6598-41BF-BFEB-56ED3BB4D11B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNETProject.Server", "Server\DotNETProject.Server.csproj", "{ABB0B893-6598-41BF-BFEB-56ED3BB4D11B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNETProject.Client", "Client\DotNETProject.Client.csproj", "{CB5590BB-4FD5-44C4-B103-8971771CEC6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNETProject.Client", "Client\DotNETProject.Client.csproj", "{CB5590BB-4FD5-44C4-B103-8971771CEC6D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNETProject.Shared", "Shared\DotNETProject.Shared.csproj", "{5316846D-7E3E-4ACE-AB55-CBB85AB628C2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNETProject.Shared", "Shared\DotNETProject.Shared.csproj", "{5316846D-7E3E-4ACE-AB55-CBB85AB628C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

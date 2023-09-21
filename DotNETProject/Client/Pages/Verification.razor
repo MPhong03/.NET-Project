@@ -1,0 +1,66 @@
+﻿@page "/verification/{Email}"
+
+@using DotNETProject.Shared;
+@using DotNETProject.Shared;
+@using Newtonsoft.Json;
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+
+<h3>Verification</h3>
+
+<form @onsubmit="VerifyOTP">
+    <span>OTP has been sent to @Email</span>
+    <div class="form-group">
+        <label for="otp">OTP</label>
+        <input type="number" class="form-control" id="otp" @bind="otpDto.Otp">
+@*        <input type="hidden" @bind="otpDto.Email">
+*@    </div>
+    <button type="submit" class="btn btn-primary">Send OTP</button>
+</form>
+
+@if (!string.IsNullOrEmpty(errorMessage))
+{
+    <p class="text-danger">@errorMessage</p>
+}
+
+
+@code {
+    [Parameter] public string Email { get; set; }
+    private OTPDto otpDto = new OTPDto();
+    private string errorMessage = "";
+
+    private async Task VerifyOTP()
+    {
+        try
+        {
+            otpDto.Email = Email;
+            var content = new StringContent(JsonConvert.SerializeObject(otpDto), System.Text.Encoding.UTF8, "application/json");
+            var response = await HttpClient.PostAsync("/api/auth/verify-otp", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                // Send OTP Successful
+
+                NavigationManager.NavigateTo($"/reset/{Email}");
+            }
+            else
+            {
+                // Registration failed, handle errors
+                if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                {
+                    // User already exists or other validation errors
+                    errorMessage = await response.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    // Handle other error cases
+                    errorMessage = "An error occurred during verify.";
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An error occurred: " + ex.Message;
+        }
+    }
+}

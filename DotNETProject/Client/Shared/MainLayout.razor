@@ -23,7 +23,7 @@
             else
             {
                 <NavLink href="/swagger">API</NavLink>
-                <NavLink href="#" @onclick="Logout">Logout</NavLink>
+                <NavLink href="/logout">Logout</NavLink>
             }
         </div>
 
@@ -44,15 +44,19 @@
 
     private async Task<bool> CheckIfLoggedIn()
     {
-        // Thực hiện kiểm tra đăng nhập ở đây, có thể dựa vào việc kiểm tra token trong Local Storage
         var token = await localStorage.GetItemAsStringAsync("token");
-        return !string.IsNullOrEmpty(token);
+        var tokenExpiration = await localStorage.GetItemAsStringAsync("tokenExpiration");
+
+        DateTime dateTimeNow = DateTime.UtcNow; // Get the current UTC time
+
+        long unixTimestamp = ((DateTimeOffset)dateTimeNow).ToUnixTimeSeconds();
+
+        if (!string.IsNullOrEmpty(token) || (unixTimestamp < long.Parse(tokenExpiration)))
+        {
+            return true;
+        }
+
+        return false;
     }
 
-    private async Task Logout()
-    {
-        await localStorage.RemoveItemAsync("token");
-        await localStorage.RemoveItemAsync("email");
-        isLoggedIn = false;
-    }
 }

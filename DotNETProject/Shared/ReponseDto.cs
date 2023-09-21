@@ -10,10 +10,12 @@ namespace DotNETProject.Shared
     {
         public string message { get; set; }
         public string token { get; set; }
-        public ReponseDto(string message, string token)
+        public long tokenExpired { get; set; }
+        public ReponseDto(string message, string token, long tokenExpired)
         {
             this.message = message;
             this.token = token;
+            this.tokenExpired = tokenExpired;
         }
     }
 }

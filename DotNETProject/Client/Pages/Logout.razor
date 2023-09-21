@@ -1,0 +1,20 @@
+﻿@page "/logout"
+@using Blazored.LocalStorage;
+
+@inject ILocalStorageService localStorage
+@inject NavigationManager navigationManager
+
+<h3>Logging Out...</h3>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        // Perform logout actions here
+        await localStorage.RemoveItemAsync("token");
+        await localStorage.RemoveItemAsync("tokenExpiration");
+        await localStorage.RemoveItemAsync("email");
+
+        // Redirect to the login page after logout
+        navigationManager.NavigateTo("/login");
+    }
+}

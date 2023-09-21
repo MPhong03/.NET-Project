@@ -19,6 +19,7 @@
         <input type="password" class="form-control" id="password" @bind="userDto.Password">
     </div>
     <button type="submit" class="btn btn-primary">Login</button>
+    <NavLink href="/forgotpassword">Forgot password</NavLink>
 </form>
 
 @if (!string.IsNullOrEmpty(errorMessage))
@@ -45,6 +46,8 @@
 
                 await localStorage.SetItemAsync("token", responseDto.token);
                 await localStorage.SetItemAsync("email", userDto.Email);
+                await localStorage.SetItemAsync("tokenExpiration", responseDto.tokenExpired);
+                
 
                 Console.WriteLine("Token: " + localStorage.GetItemAsStringAsync("token"));
 

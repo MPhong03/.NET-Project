@@ -90,9 +90,11 @@ namespace DotNETProject.Server.Controllers
                 return BadRequest("Wrong password!");
             }
 
-            string token = CreateToken(user);
+            string token;
+            long tokenExpired;
+            CreateToken(user, out token, out tokenExpired);
 
-            return Ok(new ReponseDto("Login successfully!", token));
+            return Ok(new ReponseDto("Login successfully!", token, tokenExpired));
         }
 
         [HttpPost("forgot-password")]
@@ -198,7 +200,7 @@ namespace DotNETProject.Server.Controllers
                 return computeHash.SequenceEqual(passwordHash);
             }
         }
-        private string CreateToken(User user)
+        private void CreateToken(User user, out string jwtToken, out long tokenExpiration)
         {
             List<Claim> claims = new List<Claim>
             {
@@ -208,17 +210,21 @@ namespace DotNETProject.Server.Controllers
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
                 _configuration.GetSection("AppSettings:Token").Value));
 
+            var expirationDate = DateTime.Now.AddMinutes(30);
+
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
             var token = new JwtSecurityToken(
                 claims: claims,
-                expires: DateTime.Now.AddDays(1),
+                expires: expirationDate,
                 signingCredentials: creds
                 );
 
-            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+            jwtToken = new JwtSecurityTokenHandler().WriteToken(token);
+            DateTimeOffset e = (DateTimeOffset)expirationDate;
+            tokenExpiration = e.ToUnixTimeSeconds();
 
-            return jwt;
+            //return jwt;
         }
 
         private string GenerateRandomOTP(int length = 6)

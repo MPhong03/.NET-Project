@@ -7,17 +7,39 @@
 
 <h1>Hello, world!</h1>
 
-Welcome to your new app.
+Welcome to your new app.<br/>
 
 Your email: @email
+<br />
+
+Expired? @check
+<br />
+
+Now: @DateTime.Now
+<br />
+
+Expired Date: @tokenExpired
+
 
 <SurveyPrompt Title="How is Blazor working for you?" />
 
 @code {
     private string email;
+    private bool check;
+    private long tokenExpired;
 
     protected override async Task OnInitializedAsync()
     {
         email = await localStorage.GetItemAsStringAsync("email");
+
+        var tokenExpiration = await localStorage.GetItemAsStringAsync("tokenExpiration");
+
+        DateTime dateTimeNow = DateTime.UtcNow; // Get the current UTC time
+
+        long unixTimestamp = ((DateTimeOffset)dateTimeNow).ToUnixTimeSeconds();
+
+        check = unixTimestamp < long.Parse(tokenExpiration);
+        tokenExpired = long.Parse(tokenExpiration);
     }
+
 }
