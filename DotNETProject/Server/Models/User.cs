@@ -21,5 +21,6 @@ namespace DotNETProject.Server.Models
         public string Otp { get; set; } = string.Empty;
         public DateTime ResetPasswordExpiry { get; set; }
         public bool IsPermit { get; set; } = false;
+        public DateTime createdDate { get; set; }
     }
 }

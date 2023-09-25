@@ -3,9 +3,9 @@
 @inject ILocalStorageService localStorage
 
 <div class="page">
-    <div class="sidebar">
+    @*<div class="sidebar">
         <NavMenu />
-    </div>
+    </div>*@
 
     <main>
         @*<div class="top-row px-4">
@@ -38,25 +38,41 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // Nếu đã đăng nhập, set isLoggedIn thành true
-        isLoggedIn = await CheckIfLoggedIn();
+        try
+        {
+            isLoggedIn = await CheckIfLoggedIn();
+        }
+        catch (Exception ex)
+        {
+            isLoggedIn = false;
+            Console.WriteLine($"An error occurred: {ex.Message}");
+        }
     }
 
     private async Task<bool> CheckIfLoggedIn()
     {
-        var token = await localStorage.GetItemAsStringAsync("token");
-        var tokenExpiration = await localStorage.GetItemAsStringAsync("tokenExpiration");
-
-        DateTime dateTimeNow = DateTime.UtcNow; // Get the current UTC time
-
-        long unixTimestamp = ((DateTimeOffset)dateTimeNow).ToUnixTimeSeconds();
-
-        if (!string.IsNullOrEmpty(token) || (unixTimestamp < long.Parse(tokenExpiration)))
+        try
         {
-            return true;
-        }
+            var token = await localStorage.GetItemAsStringAsync("token");
+            var tokenExpiration = await localStorage.GetItemAsStringAsync("tokenExpiration");
 
-        return false;
+            DateTime dateTimeNow = DateTime.UtcNow; // Get the current UTC time
+
+            long unixTimestamp = ((DateTimeOffset)dateTimeNow).ToUnixTimeSeconds();
+
+            if (!string.IsNullOrEmpty(token) || (unixTimestamp < long.Parse(tokenExpiration)))
+            {
+                return true;
+            }
+
+            return false;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred: {ex.Message}");
+            return false;
+        }
     }
+
 
 }

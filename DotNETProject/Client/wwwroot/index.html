@@ -14,11 +14,31 @@
 <body>
     <div id="app">Loading...</div>
 
-    <div id="blazor-error-ui">
+    <!--<div id="blazor-error-ui">
         An unhandled error has occurred.
         <a href="" class="reload">Reload</a>
         <a class="dismiss">🗙</a>
+    </div>-->
+
+    <div id="blazor-error-ui" class="toast bg-warning text-dark bg-opacity-25 m-2" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000" style="position: fixed; bottom: 0; right: 0;">
+        <div class="toast-body d-flex justify-content-between">
+            <span>An unhandled error has occurred.</span>
+            <div class="">
+                <a href="" class="reload text-dark">Reload</a>
+                <a href="" class="dismiss text-dark ml-2">🗙</a>
+            </div>
+        </div>
     </div>
+
+    <script>
+        $(document).ready(function () {
+            // Automatically close the toast after 5 seconds (5000 milliseconds)
+            setTimeout(function () {
+                $('#blazor-error-ui').fadeOut('slow');
+            }, 5000);
+        });
+    </script>
+
     <script src="_framework/blazor.webassembly.js"></script>
 </body>
 

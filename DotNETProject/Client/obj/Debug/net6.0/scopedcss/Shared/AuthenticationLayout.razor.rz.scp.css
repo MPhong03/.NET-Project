@@ -1,0 +1,101 @@
+.page[b-j99ypee2fe] {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: #007bff !important;
+    background: linear-gradient(to right, #0062E6, #33AEFF) !important;
+    height: 100%;
+}
+
+.btn-login[b-j99ypee2fe] {
+    font-size: 0.9rem;
+    letter-spacing: 0.05rem;
+    padding: 0.75rem 1rem;
+}
+
+.btn-google[b-j99ypee2fe] {
+    color: white !important;
+    background-color: #ea4335;
+}
+
+.btn-facebook[b-j99ypee2fe] {
+    color: white !important;
+    background-color: #3b5998;
+}
+
+
+main[b-j99ypee2fe] {
+    flex: 1;
+}
+
+.sidebar[b-j99ypee2fe] {
+    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+}
+
+.top-row[b-j99ypee2fe] {
+    background-color: #f7f7f7;
+    border-bottom: 1px solid #d6d5d5;
+    justify-content: flex-end;
+    height: 3.5rem;
+    display: flex;
+    align-items: center;
+}
+
+    .top-row[b-j99ypee2fe]  a, .top-row[b-j99ypee2fe]  .btn-link {
+        white-space: nowrap;
+        margin-left: 1.5rem;
+        text-decoration: none;
+    }
+
+        .top-row[b-j99ypee2fe]  a:hover, .top-row[b-j99ypee2fe]  .btn-link:hover {
+            text-decoration: underline;
+        }
+
+        .top-row[b-j99ypee2fe]  a:first-child {
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+@media (max-width: 640.98px) {
+    .top-row:not(.auth)[b-j99ypee2fe] {
+        display: none;
+    }
+
+    .top-row.auth[b-j99ypee2fe] {
+        justify-content: space-between;
+    }
+
+    .top-row[b-j99ypee2fe]  a, .top-row[b-j99ypee2fe]  .btn-link {
+        margin-left: 0;
+    }
+}
+
+@media (min-width: 641px) {
+    .page[b-j99ypee2fe] {
+        flex-direction: row;
+    }
+
+    .sidebar[b-j99ypee2fe] {
+        width: 250px;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+    }
+
+    .top-row[b-j99ypee2fe] {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+        .top-row.auth[b-j99ypee2fe]  a:first-child {
+            flex: 1;
+            text-align: right;
+            width: 0;
+        }
+
+    .top-row[b-j99ypee2fe], article[b-j99ypee2fe] {
+        padding-left: 2rem !important;
+        padding-right: 1.5rem !important;
+    }
+}

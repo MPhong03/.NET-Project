@@ -52,7 +52,8 @@ namespace DotNETProject.Server.Controllers
                 UserName = request.UserName,
                 Email = request.Email,
                 PasswordHash = passwordHash,
-                PasswordSalt = passwordSalt
+                PasswordSalt = passwordSalt,
+                createdDate = DateTime.Now
             };
 
             _context.Users.Add(user);
@@ -64,19 +65,6 @@ namespace DotNETProject.Server.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login(UserDto request)
         {
-            //if(user.Email != request.Email)
-            //{
-            //    return BadRequest("User not found!");
-            //}
-
-            //if(!VerifyPasswordHash(request.Password, user.PasswordHash, user.PasswordSalt))
-            //{
-            //    return BadRequest("Wrong password!");
-            //}
-
-            //string token = CreateToken(user);
-
-            //return Ok(token);
 
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == request.Email);
 
