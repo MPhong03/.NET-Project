@@ -16,10 +16,6 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\Minh Phong\OneDrive\Máy tính\.Net Technology\.net-project\DotNETProject\Client
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/Minh Phong/OneDrive/Máy tính/.Net Technology/.net-project/DotNETProject/Client/App.razor]
-build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
-build_metadata.AdditionalFiles.CssScope = 
-
 [C:/Users/Minh Phong/OneDrive/Máy tính/.Net Technology/.net-project/DotNETProject/Client/Pages/AuthenticationPages/ForgotPassword.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25QYWdlc1xGb3Jnb3RQYXNzd29yZC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
@@ -59,6 +55,10 @@ build_metadata.AdditionalFiles.CssScope =
 [C:/Users/Minh Phong/OneDrive/Máy tính/.Net Technology/.net-project/DotNETProject/Client/_Imports.razor]
 build_metadata.AdditionalFiles.TargetPath = X0ltcG9ydHMucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Minh Phong/OneDrive/Máy tính/.Net Technology/.net-project/DotNETProject/Client/App.razor]
+build_metadata.AdditionalFiles.TargetPath = QXBwLnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-3g46n9hgv6
 
 [C:/Users/Minh Phong/OneDrive/Máy tính/.Net Technology/.net-project/DotNETProject/Client/Pages/AuthenticationPages/Login.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25QYWdlc1xMb2dpbi5yYXpvcg==
