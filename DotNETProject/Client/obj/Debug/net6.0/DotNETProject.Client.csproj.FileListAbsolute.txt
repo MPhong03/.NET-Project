@@ -845,3 +845,4 @@ C:\Users\Minh Phong\OneDrive\Máy tính\.Net Technology\.net-project\DotNETProje
 C:\Users\Minh Phong\OneDrive\Máy tính\.Net Technology\.net-project\DotNETProject\Client\obj\Debug\net6.0\scopedcss\Shared\AuthenticationLayout.razor.rz.scp.css
 C:\Users\Minh Phong\OneDrive\Máy tính\.Net Technology\.net-project\DotNETProject\Client\obj\Debug\net6.0\scopedcss\Pages\AuthenticationPages\Login.razor.rz.scp.css
 C:\Users\Minh Phong\OneDrive\Máy tính\.Net Technology\.net-project\DotNETProject\Client\obj\Debug\net6.0\scopedcss\Pages\AuthenticationPages\Register.razor.rz.scp.css
+C:\Users\Minh Phong\OneDrive\Máy tính\.Net Technology\.net-project\DotNETProject\Client\obj\Debug\net6.0\scopedcss\Shared\Footer.razor.rz.scp.css

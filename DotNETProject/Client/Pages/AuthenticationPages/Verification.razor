@@ -20,12 +20,12 @@
 <div class="container">
     <div class="row">
         <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-            <div class="card border-0 shadow rounded-3 my-5">
+            <div class="card border-0 shadow rounded-3 my-5 bg-dark text-light">
                 <div class="card-body p-4 p-sm-5">
                     <h3 class="card-title text-center mb-5 fw-light fs-5">Verification</h3>
                     <form @onsubmit="VerifyOTP">
                         <span>OTP has been sent to @Email</span>
-                        <div class="form-floating mb-3">
+                        <div class="form-floating mb-3 text-dark">
                             <input type="number" class="form-control" id="floatingOTP" placeholder="OTP" @bind="otpDto.Otp">
                             <label for="floatingOTP">OTP</label>
                         </div>

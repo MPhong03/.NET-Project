@@ -2,8 +2,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    background: #007bff !important;
-    background: linear-gradient(to right, #0062E6, #33AEFF) !important;
+    background: url("https://cutewallpaper.org/26/best-shots-in-movies-wallpaper/197466784.jpg") !important;
     height: 100%;
 }
 
@@ -22,6 +21,10 @@
     color: white !important;
     background-color: #3b5998;
 }
+
+/*.bckground {
+    background: 
+}*/
 
 
 main[b-j99ypee2fe] {

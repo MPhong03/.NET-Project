@@ -8,7 +8,7 @@ namespace DotNETProject.Shared
 {
     public class OTPDto
     {
-        public string Otp { get; set; }
-        public string Email { get; set; }
+        public string? Otp { get; set; } = null;
+        public string? Email { get; set; } = null;
     }
 }

@@ -14,7 +14,7 @@
             <a href="/login" target="_blank">Login</a>
         </div>*@
 
-        <div class="top-row px-4">
+        @*<div class="top-row px-4">
             @if (!isLoggedIn)
             {
                 <NavLink href="/register">Register</NavLink>
@@ -25,54 +25,58 @@
                 <NavLink href="/swagger">API</NavLink>
                 <NavLink href="/logout">Logout</NavLink>
             }
-        </div>
+        </div>*@
+
+        <NavBar />
 
         <article class="content px-4">
             @Body
         </article>
+
+        <Footer />
     </main>
 </div>
 
 @code {
-    private bool isLoggedIn = false;
+    //private bool isLoggedIn = false;
 
-    protected override async Task OnInitializedAsync()
-    {
-        try
-        {
-            isLoggedIn = await CheckIfLoggedIn();
-        }
-        catch (Exception ex)
-        {
-            isLoggedIn = false;
-            Console.WriteLine($"An error occurred: {ex.Message}");
-        }
-    }
+    //protected override async Task OnInitializedAsync()
+    //{
+    //    try
+    //    {
+    //        isLoggedIn = await CheckIfLoggedIn();
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        isLoggedIn = false;
+    //        Console.WriteLine($"An error occurred: {ex.Message}");
+    //    }
+    //}
 
-    private async Task<bool> CheckIfLoggedIn()
-    {
-        try
-        {
-            var token = await localStorage.GetItemAsStringAsync("token");
-            var tokenExpiration = await localStorage.GetItemAsStringAsync("tokenExpiration");
+    //private async Task<bool> CheckIfLoggedIn()
+    //{
+    //    try
+    //    {
+    //        var token = await localStorage.GetItemAsStringAsync("token");
+    //        var tokenExpiration = await localStorage.GetItemAsStringAsync("tokenExpiration");
 
-            DateTime dateTimeNow = DateTime.UtcNow; // Get the current UTC time
+    //        DateTime dateTimeNow = DateTime.UtcNow; // Get the current UTC time
 
-            long unixTimestamp = ((DateTimeOffset)dateTimeNow).ToUnixTimeSeconds();
+    //        long unixTimestamp = ((DateTimeOffset)dateTimeNow).ToUnixTimeSeconds();
 
-            if (!string.IsNullOrEmpty(token) || (unixTimestamp < long.Parse(tokenExpiration)))
-            {
-                return true;
-            }
+    //        if (!string.IsNullOrEmpty(token) || (unixTimestamp < long.Parse(tokenExpiration)))
+    //        {
+    //            return true;
+    //        }
 
-            return false;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"An error occurred: {ex.Message}");
-            return false;
-        }
-    }
+    //        return false;
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        Console.WriteLine($"An error occurred: {ex.Message}");
+    //        return false;
+    //    }
+    //}
 
 
 }

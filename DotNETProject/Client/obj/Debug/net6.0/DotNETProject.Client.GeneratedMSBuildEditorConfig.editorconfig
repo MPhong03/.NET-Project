@@ -48,6 +48,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9nb3V0LnJhem9y
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Minh Phong/OneDrive/Máy tính/.Net Technology/.net-project/DotNETProject/Client/Shared/NavBar.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE5hdkJhci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Minh Phong/OneDrive/Máy tính/.Net Technology/.net-project/DotNETProject/Client/Shared/SurveyPrompt.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXFN1cnZleVByb21wdC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
@@ -67,6 +71,10 @@ build_metadata.AdditionalFiles.CssScope = b-oc6ks3wnay
 [C:/Users/Minh Phong/OneDrive/Máy tính/.Net Technology/.net-project/DotNETProject/Client/Shared/AuthenticationLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEF1dGhlbnRpY2F0aW9uTGF5b3V0LnJhem9y
 build_metadata.AdditionalFiles.CssScope = b-j99ypee2fe
+
+[C:/Users/Minh Phong/OneDrive/Máy tính/.Net Technology/.net-project/DotNETProject/Client/Shared/Footer.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEZvb3Rlci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-bfazraae9y
 
 [C:/Users/Minh Phong/OneDrive/Máy tính/.Net Technology/.net-project/DotNETProject/Client/Shared/MainLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXE1haW5MYXlvdXQucmF6b3I=
