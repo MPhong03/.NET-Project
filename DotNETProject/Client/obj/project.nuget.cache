@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "5IDEgdWrkza9COAC9z6ilYT9T72ZhckZrNhfBQ/h2I3ZDGO8DZCixn1FkdxT4qka+MxqSyuV1tkO1xD50BzS6Q==",
+  "dgSpecHash": "1XUUCpgurCfWdexdd5F6tFnt+6vkRFRgviyfILeluLDhLLXyTW6k7iTGxARshBZZftUUx7pw8Ed9xSkqvANgsA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\.net-project\\DotNETProject\\Client\\DotNETProject.Client.csproj",
+  "projectFilePath": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\DotNETProject.Client.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Minh Phong\\.nuget\\packages\\blazored.localstorage\\4.4.0\\blazored.localstorage.4.4.0.nupkg.sha512",
     "C:\\Users\\Minh Phong\\.nuget\\packages\\microsoft.aspnet.webapi.client\\5.2.9\\microsoft.aspnet.webapi.client.5.2.9.nupkg.sha512",

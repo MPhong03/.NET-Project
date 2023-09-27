@@ -1,0 +1,32 @@
+﻿.featured-title {
+    width: 200px;
+}
+
+.featured-button {
+    background-color: #4dbf00;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    font-weight: bold;
+}
+
+h3{
+    color: gold;
+}
+
+.list img{
+    width:100%;
+    height:39vh;
+}
+
+.list p {
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: larger;
+}
+.list a {
+    text-decoration: none !important;
+}

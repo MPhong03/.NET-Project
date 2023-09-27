@@ -19,7 +19,7 @@ html, body {
 body {
     padding: 0;
     margin: 0;
-    background: #181828;
+    background: #fff;
     font-size: 14px;
     line-height: 1;
 }
@@ -190,7 +190,7 @@ button {
 
 .error__message {
     text-align: center;
-    color: #181828;
+    color: #fff;
 }
 
 .message__title {
@@ -249,8 +249,8 @@ button {
     display: inline-block;
     vertical-align: top;
     margin: 0 15px;
-    border: 1px solid #181828;
-    color: #181828;
+    border: 1px solid #fff;
+    color: #fff;
     text-decoration: none;
     font-family: 'Montserrat', sans-serif;
     text-transform: uppercase;

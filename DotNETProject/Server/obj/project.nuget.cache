@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "MneOnJ+m587Xiw8H3Z/zU/HGt0JAYV8nPQ62Vf9+V7EH/so3UA+bVJYqPKoibtCYxUf+rioMnv2u5noRkKSAbA==",
+  "dgSpecHash": "JOnril4c5mzmt+vW/0mVQyBgAtFbB4e1XoO45SleHbNqfQmZFPkUWtJtXInKf6XIM2CqNFIcFFYQx7sYqb76rQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\.net-project\\DotNETProject\\Server\\DotNETProject.Server.csproj",
+  "projectFilePath": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Server\\DotNETProject.Server.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Minh Phong\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\Minh Phong\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
