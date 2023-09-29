@@ -22,6 +22,71 @@ namespace DotNETProject.Server.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("DotNETProject.Server.Models.Episode", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("EpisodeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TVSeriesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Time")
+                        .HasColumnType("int");
+
+                    b.Property<long>("View")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TVSeriesId");
+
+                    b.ToTable("episodes");
+                });
+
+            modelBuilder.Entity("DotNETProject.Server.Models.Film", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("IMDBScore")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReleaseYear")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<long>("View")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("films");
+
+                    b.UseTptMappingStrategy();
+                });
+
             modelBuilder.Entity("DotNETProject.Server.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -64,6 +129,61 @@ namespace DotNETProject.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("users");
+                });
+
+            modelBuilder.Entity("DotNETProject.Server.Models.Movie", b =>
+                {
+                    b.HasBaseType("DotNETProject.Server.Models.Film");
+
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Time")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("movies");
+                });
+
+            modelBuilder.Entity("DotNETProject.Server.Models.TVSeries", b =>
+                {
+                    b.HasBaseType("DotNETProject.Server.Models.Film");
+
+                    b.ToTable("tvseries");
+                });
+
+            modelBuilder.Entity("DotNETProject.Server.Models.Episode", b =>
+                {
+                    b.HasOne("DotNETProject.Server.Models.TVSeries", null)
+                        .WithMany("episodes")
+                        .HasForeignKey("TVSeriesId");
+                });
+
+            modelBuilder.Entity("DotNETProject.Server.Models.Movie", b =>
+                {
+                    b.HasOne("DotNETProject.Server.Models.Film", null)
+                        .WithOne()
+                        .HasForeignKey("DotNETProject.Server.Models.Movie", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DotNETProject.Server.Models.TVSeries", b =>
+                {
+                    b.HasOne("DotNETProject.Server.Models.Film", null)
+                        .WithOne()
+                        .HasForeignKey("DotNETProject.Server.Models.TVSeries", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DotNETProject.Server.Models.TVSeries", b =>
+                {
+                    b.Navigation("episodes");
                 });
 #pragma warning restore 612, 618
         }
