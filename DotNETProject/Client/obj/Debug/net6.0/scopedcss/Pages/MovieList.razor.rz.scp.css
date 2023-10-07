@@ -1,0 +1,44 @@
+h3[b-jgz7byxtgh] {
+    color: gold;
+}
+
+.list img[b-jgz7byxtgh] {
+    width: 100%;
+    height: 39vh;
+}
+
+.list p[b-jgz7byxtgh] {
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: larger;
+}
+
+.list a[b-jgz7byxtgh] {
+    text-decoration: none !important;
+}
+
+.pagination[b-jgz7byxtgh] {
+    display: inline-block;
+}
+
+.pagination a[b-jgz7byxtgh] {
+    transition: background-color .3s;
+    color: black;
+    float: left;
+    padding: 8px 16px;
+    text-decoration: none;
+    color: white;
+    border-radius: 5px;
+    margin: 0 2px;
+}
+
+.pagination a.active[b-jgz7byxtgh] {
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+}
+
+.pagination a:hover:not(.active)[b-jgz7byxtgh] {
+    background-color: #ddd;
+}

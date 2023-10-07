@@ -12012,24 +12012,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Minh Phong\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\Huy\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Server\\DotNETProject.Server.csproj",
+      "projectUniqueName": "C:\\Users\\Huy\\Desktop\\dotnet1\\net-project\\DotNETProject\\Server\\DotNETProject.Server.csproj",
       "projectName": "DotNETProject.Server",
-      "projectPath": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Server\\DotNETProject.Server.csproj",
-      "packagesPath": "C:\\Users\\Minh Phong\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Server\\obj\\",
+      "projectPath": "C:\\Users\\Huy\\Desktop\\dotnet1\\net-project\\DotNETProject\\Server\\DotNETProject.Server.csproj",
+      "packagesPath": "C:\\Users\\Huy\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Huy\\Desktop\\dotnet1\\net-project\\DotNETProject\\Server\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\Minh Phong\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\Huy\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -12037,18 +12032,17 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
           "projectReferences": {
-            "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\DotNETProject.Client.csproj": {
-              "projectPath": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\DotNETProject.Client.csproj"
+            "C:\\Users\\Huy\\Desktop\\dotnet1\\net-project\\DotNETProject\\Client\\DotNETProject.Client.csproj": {
+              "projectPath": "C:\\Users\\Huy\\Desktop\\dotnet1\\net-project\\DotNETProject\\Client\\DotNETProject.Client.csproj"
             },
-            "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Shared\\DotNETProject.Shared.csproj": {
-              "projectPath": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Shared\\DotNETProject.Shared.csproj"
+            "C:\\Users\\Huy\\Desktop\\dotnet1\\net-project\\DotNETProject\\Shared\\DotNETProject.Shared.csproj": {
+              "projectPath": "C:\\Users\\Huy\\Desktop\\dotnet1\\net-project\\DotNETProject\\Shared\\DotNETProject.Shared.csproj"
             }
           }
         }
@@ -12117,7 +12111,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.200\\RuntimeIdentifierGraph.json"
       }
     }
   }
