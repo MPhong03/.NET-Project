@@ -62,6 +62,10 @@ namespace DotNETProject.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("BackgroundUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -69,7 +73,15 @@ namespace DotNETProject.Server.Migrations
                     b.Property<double>("IMDBScore")
                         .HasColumnType("float");
 
+                    b.Property<string>("LogoUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PosterUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

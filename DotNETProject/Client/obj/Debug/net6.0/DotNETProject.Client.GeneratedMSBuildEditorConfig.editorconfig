@@ -16,6 +16,10 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\Minh Phong\OneDrive\Máy tính\.Net Technology\GIT\net-project\DotNETProject\Client
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/Minh Phong/OneDrive/Máy tính/.Net Technology/GIT/net-project/DotNETProject/Client/Pages/Admin/Index.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW5cSW5kZXgucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Minh Phong/OneDrive/Máy tính/.Net Technology/GIT/net-project/DotNETProject/Client/Pages/AuthenticationPages/ForgotPassword.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQXV0aGVudGljYXRpb25QYWdlc1xGb3Jnb3RQYXNzd29yZC5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
@@ -38,6 +42,14 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Minh Phong/OneDrive/Máy tính/.Net Technology/GIT/net-project/DotNETProject/Client/Pages/Logout.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9nb3V0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Minh Phong/OneDrive/Máy tính/.Net Technology/GIT/net-project/DotNETProject/Client/Shared/AdminLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEFkbWluTGF5b3V0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Minh Phong/OneDrive/Máy tính/.Net Technology/GIT/net-project/DotNETProject/Client/Shared/AdminNavMenu.razor]
+build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEFkbWluTmF2TWVudS5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Minh Phong/OneDrive/Máy tính/.Net Technology/GIT/net-project/DotNETProject/Client/Shared/NavBar.razor]
@@ -67,6 +79,14 @@ build_metadata.AdditionalFiles.CssScope = b-oc6ks3wnay
 [C:/Users/Minh Phong/OneDrive/Máy tính/.Net Technology/GIT/net-project/DotNETProject/Client/Pages/Index.razor]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXgucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = b-e0je2jbdgh
+
+[C:/Users/Minh Phong/OneDrive/Máy tính/.Net Technology/GIT/net-project/DotNETProject/Client/Pages/MovieDetail.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTW92aWVEZXRhaWwucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = b-u2rgeylb6l
+
+[C:/Users/Minh Phong/OneDrive/Máy tính/.Net Technology/GIT/net-project/DotNETProject/Client/Pages/MovieList.razor]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTW92aWVMaXN0LnJhem9y
+build_metadata.AdditionalFiles.CssScope = b-jgz7byxtgh
 
 [C:/Users/Minh Phong/OneDrive/Máy tính/.Net Technology/GIT/net-project/DotNETProject/Client/Shared/AuthenticationLayout.razor]
 build_metadata.AdditionalFiles.TargetPath = U2hhcmVkXEF1dGhlbnRpY2F0aW9uTGF5b3V0LnJhem9y

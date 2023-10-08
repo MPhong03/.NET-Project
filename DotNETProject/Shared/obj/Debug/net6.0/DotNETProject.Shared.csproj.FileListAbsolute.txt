@@ -22,3 +22,15 @@ C:\Users\Minh Phong\OneDrive\Máy tính\.Net Technology\GIT\net-project\DotNETPr
 C:\Users\Minh Phong\OneDrive\Máy tính\.Net Technology\GIT\net-project\DotNETProject\Shared\obj\Debug\net6.0\refint\DotNETProject.Shared.dll
 C:\Users\Minh Phong\OneDrive\Máy tính\.Net Technology\GIT\net-project\DotNETProject\Shared\obj\Debug\net6.0\DotNETProject.Shared.pdb
 C:\Users\Minh Phong\OneDrive\Máy tính\.Net Technology\GIT\net-project\DotNETProject\Shared\obj\Debug\net6.0\ref\DotNETProject.Shared.dll
+C:\Users\Huy\Desktop\dotnet1\net-project\DotNETProject\Shared\bin\Debug\net6.0\DotNETProject.Shared.deps.json
+C:\Users\Huy\Desktop\dotnet1\net-project\DotNETProject\Shared\bin\Debug\net6.0\DotNETProject.Shared.dll
+C:\Users\Huy\Desktop\dotnet1\net-project\DotNETProject\Shared\bin\Debug\net6.0\DotNETProject.Shared.pdb
+C:\Users\Huy\Desktop\dotnet1\net-project\DotNETProject\Shared\obj\Debug\net6.0\DotNETProject.Shared.csproj.AssemblyReference.cache
+C:\Users\Huy\Desktop\dotnet1\net-project\DotNETProject\Shared\obj\Debug\net6.0\DotNETProject.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Huy\Desktop\dotnet1\net-project\DotNETProject\Shared\obj\Debug\net6.0\DotNETProject.Shared.AssemblyInfoInputs.cache
+C:\Users\Huy\Desktop\dotnet1\net-project\DotNETProject\Shared\obj\Debug\net6.0\DotNETProject.Shared.AssemblyInfo.cs
+C:\Users\Huy\Desktop\dotnet1\net-project\DotNETProject\Shared\obj\Debug\net6.0\DotNETProject.Shared.csproj.CoreCompileInputs.cache
+C:\Users\Huy\Desktop\dotnet1\net-project\DotNETProject\Shared\obj\Debug\net6.0\DotNETProject.Shared.dll
+C:\Users\Huy\Desktop\dotnet1\net-project\DotNETProject\Shared\obj\Debug\net6.0\refint\DotNETProject.Shared.dll
+C:\Users\Huy\Desktop\dotnet1\net-project\DotNETProject\Shared\obj\Debug\net6.0\DotNETProject.Shared.pdb
+C:\Users\Huy\Desktop\dotnet1\net-project\DotNETProject\Shared\obj\Debug\net6.0\ref\DotNETProject.Shared.dll

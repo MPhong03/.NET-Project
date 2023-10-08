@@ -13,6 +13,9 @@ namespace DotNETProject.Server.Models
         public string Description { get; set; } = string.Empty;
         public double IMDBScore { get; set; } = double.MinValue;
         public long View { get; set; } = long.MinValue;
+        public string PosterUrl { get; set; }
+        public string BackgroundUrl { get; set; }
+        public string LogoUrl { get; set; }
         public Film()
         {
             

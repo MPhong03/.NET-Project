@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "rxG8Jy+rKQSKBBds1Mnzb5mD++mdyFMCOs3T+Vazqgs=",
+  "Hash": "qILnrcBL1s1SIWPj9T1Bhs8MTJh191IU72NsAUwrPnY=",
   "Source": "DotNETProject.Server",
   "BasePath": "_content/DotNETProject.Server",
   "Mode": "Default",
@@ -28,6 +28,40 @@
     }
   ],
   "Assets": [
+    {
+      "Identity": "C:\\Users\\Minh Phong\\.nuget\\packages\\mudblazor\\6.10.0\\staticwebassets\\MudBlazor.min.css",
+      "SourceId": "MudBlazor",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\Minh Phong\\.nuget\\packages\\mudblazor\\6.10.0\\staticwebassets\\",
+      "BasePath": "_content/MudBlazor",
+      "RelativePath": "MudBlazor.min.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\Minh Phong\\.nuget\\packages\\mudblazor\\6.10.0\\staticwebassets\\MudBlazor.min.css"
+    },
+    {
+      "Identity": "C:\\Users\\Minh Phong\\.nuget\\packages\\mudblazor\\6.10.0\\staticwebassets\\MudBlazor.min.js",
+      "SourceId": "MudBlazor",
+      "SourceType": "Package",
+      "ContentRoot": "C:\\Users\\Minh Phong\\.nuget\\packages\\mudblazor\\6.10.0\\staticwebassets\\",
+      "BasePath": "_content/MudBlazor",
+      "RelativePath": "MudBlazor.min.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\Minh Phong\\.nuget\\packages\\mudblazor\\6.10.0\\staticwebassets\\MudBlazor.min.js"
+    },
     {
       "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\blazor.boot.json",
       "SourceId": "DotNETProject.Client",
@@ -281,7 +315,7 @@
       "AssetTraitValue": "runtime",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "C:\\Users\\Minh Phong\\.nuget\\packages\\microsoft.aspnetcore.authorization\\6.0.15\\lib\\net6.0\\Microsoft.AspNetCore.Authorization.dll"
+      "OriginalItemSpec": "C:\\Users\\Minh Phong\\.nuget\\packages\\microsoft.aspnetcore.authorization\\6.0.16\\lib\\net6.0\\Microsoft.AspNetCore.Authorization.dll"
     },
     {
       "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Components.dll",
@@ -298,7 +332,7 @@
       "AssetTraitValue": "runtime",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "C:\\Users\\Minh Phong\\.nuget\\packages\\microsoft.aspnetcore.components\\6.0.15\\lib\\net6.0\\Microsoft.AspNetCore.Components.dll"
+      "OriginalItemSpec": "C:\\Users\\Minh Phong\\.nuget\\packages\\microsoft.aspnetcore.components\\6.0.16\\lib\\net6.0\\Microsoft.AspNetCore.Components.dll"
     },
     {
       "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Components.Forms.dll",
@@ -315,7 +349,7 @@
       "AssetTraitValue": "runtime",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "C:\\Users\\Minh Phong\\.nuget\\packages\\microsoft.aspnetcore.components.forms\\6.0.15\\lib\\net6.0\\Microsoft.AspNetCore.Components.Forms.dll"
+      "OriginalItemSpec": "C:\\Users\\Minh Phong\\.nuget\\packages\\microsoft.aspnetcore.components.forms\\6.0.16\\lib\\net6.0\\Microsoft.AspNetCore.Components.Forms.dll"
     },
     {
       "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Components.Web.dll",
@@ -332,7 +366,7 @@
       "AssetTraitValue": "runtime",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "C:\\Users\\Minh Phong\\.nuget\\packages\\microsoft.aspnetcore.components.web\\6.0.15\\lib\\net6.0\\Microsoft.AspNetCore.Components.Web.dll"
+      "OriginalItemSpec": "C:\\Users\\Minh Phong\\.nuget\\packages\\microsoft.aspnetcore.components.web\\6.0.16\\lib\\net6.0\\Microsoft.AspNetCore.Components.Web.dll"
     },
     {
       "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Components.WebAssembly.dll",
@@ -366,7 +400,7 @@
       "AssetTraitValue": "runtime",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "C:\\Users\\Minh Phong\\.nuget\\packages\\microsoft.aspnetcore.metadata\\6.0.15\\lib\\net6.0\\Microsoft.AspNetCore.Metadata.dll"
+      "OriginalItemSpec": "C:\\Users\\Minh Phong\\.nuget\\packages\\microsoft.aspnetcore.metadata\\6.0.16\\lib\\net6.0\\Microsoft.AspNetCore.Metadata.dll"
     },
     {
       "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.CSharp.dll",
@@ -556,6 +590,40 @@
       "OriginalItemSpec": "C:\\Users\\Minh Phong\\.nuget\\packages\\microsoft.extensions.filesystemglobbing\\6.0.0\\lib\\net6.0\\Microsoft.Extensions.FileSystemGlobbing.dll"
     },
     {
+      "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.Extensions.Localization.Abstractions.dll",
+      "SourceId": "DotNETProject.Client",
+      "SourceType": "Project",
+      "ContentRoot": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "_framework/Microsoft.Extensions.Localization.Abstractions.dll",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "BlazorWebAssemblyResource",
+      "AssetTraitValue": "runtime",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "C:\\Users\\Minh Phong\\.nuget\\packages\\microsoft.extensions.localization.abstractions\\6.0.16\\lib\\net6.0\\Microsoft.Extensions.Localization.Abstractions.dll"
+    },
+    {
+      "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.Extensions.Localization.dll",
+      "SourceId": "DotNETProject.Client",
+      "SourceType": "Project",
+      "ContentRoot": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "_framework/Microsoft.Extensions.Localization.dll",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "BlazorWebAssemblyResource",
+      "AssetTraitValue": "runtime",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "C:\\Users\\Minh Phong\\.nuget\\packages\\microsoft.extensions.localization\\6.0.16\\lib\\net6.0\\Microsoft.Extensions.Localization.dll"
+    },
+    {
       "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.Extensions.Logging.Abstractions.dll",
       "SourceId": "DotNETProject.Client",
       "SourceType": "Project",
@@ -638,7 +706,7 @@
       "AssetTraitValue": "runtime",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "C:\\Users\\Minh Phong\\.nuget\\packages\\microsoft.jsinterop\\6.0.15\\lib\\net6.0\\Microsoft.JSInterop.dll"
+      "OriginalItemSpec": "C:\\Users\\Minh Phong\\.nuget\\packages\\microsoft.jsinterop\\6.0.16\\lib\\net6.0\\Microsoft.JSInterop.dll"
     },
     {
       "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.JSInterop.WebAssembly.dll",
@@ -741,6 +809,23 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "C:\\Users\\Minh Phong\\.nuget\\packages\\microsoft.netcore.app.runtime.mono.browser-wasm\\6.0.16\\runtimes\\browser-wasm\\lib\\net6.0\\mscorlib.dll"
+    },
+    {
+      "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\MudBlazor.dll",
+      "SourceId": "DotNETProject.Client",
+      "SourceType": "Project",
+      "ContentRoot": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "_framework/MudBlazor.dll",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "BlazorWebAssemblyResource",
+      "AssetTraitValue": "runtime",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "C:\\Users\\Minh Phong\\.nuget\\packages\\mudblazor\\6.10.0\\lib\\net6.0\\MudBlazor.dll"
     },
     {
       "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\netstandard.dll",
@@ -3565,23 +3650,6 @@
       "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\System.Runtime.Serialization.Primitives.dll"
     },
     {
-      "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\+Fcpcs20.gz",
-      "SourceId": "DotNETProject.Client",
-      "SourceType": "Project",
-      "ContentRoot": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\",
-      "BasePath": "/",
-      "RelativePath": "_framework/Microsoft.AspNetCore.Components.dll.gz",
-      "AssetKind": "Build",
-      "AssetMode": "All",
-      "AssetRole": "Alternative",
-      "RelatedAsset": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Components.dll",
-      "AssetTraitName": "Content-Encoding",
-      "AssetTraitValue": "gzip",
-      "CopyToOutputDirectory": "PreserveNewest",
-      "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Components.dll"
-    },
-    {
       "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\+kD+6PkI.gz",
       "SourceId": "DotNETProject.Client",
       "SourceType": "Project",
@@ -3786,21 +3854,38 @@
       "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\System.ComponentModel.DataAnnotations.dll"
     },
     {
-      "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\2q+XgZXQ.gz",
+      "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\2qdISsKL.gz",
       "SourceId": "DotNETProject.Client",
       "SourceType": "Project",
       "ContentRoot": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\",
       "BasePath": "/",
-      "RelativePath": "_framework/Microsoft.AspNetCore.Components.Web.dll.gz",
+      "RelativePath": "_framework/MudBlazor.dll.gz",
       "AssetKind": "Build",
       "AssetMode": "All",
       "AssetRole": "Alternative",
-      "RelatedAsset": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Components.Web.dll",
+      "RelatedAsset": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\MudBlazor.dll",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Components.Web.dll"
+      "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\MudBlazor.dll"
+    },
+    {
+      "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\2ZKZHPYN.gz",
+      "SourceId": "DotNETProject.Client",
+      "SourceType": "Project",
+      "ContentRoot": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "_framework/Microsoft.Extensions.Localization.Abstractions.dll.gz",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "RelatedAsset": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.Extensions.Localization.Abstractions.dll",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.Extensions.Localization.Abstractions.dll"
     },
     {
       "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\3jXHBOA7.gz",
@@ -4704,23 +4789,6 @@
       "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\System.Transactions.Local.dll"
     },
     {
-      "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\DpEt1Hiq.gz",
-      "SourceId": "DotNETProject.Client",
-      "SourceType": "Project",
-      "ContentRoot": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\",
-      "BasePath": "/",
-      "RelativePath": "_framework/Microsoft.AspNetCore.Components.Forms.dll.gz",
-      "AssetKind": "Build",
-      "AssetMode": "All",
-      "AssetRole": "Alternative",
-      "RelatedAsset": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Components.Forms.dll",
-      "AssetTraitName": "Content-Encoding",
-      "AssetTraitValue": "gzip",
-      "CopyToOutputDirectory": "PreserveNewest",
-      "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Components.Forms.dll"
-    },
-    {
       "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\dQlzqaJQ.gz",
       "SourceId": "DotNETProject.Client",
       "SourceType": "Project",
@@ -4974,23 +5042,6 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\System.Text.Encoding.CodePages.dll"
-    },
-    {
-      "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\g4imZchS.gz",
-      "SourceId": "DotNETProject.Client",
-      "SourceType": "Project",
-      "ContentRoot": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\",
-      "BasePath": "/",
-      "RelativePath": "_framework/Microsoft.JSInterop.dll.gz",
-      "AssetKind": "Build",
-      "AssetMode": "All",
-      "AssetRole": "Alternative",
-      "RelatedAsset": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.JSInterop.dll",
-      "AssetTraitName": "Content-Encoding",
-      "AssetTraitValue": "gzip",
-      "CopyToOutputDirectory": "PreserveNewest",
-      "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.JSInterop.dll"
     },
     {
       "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\G6+V5C5z.gz",
@@ -5316,6 +5367,23 @@
       "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.Extensions.Configuration.Abstractions.dll"
     },
     {
+      "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\J4KiNpSU.gz",
+      "SourceId": "DotNETProject.Client",
+      "SourceType": "Project",
+      "ContentRoot": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "_framework/Microsoft.AspNetCore.Components.dll.gz",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "RelatedAsset": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Components.dll",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Components.dll"
+    },
+    {
       "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\JApuHJ59.gz",
       "SourceId": "DotNETProject.Client",
       "SourceType": "Project",
@@ -5433,23 +5501,6 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\System.Linq.dll"
-    },
-    {
-      "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\kC+BGNwv.gz",
-      "SourceId": "DotNETProject.Client",
-      "SourceType": "Project",
-      "ContentRoot": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\",
-      "BasePath": "/",
-      "RelativePath": "_framework/Microsoft.AspNetCore.Metadata.dll.gz",
-      "AssetKind": "Build",
-      "AssetMode": "All",
-      "AssetRole": "Alternative",
-      "RelatedAsset": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Metadata.dll",
-      "AssetTraitName": "Content-Encoding",
-      "AssetTraitValue": "gzip",
-      "CopyToOutputDirectory": "PreserveNewest",
-      "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Metadata.dll"
     },
     {
       "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\kck+2eLr.gz",
@@ -5894,6 +5945,23 @@
       "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\System.IO.Compression.dll"
     },
     {
+      "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\PfOv8diz.gz",
+      "SourceId": "DotNETProject.Client",
+      "SourceType": "Project",
+      "ContentRoot": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "_framework/Microsoft.AspNetCore.Components.Web.dll.gz",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "RelatedAsset": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Components.Web.dll",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Components.Web.dll"
+    },
+    {
       "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\PKlcEzuN.gz",
       "SourceId": "DotNETProject.Client",
       "SourceType": "Project",
@@ -6266,6 +6334,23 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\System.ServiceProcess.dll"
+    },
+    {
+      "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\TPreZNry.gz",
+      "SourceId": "DotNETProject.Client",
+      "SourceType": "Project",
+      "ContentRoot": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "_framework/Microsoft.AspNetCore.Authorization.dll.gz",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "RelatedAsset": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Authorization.dll",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Authorization.dll"
     },
     {
       "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\TRYTvCe6.gz",
@@ -6795,6 +6880,23 @@
       "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\System.ComponentModel.Annotations.dll"
     },
     {
+      "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\XzNCXazC.gz",
+      "SourceId": "DotNETProject.Client",
+      "SourceType": "Project",
+      "ContentRoot": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "_framework/Microsoft.AspNetCore.Metadata.dll.gz",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "RelatedAsset": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Metadata.dll",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Metadata.dll"
+    },
+    {
       "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\Y+WpT9Ts.gz",
       "SourceId": "DotNETProject.Client",
       "SourceType": "Project",
@@ -6863,21 +6965,21 @@
       "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\System.Security.Claims.dll"
     },
     {
-      "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\yRgoLNQC.gz",
+      "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\yQuf2VZe.gz",
       "SourceId": "DotNETProject.Client",
       "SourceType": "Project",
       "ContentRoot": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\",
       "BasePath": "/",
-      "RelativePath": "_framework/Microsoft.AspNetCore.Authorization.dll.gz",
+      "RelativePath": "_framework/Microsoft.AspNetCore.Components.Forms.dll.gz",
       "AssetKind": "Build",
       "AssetMode": "All",
       "AssetRole": "Alternative",
-      "RelatedAsset": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Authorization.dll",
+      "RelatedAsset": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Components.Forms.dll",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
-      "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Authorization.dll"
+      "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.AspNetCore.Components.Forms.dll"
     },
     {
       "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\yRZZw5R3.gz",
@@ -6895,6 +6997,23 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\System.Security.Cryptography.Encoding.dll"
+    },
+    {
+      "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\YSBfyBZy.gz",
+      "SourceId": "DotNETProject.Client",
+      "SourceType": "Project",
+      "ContentRoot": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "_framework/Microsoft.JSInterop.dll.gz",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "RelatedAsset": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.JSInterop.dll",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.JSInterop.dll"
     },
     {
       "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\YYj+SMRU.gz",
@@ -6980,6 +7099,23 @@
       "CopyToOutputDirectory": "PreserveNewest",
       "CopyToPublishDirectory": "Never",
       "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\System.Xml.dll"
+    },
+    {
+      "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\zrn7ugGy.gz",
+      "SourceId": "DotNETProject.Client",
+      "SourceType": "Project",
+      "ContentRoot": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "_framework/Microsoft.Extensions.Localization.dll.gz",
+      "AssetKind": "Build",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "RelatedAsset": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.Extensions.Localization.dll",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "CopyToOutputDirectory": "PreserveNewest",
+      "CopyToPublishDirectory": "Never",
+      "OriginalItemSpec": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\bin\\Debug\\net6.0\\wwwroot\\_framework\\Microsoft.Extensions.Localization.dll"
     },
     {
       "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\obj\\Debug\\net6.0\\build-gz\\ZS3cCfrW.gz",
@@ -7475,6 +7611,40 @@
       "OriginalItemSpec": "wwwroot\\img\\9.jpg"
     },
     {
+      "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\wwwroot\\img\\bg-1.jpg",
+      "SourceId": "DotNETProject.Client",
+      "SourceType": "Project",
+      "ContentRoot": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "img/bg-1.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\img\\bg-1.jpg"
+    },
+    {
+      "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\wwwroot\\img\\cast\\cast-1-1.jpg",
+      "SourceId": "DotNETProject.Client",
+      "SourceType": "Project",
+      "ContentRoot": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "img/cast/cast-1-1.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\img\\cast\\cast-1-1.jpg"
+    },
+    {
       "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\wwwroot\\img\\f-1.jpg",
       "SourceId": "DotNETProject.Client",
       "SourceType": "Project",
@@ -7575,6 +7745,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\img\\f-t-3.png"
+    },
+    {
+      "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\wwwroot\\img\\logo-1.png",
+      "SourceId": "DotNETProject.Client",
+      "SourceType": "Project",
+      "ContentRoot": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\wwwroot\\",
+      "BasePath": "/",
+      "RelativePath": "img/logo-1.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\img\\logo-1.png"
     },
     {
       "Identity": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\wwwroot\\index.html",

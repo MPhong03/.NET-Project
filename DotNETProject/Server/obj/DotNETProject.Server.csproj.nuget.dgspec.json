@@ -65,6 +65,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[6.0.15, )"
+            },
+            "MudBlazor": {
+              "target": "Package",
+              "version": "[6.10.0, )"
             }
           },
           "imports": [

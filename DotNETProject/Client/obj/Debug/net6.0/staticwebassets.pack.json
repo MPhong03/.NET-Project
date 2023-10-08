@@ -117,6 +117,14 @@
       "PackagePath": "staticwebassets\\img\\9.jpg"
     },
     {
+      "Id": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\wwwroot\\img\\bg-1.jpg",
+      "PackagePath": "staticwebassets\\img\\bg-1.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\wwwroot\\img\\cast\\cast-1-1.jpg",
+      "PackagePath": "staticwebassets\\img\\cast\\cast-1-1.jpg"
+    },
+    {
       "Id": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\wwwroot\\img\\f-1.jpg",
       "PackagePath": "staticwebassets\\img\\f-1.jpg"
     },
@@ -139,6 +147,10 @@
     {
       "Id": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\wwwroot\\img\\f-t-3.png",
       "PackagePath": "staticwebassets\\img\\f-t-3.png"
+    },
+    {
+      "Id": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\wwwroot\\img\\logo-1.png",
+      "PackagePath": "staticwebassets\\img\\logo-1.png"
     },
     {
       "Id": "C:\\Users\\Minh Phong\\OneDrive\\Máy tính\\.Net Technology\\GIT\\net-project\\DotNETProject\\Client\\wwwroot\\index.html",
