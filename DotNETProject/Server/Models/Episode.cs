@@ -12,5 +12,6 @@ namespace DotNETProject.Server.Models
         public int Time { get; set; } = 0;
         public string Link { get; set; } = string.Empty;
         public long View { get; set; } = long.MinValue;
+        public TVSeries Series { get; set; }
     }
 }

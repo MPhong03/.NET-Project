@@ -5,6 +5,6 @@ namespace DotNETProject.Server.Models
     [Table("tvseries")]
     public class TVSeries : Film
     {
-        public List<Episode> episodes { get; set; } = new List<Episode>();
+        public ICollection<Episode> episodes { get; set; }
     }
 }

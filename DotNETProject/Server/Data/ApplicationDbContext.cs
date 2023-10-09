@@ -14,5 +14,7 @@ namespace DotNETProject.Server.Data
         public DbSet<Movie> Movies { get; set; }
         public DbSet<TVSeries> TVSeries { get; set; }
         public DbSet<Episode> Episodes { get; set; }
+        public DbSet<Cast> Casts { get; set; }
+        public DbSet<FilmCast> FilmCasts { get; set; }
     }
 }

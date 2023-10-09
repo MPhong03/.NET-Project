@@ -16,6 +16,8 @@ namespace DotNETProject.Server.Models
         public string PosterUrl { get; set; }
         public string BackgroundUrl { get; set; }
         public string LogoUrl { get; set; }
+        public ICollection<FilmCast> FilmCasts { get; set; }
+        public string TrailerUrl { get; set; }
         public Film()
         {
             
