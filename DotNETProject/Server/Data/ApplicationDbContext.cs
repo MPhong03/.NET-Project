@@ -16,5 +16,6 @@ namespace DotNETProject.Server.Data
         public DbSet<Episode> Episodes { get; set; }
         public DbSet<Cast> Casts { get; set; }
         public DbSet<FilmCast> FilmCasts { get; set; }
+        public DbSet<Director> Directors { get; set; }
     }
 }

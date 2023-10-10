@@ -1,0 +1,73 @@
+﻿@model DotNETProject.Server.Models.Film
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Film</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReleaseYear" class="control-label"></label>
+                <input asp-for="ReleaseYear" class="form-control" />
+                <span asp-validation-for="ReleaseYear" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IMDBScore" class="control-label"></label>
+                <input asp-for="IMDBScore" class="form-control" />
+                <span asp-validation-for="IMDBScore" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="View" class="control-label"></label>
+                <input asp-for="View" class="form-control" />
+                <span asp-validation-for="View" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PosterUrl" class="control-label"></label>
+                <input asp-for="PosterUrl" class="form-control" />
+                <span asp-validation-for="PosterUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BackgroundUrl" class="control-label"></label>
+                <input asp-for="BackgroundUrl" class="form-control" />
+                <span asp-validation-for="BackgroundUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LogoUrl" class="control-label"></label>
+                <input asp-for="LogoUrl" class="form-control" />
+                <span asp-validation-for="LogoUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TrailerUrl" class="control-label"></label>
+                <input asp-for="TrailerUrl" class="form-control" />
+                <span asp-validation-for="TrailerUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

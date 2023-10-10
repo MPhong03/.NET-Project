@@ -12,55 +12,55 @@ namespace DotNETProject.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EpisodesController : ControllerBase
+    public class CastsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public EpisodesController(ApplicationDbContext context)
+        public CastsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Episodes
+        // GET: api/Casts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Episode>>> GetEpisodes()
+        public async Task<ActionResult<IEnumerable<Cast>>> GetCasts()
         {
-          if (_context.Episodes == null)
+          if (_context.Casts == null)
           {
               return NotFound();
           }
-            return await _context.Episodes.ToListAsync();
+            return await _context.Casts.ToListAsync();
         }
 
-        // GET: api/Episodes/5
+        // GET: api/Casts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Episode>> GetEpisode(int id)
+        public async Task<ActionResult<Cast>> GetCast(int id)
         {
-          if (_context.Episodes == null)
+          if (_context.Casts == null)
           {
               return NotFound();
           }
-            var episode = await _context.Episodes.FindAsync(id);
+            var cast = await _context.Casts.FindAsync(id);
 
-            if (episode == null)
+            if (cast == null)
             {
                 return NotFound();
             }
 
-            return episode;
+            return cast;
         }
 
-        // PUT: api/Episodes/5
+        // PUT: api/Casts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEpisode(int id, Episode episode)
+        public async Task<IActionResult> PutCast(int id, Cast cast)
         {
-            if (id != episode.Id)
+            if (id != cast.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(episode).State = EntityState.Modified;
+            _context.Entry(cast).State = EntityState.Modified;
 
             try
             {
@@ -68,7 +68,7 @@ namespace DotNETProject.Server.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!EpisodeExists(id))
+                if (!CastExists(id))
                 {
                     return NotFound();
                 }
@@ -81,44 +81,44 @@ namespace DotNETProject.Server.Controllers
             return NoContent();
         }
 
-        // POST: api/Episodes
+        // POST: api/Casts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Episode>> PostEpisode(Episode episode)
+        public async Task<ActionResult<Cast>> PostCast(Cast cast)
         {
-          if (_context.Episodes == null)
+          if (_context.Casts == null)
           {
-              return Problem("Entity set 'ApplicationDbContext.Episodes'  is null.");
+              return Problem("Entity set 'ApplicationDbContext.Casts'  is null.");
           }
-            _context.Episodes.Add(episode);
+            _context.Casts.Add(cast);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetEpisode", new { id = episode.Id }, episode);
+            return CreatedAtAction("GetCast", new { id = cast.Id }, cast);
         }
 
-        // DELETE: api/Episodes/5
+        // DELETE: api/Casts/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEpisode(int id)
+        public async Task<IActionResult> DeleteCast(int id)
         {
-            if (_context.Episodes == null)
+            if (_context.Casts == null)
             {
                 return NotFound();
             }
-            var episode = await _context.Episodes.FindAsync(id);
-            if (episode == null)
+            var cast = await _context.Casts.FindAsync(id);
+            if (cast == null)
             {
                 return NotFound();
             }
 
-            _context.Episodes.Remove(episode);
+            _context.Casts.Remove(cast);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool EpisodeExists(int id)
+        private bool CastExists(int id)
         {
-            return (_context.Episodes?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Casts?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

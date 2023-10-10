@@ -12,55 +12,55 @@ namespace DotNETProject.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EpisodesController : ControllerBase
+    public class DirectorsController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
 
-        public EpisodesController(ApplicationDbContext context)
+        public DirectorsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/Episodes
+        // GET: api/Directors
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Episode>>> GetEpisodes()
+        public async Task<ActionResult<IEnumerable<Director>>> GetDirectors()
         {
-          if (_context.Episodes == null)
+          if (_context.Directors == null)
           {
               return NotFound();
           }
-            return await _context.Episodes.ToListAsync();
+            return await _context.Directors.ToListAsync();
         }
 
-        // GET: api/Episodes/5
+        // GET: api/Directors/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Episode>> GetEpisode(int id)
+        public async Task<ActionResult<Director>> GetDirector(int id)
         {
-          if (_context.Episodes == null)
+          if (_context.Directors == null)
           {
               return NotFound();
           }
-            var episode = await _context.Episodes.FindAsync(id);
+            var director = await _context.Directors.FindAsync(id);
 
-            if (episode == null)
+            if (director == null)
             {
                 return NotFound();
             }
 
-            return episode;
+            return director;
         }
 
-        // PUT: api/Episodes/5
+        // PUT: api/Directors/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEpisode(int id, Episode episode)
+        public async Task<IActionResult> PutDirector(int id, Director director)
         {
-            if (id != episode.Id)
+            if (id != director.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(episode).State = EntityState.Modified;
+            _context.Entry(director).State = EntityState.Modified;
 
             try
             {
@@ -68,7 +68,7 @@ namespace DotNETProject.Server.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!EpisodeExists(id))
+                if (!DirectorExists(id))
                 {
                     return NotFound();
                 }
@@ -81,44 +81,44 @@ namespace DotNETProject.Server.Controllers
             return NoContent();
         }
 
-        // POST: api/Episodes
+        // POST: api/Directors
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Episode>> PostEpisode(Episode episode)
+        public async Task<ActionResult<Director>> PostDirector(Director director)
         {
-          if (_context.Episodes == null)
+          if (_context.Directors == null)
           {
-              return Problem("Entity set 'ApplicationDbContext.Episodes'  is null.");
+              return Problem("Entity set 'ApplicationDbContext.Directors'  is null.");
           }
-            _context.Episodes.Add(episode);
+            _context.Directors.Add(director);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetEpisode", new { id = episode.Id }, episode);
+            return CreatedAtAction("GetDirector", new { id = director.Id }, director);
         }
 
-        // DELETE: api/Episodes/5
+        // DELETE: api/Directors/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEpisode(int id)
+        public async Task<IActionResult> DeleteDirector(int id)
         {
-            if (_context.Episodes == null)
+            if (_context.Directors == null)
             {
                 return NotFound();
             }
-            var episode = await _context.Episodes.FindAsync(id);
-            if (episode == null)
+            var director = await _context.Directors.FindAsync(id);
+            if (director == null)
             {
                 return NotFound();
             }
 
-            _context.Episodes.Remove(episode);
+            _context.Directors.Remove(director);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool EpisodeExists(int id)
+        private bool DirectorExists(int id)
         {
-            return (_context.Episodes?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Directors?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

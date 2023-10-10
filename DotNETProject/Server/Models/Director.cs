@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DotNETProject.Server.Models
 {
-    [Table("casts")]
-    public class Cast
+    [Table("directors")]
+    public class Director
     {
         [Key]
         public int Id { get; set; }
@@ -13,6 +13,6 @@ namespace DotNETProject.Server.Models
         public string Gender { get; set; } = string.Empty;
         public string Nation { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public ICollection<FilmCast> FilmCasts { get; set; } = new List<FilmCast>();
+        public ICollection<FilmDirector> FilmDirectors { get; set; } = new List<FilmDirector>();
     }
 }

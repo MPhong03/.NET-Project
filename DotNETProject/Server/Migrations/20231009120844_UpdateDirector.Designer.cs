@@ -4,6 +4,7 @@ using DotNETProject.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DotNETProject.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231009120844_UpdateDirector")]
+    partial class UpdateDirector
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -134,6 +137,9 @@ namespace DotNETProject.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("DirectorId")
+                        .HasColumnType("int");
+
                     b.Property<double>("IMDBScore")
                         .HasColumnType("float");
 
@@ -161,6 +167,8 @@ namespace DotNETProject.Server.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DirectorId");
 
                     b.ToTable("films");
 
@@ -191,30 +199,7 @@ namespace DotNETProject.Server.Migrations
 
                     b.HasIndex("FilmId");
 
-                    b.ToTable("filmcasts");
-                });
-
-            modelBuilder.Entity("DotNETProject.Server.Models.FilmDirector", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("DirectorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FilmId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DirectorId");
-
-                    b.HasIndex("FilmId");
-
-                    b.ToTable("filmdirectors");
+                    b.ToTable("FilmCasts");
                 });
 
             modelBuilder.Entity("DotNETProject.Server.Models.User", b =>
@@ -297,6 +282,13 @@ namespace DotNETProject.Server.Migrations
                     b.Navigation("Series");
                 });
 
+            modelBuilder.Entity("DotNETProject.Server.Models.Film", b =>
+                {
+                    b.HasOne("DotNETProject.Server.Models.Director", null)
+                        .WithMany("Films")
+                        .HasForeignKey("DirectorId");
+                });
+
             modelBuilder.Entity("DotNETProject.Server.Models.FilmCast", b =>
                 {
                     b.HasOne("DotNETProject.Server.Models.Cast", "Cast")
@@ -312,25 +304,6 @@ namespace DotNETProject.Server.Migrations
                         .IsRequired();
 
                     b.Navigation("Cast");
-
-                    b.Navigation("Film");
-                });
-
-            modelBuilder.Entity("DotNETProject.Server.Models.FilmDirector", b =>
-                {
-                    b.HasOne("DotNETProject.Server.Models.Director", "Director")
-                        .WithMany("FilmDirectors")
-                        .HasForeignKey("DirectorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DotNETProject.Server.Models.Film", "Film")
-                        .WithMany("FilmDirectors")
-                        .HasForeignKey("FilmId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Director");
 
                     b.Navigation("Film");
                 });
@@ -360,14 +333,12 @@ namespace DotNETProject.Server.Migrations
 
             modelBuilder.Entity("DotNETProject.Server.Models.Director", b =>
                 {
-                    b.Navigation("FilmDirectors");
+                    b.Navigation("Films");
                 });
 
             modelBuilder.Entity("DotNETProject.Server.Models.Film", b =>
                 {
                     b.Navigation("FilmCasts");
-
-                    b.Navigation("FilmDirectors");
                 });
 
             modelBuilder.Entity("DotNETProject.Server.Models.TVSeries", b =>

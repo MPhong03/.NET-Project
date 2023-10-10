@@ -25,10 +25,10 @@ namespace DotNETProject.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Movie>>> GetMovies()
         {
-            if (_context.Movies == null)
-            {
-                return NotFound();
-            }
+          if (_context.Movies == null)
+          {
+              return NotFound();
+          }
             return await _context.Movies.ToListAsync();
         }
 
@@ -36,10 +36,10 @@ namespace DotNETProject.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Movie>> GetMovie(int id)
         {
-            if (_context.Movies == null)
-            {
-                return NotFound();
-            }
+          if (_context.Movies == null)
+          {
+              return NotFound();
+          }
             var movie = await _context.Movies.FindAsync(id);
 
             if (movie == null)
@@ -86,10 +86,10 @@ namespace DotNETProject.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Movie>> PostMovie(Movie movie)
         {
-            if (_context.Movies == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.Movies'  is null.");
-            }
+          if (_context.Movies == null)
+          {
+              return Problem("Entity set 'ApplicationDbContext.Movies'  is null.");
+          }
             _context.Movies.Add(movie);
             await _context.SaveChangesAsync();
 

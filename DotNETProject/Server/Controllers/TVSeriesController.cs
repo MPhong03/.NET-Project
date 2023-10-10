@@ -25,10 +25,10 @@ namespace DotNETProject.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TVSeries>>> GetTVSeries()
         {
-            if (_context.TVSeries == null)
-            {
-                return NotFound();
-            }
+          if (_context.TVSeries == null)
+          {
+              return NotFound();
+          }
             return await _context.TVSeries.ToListAsync();
         }
 
@@ -36,10 +36,10 @@ namespace DotNETProject.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<TVSeries>> GetTVSeries(int id)
         {
-            if (_context.TVSeries == null)
-            {
-                return NotFound();
-            }
+          if (_context.TVSeries == null)
+          {
+              return NotFound();
+          }
             var tVSeries = await _context.TVSeries.FindAsync(id);
 
             if (tVSeries == null)
@@ -86,10 +86,10 @@ namespace DotNETProject.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<TVSeries>> PostTVSeries(TVSeries tVSeries)
         {
-            if (_context.TVSeries == null)
-            {
-                return Problem("Entity set 'ApplicationDbContext.TVSeries'  is null.");
-            }
+          if (_context.TVSeries == null)
+          {
+              return Problem("Entity set 'ApplicationDbContext.TVSeries'  is null.");
+          }
             _context.TVSeries.Add(tVSeries);
             await _context.SaveChangesAsync();
 

@@ -13,15 +13,12 @@ namespace DotNETProject.Server.Models
         public string Description { get; set; } = string.Empty;
         public double IMDBScore { get; set; } = double.MinValue;
         public long View { get; set; } = long.MinValue;
-        public string PosterUrl { get; set; }
-        public string BackgroundUrl { get; set; }
-        public string LogoUrl { get; set; }
-        public ICollection<FilmCast> FilmCasts { get; set; }
-        public string TrailerUrl { get; set; }
-        public Film()
-        {
-            
-        }
+        public string PosterUrl { get; set; } = string.Empty;
+        public string BackgroundUrl { get; set; } = string.Empty;
+        public string LogoUrl { get; set; } = string.Empty;
+        public ICollection<FilmCast> FilmCasts { get; set; } = new List<FilmCast>();
+        public ICollection<FilmDirector> FilmDirectors { get; set; } = new List<FilmDirector>();
+        public string TrailerUrl { get; set; } = string.Empty;
         
     }
 }

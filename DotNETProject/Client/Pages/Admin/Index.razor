@@ -1,7 +1,14 @@
-﻿@page "/admin/home"
+﻿@page "/admin/"
+@using MudBlazor
 @layout AdminLayout
 
-<h1 class="text-center">Hello admin</h1>
+<MudGrid>
+    <!-- Content -->
+    <MudItem xs="12">
+        <h1>Welcome to the Dashboard!</h1>
+        <!-- Your dashboard content goes here -->
+    </MudItem>
+</MudGrid>
 
 @code {
 
