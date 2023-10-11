@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DotNETProject.Server.Data;
 using DotNETProject.Server.Models;
+using DotNETProject.Shared;
 
 namespace DotNETProject.Server.Controllers
 {
@@ -19,27 +20,44 @@ namespace DotNETProject.Server.Controllers
         public CastsController(ApplicationDbContext context)
         {
             _context = context;
-        }
+        }   
 
         // GET: api/Casts
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Cast>>> GetCasts()
+        public async Task<ActionResult<IEnumerable<CastDto>>> GetCasts()
         {
-          if (_context.Casts == null)
-          {
-              return NotFound();
-          }
-            return await _context.Casts.ToListAsync();
+            if (_context.Casts == null)
+            {
+                return NotFound();
+            }
+
+            List<Cast> list = await _context.Casts.ToListAsync();
+            List<CastDto> result = new List<CastDto>();
+
+            foreach (var item in list)
+            {
+                CastDto itemResult = new CastDto();
+                itemResult.Id = item.Id;
+                itemResult.Name = item.Name;
+                itemResult.Description = item.Description;
+                itemResult.BirthDate = item.BirthDate;
+                itemResult.AvatarUrl = item.AvatarUrl;
+                itemResult.Gender = item.Gender;
+                itemResult.Nation = item.Nation;
+                result.Add(itemResult);
+            }
+
+            return result;
         }
 
         // GET: api/Casts/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Cast>> GetCast(int id)
         {
-          if (_context.Casts == null)
-          {
-              return NotFound();
-          }
+            if (_context.Casts == null)
+            {
+                return NotFound();
+            }
             var cast = await _context.Casts.FindAsync(id);
 
             if (cast == null)
@@ -53,12 +71,21 @@ namespace DotNETProject.Server.Controllers
         // PUT: api/Casts/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCast(int id, Cast cast)
+        public async Task<IActionResult> PutCast(int id, CastDto castDto)
         {
-            if (id != cast.Id)
+            if (id != castDto.Id)
             {
                 return BadRequest();
             }
+
+            Cast cast = new Cast();
+            cast.Id = castDto.Id;
+            cast.Name = castDto.Name;
+            cast.Description = castDto.Description;
+            cast.AvatarUrl = castDto.AvatarUrl;
+            cast.Nation = castDto.Nation;
+            cast.BirthDate = castDto.BirthDate;
+            cast.Gender = castDto.Gender;
 
             _context.Entry(cast).State = EntityState.Modified;
 
@@ -84,12 +111,22 @@ namespace DotNETProject.Server.Controllers
         // POST: api/Casts
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Cast>> PostCast(Cast cast)
+        public async Task<ActionResult<CastDto>> PostCast(CastDto castDto)
         {
-          if (_context.Casts == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Casts'  is null.");
-          }
+            if (_context.Casts == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Casts'  is null.");
+            }
+
+            Cast cast = new Cast();
+            cast.Id = castDto.Id;
+            cast.Name = castDto.Name;
+            cast.Description = castDto.Description;
+            cast.AvatarUrl = castDto.AvatarUrl;
+            cast.Nation = castDto.Nation;
+            cast.BirthDate = castDto.BirthDate;
+            cast.Gender = castDto.Gender;
+
             _context.Casts.Add(cast);
             await _context.SaveChangesAsync();
 

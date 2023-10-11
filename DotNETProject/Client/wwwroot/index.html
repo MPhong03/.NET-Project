@@ -8,6 +8,8 @@
     <base href="/" />
     <link href="css/bootstrap/bootstrap.min.css" rel="stylesheet" />
     <link href="css/app.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/loading.css">
     <link href="DotNETProject.Client.styles.css" rel="stylesheet" />
 
     <!-- Bootstrap from internet -->
@@ -22,7 +24,15 @@
 </head>
 
 <body>
-    <div id="app">Loading...</div>
+    <div id="app">
+        <div id="loading-content">
+
+            <div id="loader-wrapper">
+                <div id="loader"></div>
+            </div>
+
+        </div>
+    </div>
 
     <!--<div id="blazor-error-ui">
         An unhandled error has occurred.
@@ -47,6 +57,12 @@
                 $('#blazor-error-ui').fadeOut('slow');
             }, 5000);
         });
+    </script>
+
+    <script>
+        function refreshPage() {
+            location.reload();
+        }
     </script>
 
     <script src="_framework/blazor.webassembly.js"></script>

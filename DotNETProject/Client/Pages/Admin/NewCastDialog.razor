@@ -1,0 +1,70 @@
+﻿@page "/create-cast"
+@using DotNETProject.Shared;
+@using MudBlazor
+@inject IDialogService Dialog
+@inject HttpClient httpClient
+@inject IJSRuntime JSRuntime
+
+<MudDialog>
+    <DialogContent>
+        <MudTextField @bind-Value="castDto.Name" Label="Name" />
+        <MudTextField @bind-Value="castDto.Description" Label="Description" />
+        <MudTextField @bind-Value="castDto.AvatarUrl" Label="Avatar URL" />
+        <MudTextField @bind-Value="castDto.Nation" Label="Nation" />
+
+
+        <MudSelect Label="Gender" @bind-Value="castDto.Gender">
+            <MudSelectItem Value="Male" Text="Male" />
+            <MudSelectItem Value="Female" Text="Female" />
+        </MudSelect>
+
+        <MudDatePicker PickerVariant="PickerVariant.Dialog" Label="BirthDate" Editable="true" DateFormat="dd.MM.yyyy" @bind-Date="castDto.BirthDate" Placeholder="Select Date" />
+
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+<MudDialog @bind-IsVisible="nestedVisible">
+    <DialogContent>
+        <MudText Class="nested">@message</MudText>
+    </DialogContent>
+    <DialogActions>
+        <MudButton Color="Color.Primary" OnClick="CloseNested">Close</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    private CastDto castDto = new CastDto();
+    public String Male = "Male";
+    public String Female = "Female";
+    public DateTime? birth;
+
+    private string message;
+    private bool nestedVisible;
+    private void OpenNested() => nestedVisible = true;
+    private void CloseNested() => nestedVisible = false;
+
+    async Task Submit()
+    {
+        var response = await httpClient.PostAsJsonAsync("api/Casts", castDto);
+
+        if (response.IsSuccessStatusCode)
+        {
+            MudDialog.Close(DialogResult.Ok(true));
+            await JSRuntime.InvokeVoidAsync("refreshPage");
+        }
+        else
+        {
+            var errorResponse = await response.Content.ReadAsStringAsync();
+            message = "An error occurred: " + errorResponse;
+
+            OpenNested();
+        }
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}
