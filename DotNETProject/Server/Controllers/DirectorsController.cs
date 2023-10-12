@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DotNETProject.Server.Data;
 using DotNETProject.Server.Models;
+using DotNETProject.Shared;
 
 namespace DotNETProject.Server.Controllers
 {
@@ -25,10 +26,10 @@ namespace DotNETProject.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Director>>> GetDirectors()
         {
-          if (_context.Directors == null)
-          {
-              return NotFound();
-          }
+            if (_context.Directors == null)
+            {
+                return NotFound();
+            }
             return await _context.Directors.ToListAsync();
         }
 
@@ -36,10 +37,10 @@ namespace DotNETProject.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Director>> GetDirector(int id)
         {
-          if (_context.Directors == null)
-          {
-              return NotFound();
-          }
+            if (_context.Directors == null)
+            {
+                return NotFound();
+            }
             var director = await _context.Directors.FindAsync(id);
 
             if (director == null)
@@ -53,12 +54,21 @@ namespace DotNETProject.Server.Controllers
         // PUT: api/Directors/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutDirector(int id, Director director)
+        public async Task<IActionResult> PutDirector(int id, DirectorDto directorDto)
         {
-            if (id != director.Id)
+            if (id != directorDto.Id)
             {
                 return BadRequest();
             }
+
+            Director director = new Director();
+            director.Id = id;
+            director.Name = directorDto.Name;
+            director.Description = directorDto.Description;
+            director.AvatarUrl = directorDto.AvatarUrl;
+            director.BirthDate = directorDto.BirthDate;
+            director.Gender = directorDto.Gender;
+            director.Nation = directorDto.Nation;
 
             _context.Entry(director).State = EntityState.Modified;
 
@@ -84,12 +94,22 @@ namespace DotNETProject.Server.Controllers
         // POST: api/Directors
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Director>> PostDirector(Director director)
+        public async Task<ActionResult<Director>> PostDirector(DirectorDto directorDto)
         {
-          if (_context.Directors == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Directors'  is null.");
-          }
+            if (_context.Directors == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Directors'  is null.");
+            }
+
+            Director director = new Director();
+            director.Id = directorDto.Id;
+            director.Name = directorDto.Name;
+            director.Description = directorDto.Description;
+            director.AvatarUrl = directorDto.AvatarUrl;
+            director.BirthDate = directorDto.BirthDate;
+            director.Gender = directorDto.Gender;
+            director.Nation = directorDto.Nation;
+
             _context.Directors.Add(director);
             await _context.SaveChangesAsync();
 

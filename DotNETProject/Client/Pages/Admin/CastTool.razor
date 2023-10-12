@@ -32,7 +32,9 @@
             <RowTemplate>
                 <MudTd DataLabel="ID">@context.Id</MudTd>
                 <MudTd DataLabel="Name">@context.Name</MudTd>
-                <MudTd DataLabel="Avatar">@context.AvatarUrl</MudTd>
+                <MudTd DataLabel="Avatar">
+                    <MudImage Src="@context.AvatarUrl" Width="75" Height="75" Alt="@context.Name" Elevation="25" Class="rounded-lg" />
+                </MudTd>
                 <MudTd DataLabel="Gender">@context.Gender</MudTd>
                 <MudTd DataLabel="Nation">@context.Nation</MudTd>
                 <MudTd DataLabel="BirthDate">@context.BirthDate</MudTd>
