@@ -31,23 +31,43 @@ namespace DotNETProject.Server.Controllers
                 return NotFound();
             }
 
-            List<Cast> list = await _context.Casts.ToListAsync();
-            List<CastDto> result = new List<CastDto>();
+            var castEntities = await _context.Casts
+                .Include(cast => cast.FilmCasts)
+                .ThenInclude(filmCast => filmCast.Film)
+                .ToListAsync();
 
-            foreach (var item in list)
+            var castDtos = new List<CastDto>();
+
+            foreach (var castEntity in castEntities)
             {
-                CastDto itemResult = new CastDto();
-                itemResult.Id = item.Id;
-                itemResult.Name = item.Name;
-                itemResult.Description = item.Description;
-                itemResult.BirthDate = item.BirthDate;
-                itemResult.AvatarUrl = item.AvatarUrl;
-                itemResult.Gender = item.Gender;
-                itemResult.Nation = item.Nation;
-                result.Add(itemResult);
+                var castDto = new CastDto()
+                {
+                    Id = castEntity.Id,
+                    Name = castEntity.Name,
+                    Description = castEntity.Description,
+                    BirthDate = castEntity.BirthDate,
+                    AvatarUrl = castEntity.AvatarUrl,
+                    Gender = castEntity.Gender,
+                    Nation = castEntity.Nation,
+                };
+
+                foreach (var filmCast in castEntity.FilmCasts)
+                {
+                    var filmCastDto = new FilmCastDto()
+                    {
+                        Film = new FilmDto()
+                        {
+                            Name = filmCast.Film.Name
+                        },
+                        Role = filmCast.Role
+                    };
+                    castDto.FilmCasts.Add(filmCastDto);
+                }
+
+                castDtos.Add(castDto);
             }
 
-            return result;
+            return castDtos;
         }
 
         // GET: api/Casts/5

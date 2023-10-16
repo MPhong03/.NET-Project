@@ -39,7 +39,32 @@
                 <MudTd DataLabel="Nation">@context.Nation</MudTd>
                 <MudTd DataLabel="BirthDate">@context.BirthDate</MudTd>
                 <MudTd DataLabel="Description">@context.Description.Substring(0, 20)...</MudTd>
-                <MudTd DataLabel="Participate">Updating</MudTd>
+                <MudTd DataLabel="Participate">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => OpenDirectorNested(context.Id))">Show all movies</MudButton>
+
+                    <MudDialog @bind-IsVisible="showDirectorDialogStates[context.Id]">
+                        <DialogContent>
+                            @if (context.FilmDirectors.Count != 0)
+                            {
+                                @foreach (var director in context.FilmDirectors)
+                                {
+                                    <MudText>
+                                        <MudItem xs="12">
+                                            @director.Film.Name
+                                        </MudItem>
+                                    </MudText>
+                                }
+                            }
+                            else
+                            {
+                                <MudText>Haven't directed yet</MudText>
+                            }
+                        </DialogContent>
+                        <DialogActions>
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => CloseDirectorNested(context.Id))">Close</MudButton>
+                        </DialogActions>
+                    </MudDialog>
+                </MudTd>
                 <MudTd>
                     <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => Deletedirector(context.Id))">Delete</MudButton>
                 </MudTd>
@@ -60,11 +85,28 @@
     private HashSet<DirectorDto> selectedItems = new HashSet<DirectorDto>();
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
+    Dictionary<int, bool> showDirectorDialogStates = new Dictionary<int, bool>();
+
     private IEnumerable<DirectorDto> director = new List<DirectorDto>();
 
     protected override async Task OnInitializedAsync()
     {
         director = await httpClient.GetFromJsonAsync<List<DirectorDto>>($"api/directors");
+
+        foreach (var directorDto in director)
+        {
+            showDirectorDialogStates[directorDto.Id] = false;
+        }
+    }
+
+    void OpenDirectorNested(int movieId)
+    {
+        showDirectorDialogStates[movieId] = true;
+    }
+
+    void CloseDirectorNested(int movieId)
+    {
+        showDirectorDialogStates[movieId] = false;
     }
 
     private bool FilterFunc1(DirectorDto element) => FilterFunc(element, searchString1);

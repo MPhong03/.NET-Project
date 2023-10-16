@@ -39,7 +39,32 @@
                 <MudTd DataLabel="Nation">@context.Nation</MudTd>
                 <MudTd DataLabel="BirthDate">@context.BirthDate</MudTd>
                 <MudTd DataLabel="Description">@context.Description.Substring(0, 20)...</MudTd>
-                <MudTd DataLabel="Participate">Updating</MudTd>
+                <MudTd DataLabel="Participate">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => OpenCastNested(context.Id))">Show all casts</MudButton>
+
+                    <MudDialog @bind-IsVisible="showCastDialogStates[context.Id]">
+                        <DialogContent>
+                            @if (context.FilmCasts.Count != 0)
+                            {
+                                @foreach (var cast in context.FilmCasts)
+                                {
+                                    <MudText>
+                                        <MudItem xs="12">
+                                            @cast.Film.Name - @cast.Role
+                                        </MudItem>
+                                    </MudText>
+                                }
+                            }
+                            else
+                            {
+                                <MudText>Haven't participated yet</MudText>
+                            }
+                        </DialogContent>
+                        <DialogActions>
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@(() => CloseCastNested(context.Id))">Close</MudButton>
+                        </DialogActions>
+                    </MudDialog>
+                </MudTd>
                 <MudTd>
                     <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => DeleteCast(context.Id))">Delete</MudButton>
                 </MudTd>
@@ -60,11 +85,28 @@
     private HashSet<CastDto> selectedItems = new HashSet<CastDto>();
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
+    Dictionary<int, bool> showCastDialogStates = new Dictionary<int, bool>();
+
     private IEnumerable<CastDto> cast = new List<CastDto>();
 
     protected override async Task OnInitializedAsync()
     {
         cast = await httpClient.GetFromJsonAsync<List<CastDto>>($"api/Casts");
+
+        foreach (var castDto in cast)
+        {
+            showCastDialogStates[castDto.Id] = false;
+        }
+    }
+
+    void OpenCastNested(int movieId)
+    {
+        showCastDialogStates[movieId] = true;
+    }
+
+    void CloseCastNested(int movieId)
+    {
+        showCastDialogStates[movieId] = false;
     }
 
     private bool FilterFunc1(CastDto element) => FilterFunc(element, searchString1);

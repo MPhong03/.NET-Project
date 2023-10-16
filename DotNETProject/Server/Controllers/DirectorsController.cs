@@ -24,13 +24,49 @@ namespace DotNETProject.Server.Controllers
 
         // GET: api/Directors
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Director>>> GetDirectors()
+        public async Task<ActionResult<IEnumerable<DirectorDto>>> GetDirectors()
         {
             if (_context.Directors == null)
             {
                 return NotFound();
             }
-            return await _context.Directors.ToListAsync();
+
+            var directorEntities = await _context.Directors
+                .Include(director => director.FilmDirectors)
+                .ThenInclude(filmDirector => filmDirector.Film)
+                .ToListAsync();
+
+            var directorDtos = new List<DirectorDto>();
+
+            foreach (var directorEntity in directorEntities)
+            {
+                var directorDto = new DirectorDto()
+                {
+                    Id = directorEntity.Id,
+                    Name = directorEntity.Name,
+                    Description = directorEntity.Description,
+                    BirthDate = directorEntity.BirthDate,
+                    AvatarUrl = directorEntity.AvatarUrl,
+                    Gender = directorEntity.Gender,
+                    Nation = directorEntity.Nation,
+                };
+
+                foreach (var filmDirector in directorEntity.FilmDirectors)
+                {
+                    var filmDirectorDto = new FilmDirectorDto()
+                    {
+                        Film = new FilmDto()
+                        {
+                            Name = filmDirector.Film.Name
+                        }
+                    };
+                    directorDto.FilmDirectors.Add(filmDirectorDto);
+                }
+
+                directorDtos.Add(directorDto);
+            }
+
+            return directorDtos;
         }
 
         // GET: api/Directors/5

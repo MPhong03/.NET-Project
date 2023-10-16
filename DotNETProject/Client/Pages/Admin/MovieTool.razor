@@ -55,8 +55,51 @@
                 <MudTd DataLabel="Logo">
                     <MudImage Src="@context.LogoUrl" Width="75" Height="75" Alt="@context.Name" Elevation="25" Class="rounded-lg" />
                 </MudTd>
-                <MudTd DataLabel="Casts">Updating</MudTd>
-                <MudTd DataLabel="Directors">Updating</MudTd>
+                <MudTd DataLabel="Casts">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => OpenCastNested(context.Id)">Show Casts</MudButton>
+
+                    <MudDialog @bind-IsVisible="showCastDialogStates[context.Id]">
+                        <DialogContent>
+                            @if (context.FilmCasts.Count != 0)
+                            {
+                                @foreach (var cast in context.FilmCasts)
+                                {
+                                    <MudText>@(cast.Cast.Name + " - " + cast.Role)</MudText>
+                                }
+                            }
+                            else
+                            {
+                                <MudText>There is no actor/actress</MudText>
+                            }
+                        </DialogContent>
+                        <DialogActions>
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => CloseCastNested(context.Id)">Close</MudButton>
+                        </DialogActions>
+                    </MudDialog>
+                </MudTd>
+
+                <MudTd DataLabel="Directors">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => OpenDirectorNested(context.Id)">Show Directors</MudButton>
+
+                    <MudDialog @bind-IsVisible="showDirectorDialogStates[context.Id]">
+                        <DialogContent>
+                            @if (context.FilmDirectors.Count != 0)
+                            {
+                                @foreach (var director in context.FilmDirectors)
+                                {
+                                    <MudText>@director.Director.Name</MudText>
+                                }
+                            }
+                            else
+                            {
+                                <MudText>There is no director</MudText>
+                            }
+                        </DialogContent>
+                        <DialogActions>
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => CloseDirectorNested(context.Id)">Close</MudButton>
+                        </DialogActions>
+                    </MudDialog>
+                </MudTd>
                 <MudTd DataLabel="TrailerUrl">@context.TrailerUrl</MudTd>
                 <MudTd>
                     <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => DeleteMovie(context.Id))">Delete</MudButton>
@@ -78,12 +121,42 @@
     private HashSet<MovieDto> selectedItems = new HashSet<MovieDto>();
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
+    Dictionary<int, bool> showCastDialogStates = new Dictionary<int, bool>();
+    Dictionary<int, bool> showDirectorDialogStates = new Dictionary<int, bool>();
+
     private IEnumerable<MovieDto> movie = new List<MovieDto>();
 
     protected override async Task OnInitializedAsync()
     {
         movie = await httpClient.GetFromJsonAsync<List<MovieDto>>($"api/Movies");
+
+        foreach (var movieDto in movie)
+        {
+            showCastDialogStates[movieDto.Id] = false;
+            showDirectorDialogStates[movieDto.Id] = false;
+        }
     }
+
+    void OpenCastNested(int movieId)
+    {
+        showCastDialogStates[movieId] = true;
+    }
+
+    void CloseCastNested(int movieId)
+    {
+        showCastDialogStates[movieId] = false;
+    }
+
+    void OpenDirectorNested(int movieId)
+    {
+        showDirectorDialogStates[movieId] = true;
+    }
+
+    void CloseDirectorNested(int movieId)
+    {
+        showDirectorDialogStates[movieId] = false;
+    }
+
 
     private bool FilterFunc1(MovieDto element) => FilterFunc(element, searchString1);
 

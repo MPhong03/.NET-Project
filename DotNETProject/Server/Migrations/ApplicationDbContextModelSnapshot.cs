@@ -55,7 +55,7 @@ namespace DotNETProject.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("casts");
+                    b.ToTable("casts", (string)null);
                 });
 
             modelBuilder.Entity("DotNETProject.Server.Models.Director", b =>
@@ -91,7 +91,7 @@ namespace DotNETProject.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("directors");
+                    b.ToTable("directors", (string)null);
                 });
 
             modelBuilder.Entity("DotNETProject.Server.Models.Episode", b =>
@@ -124,7 +124,7 @@ namespace DotNETProject.Server.Migrations
 
                     b.HasIndex("SeriesId");
 
-                    b.ToTable("episodes");
+                    b.ToTable("episodes", (string)null);
                 });
 
             modelBuilder.Entity("DotNETProject.Server.Models.Film", b =>
@@ -171,7 +171,7 @@ namespace DotNETProject.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("films");
+                    b.ToTable("films", (string)null);
 
                     b.UseTptMappingStrategy();
                 });
@@ -200,7 +200,7 @@ namespace DotNETProject.Server.Migrations
 
                     b.HasIndex("FilmId");
 
-                    b.ToTable("filmcasts");
+                    b.ToTable("filmcasts", (string)null);
                 });
 
             modelBuilder.Entity("DotNETProject.Server.Models.FilmDirector", b =>
@@ -223,7 +223,7 @@ namespace DotNETProject.Server.Migrations
 
                     b.HasIndex("FilmId");
 
-                    b.ToTable("filmdirectors");
+                    b.ToTable("filmdirectors", (string)null);
                 });
 
             modelBuilder.Entity("DotNETProject.Server.Models.User", b =>
@@ -267,7 +267,7 @@ namespace DotNETProject.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("users");
+                    b.ToTable("users", (string)null);
                 });
 
             modelBuilder.Entity("DotNETProject.Server.Models.Movie", b =>
@@ -286,14 +286,14 @@ namespace DotNETProject.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("movies");
+                    b.ToTable("movies", (string)null);
                 });
 
             modelBuilder.Entity("DotNETProject.Server.Models.TVSeries", b =>
                 {
                     b.HasBaseType("DotNETProject.Server.Models.Film");
 
-                    b.ToTable("tvseries");
+                    b.ToTable("tvseries", (string)null);
                 });
 
             modelBuilder.Entity("DotNETProject.Server.Models.Episode", b =>

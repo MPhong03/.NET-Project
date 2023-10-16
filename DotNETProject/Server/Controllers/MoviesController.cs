@@ -25,13 +25,75 @@ namespace DotNETProject.Server.Controllers
 
         // GET: api/Movies
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Movie>>> GetMovies()
+        public async Task<ActionResult<IEnumerable<MovieDto>>> GetMovies()
         {
             if (_context.Movies == null)
             {
                 return NotFound();
             }
-            return await _context.Movies.ToListAsync();
+
+            var movieEntities = await _context.Movies
+                .Include(movie => movie.FilmCasts)
+                .ThenInclude(filmCast => filmCast.Cast)
+                .Include(movie => movie.FilmDirectors)
+                .ThenInclude(filmDirector => filmDirector.Director)
+                .ToListAsync();
+
+            var movieDtos = new List<MovieDto>();
+
+            foreach (var movieEntity in movieEntities)
+            {
+                var movieDto = new MovieDto()
+                {
+                    Id = movieEntity.Id,
+                    Time = movieEntity.Time,
+                    Title = movieEntity.Title,
+                    Link = movieEntity.Link,
+                    Name = movieEntity.Name,
+                    ReleaseYear = movieEntity.ReleaseYear,
+                    Description = movieEntity.Description,
+                    IMDBScore = movieEntity.IMDBScore,
+                    View = movieEntity.View,
+                    PosterUrl = movieEntity.PosterUrl,
+                    BackgroundUrl = movieEntity.BackgroundUrl,
+                    LogoUrl = movieEntity.LogoUrl,
+                    TrailerUrl = movieEntity.TrailerUrl,
+                };
+
+                foreach (var filmCast in movieEntity.FilmCasts)
+                {
+                    var filmCastDto = new FilmCastDto()
+                    {
+                        Film = new FilmDto()
+                        {
+                            Name = filmCast.Film.Name
+                        },
+                        Cast = new CastDto()
+                        {
+                            Name = filmCast.Cast.Name
+                        },
+                        Role = filmCast.Role
+                    };
+                    movieDto.FilmCasts.Add(filmCastDto);
+                }
+
+                foreach (var filmDirector in movieEntity.FilmDirectors)
+                {
+                    var filmDirectorDto = new FilmDirectorDto()
+                    {
+                        DirectorId = filmDirector.DirectorId,
+                        Director = new DirectorDto()
+                        {
+                            Name = filmDirector.Director.Name
+                        }
+                    };
+                    movieDto.FilmDirectors.Add(filmDirectorDto);
+                }
+
+                movieDtos.Add(movieDto);
+            }
+
+            return movieDtos;
         }
 
         // GET: api/Movies/5
