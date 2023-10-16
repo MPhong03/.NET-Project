@@ -9,7 +9,7 @@ namespace DotNETProject.Server.Models
         [Key]
         public int Id { get; set; }
         public string EpisodeName { get; set; } = string.Empty;
-        public int Time { get; set; } = 0;
+        public string Time { get; set; } = string.Empty;
         public string Link { get; set; } = string.Empty;
         public long View { get; set; } = long.MinValue;
         public TVSeries Series { get; set; } = new TVSeries();

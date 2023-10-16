@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DotNETProject.Server.Data;
 using DotNETProject.Server.Models;
+using DotNETProject.Shared;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace DotNETProject.Server.Controllers
 {
@@ -25,10 +27,10 @@ namespace DotNETProject.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Movie>>> GetMovies()
         {
-          if (_context.Movies == null)
-          {
-              return NotFound();
-          }
+            if (_context.Movies == null)
+            {
+                return NotFound();
+            }
             return await _context.Movies.ToListAsync();
         }
 
@@ -36,10 +38,10 @@ namespace DotNETProject.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Movie>> GetMovie(int id)
         {
-          if (_context.Movies == null)
-          {
-              return NotFound();
-          }
+            if (_context.Movies == null)
+            {
+                return NotFound();
+            }
             var movie = await _context.Movies.FindAsync(id);
 
             if (movie == null)
@@ -84,17 +86,87 @@ namespace DotNETProject.Server.Controllers
         // POST: api/Movies
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Movie>> PostMovie(Movie movie)
+        public async Task<ActionResult<Movie>> PostMovie(MovieDto movieDto)
         {
-          if (_context.Movies == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Movies'  is null.");
-          }
+            if (_context.Movies == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Movies' is null.");
+            }
+
+            if (movieDto.FilmCasts == null)
+            {
+                return Problem("FilmCasts collection is null.");
+            }
+
+            Movie movie = new Movie
+            {
+                Title = movieDto.Title,
+                Time = movieDto.Time,
+                Link = movieDto.Link,
+                Name = movieDto.Name,
+                ReleaseYear = movieDto.ReleaseYear,
+                Description = movieDto.Description,
+                IMDBScore = movieDto.IMDBScore,
+                View = movieDto.View,
+                PosterUrl = movieDto.PosterUrl,
+                BackgroundUrl = movieDto.BackgroundUrl,
+                LogoUrl = movieDto.LogoUrl,
+                TrailerUrl = movieDto.TrailerUrl
+            };
+
+            if (movieDto.FilmCasts != null)
+            {
+                foreach (var filmCastDto in movieDto.FilmCasts)
+                {
+                    //Cast cast = new Cast
+                    //{
+                    //    Name = filmCastDto.Cast.Name,
+                    //    AvatarUrl = filmCastDto.Cast.AvatarUrl,
+                    //    BirthDate = filmCastDto.Cast.BirthDate,
+                    //    Gender = filmCastDto.Cast.Gender,
+                    //    Nation = filmCastDto.Cast.Nation,
+                    //    Description = filmCastDto.Cast.Description
+                    //};
+
+                    FilmCast filmCast = new FilmCast
+                    {
+                        Cast = await _context.Casts.FindAsync(filmCastDto.Cast.Id),
+                        Role = filmCastDto.Role
+                    };
+
+                    movie.FilmCasts.Add(filmCast);
+                }
+            }
+
+            if (movieDto.FilmDirectors != null)
+            {
+                foreach (var filmDirectorDto in movieDto.FilmDirectors)
+                {
+                    //Director director = new Director
+                    //{
+                    //    Name = filmDirectorDto.Director.Name,
+                    //    AvatarUrl = filmDirectorDto.Director.AvatarUrl,
+                    //    BirthDate = filmDirectorDto.Director.BirthDate,
+                    //    Gender = filmDirectorDto.Director.Gender,
+                    //    Nation = filmDirectorDto.Director.Nation,
+                    //    Description = filmDirectorDto.Director.Description
+                    //};
+
+                    FilmDirector filmDirector = new FilmDirector
+                    {
+                        Director = await _context.Directors.FindAsync(filmDirectorDto.Director.Id),
+                    };
+
+                    movie.FilmDirectors.Add(filmDirector);
+                }
+            }
+
             _context.Movies.Add(movie);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetMovie", new { id = movie.Id }, movie);
         }
+
 
         // DELETE: api/Movies/5
         [HttpDelete("{id}")]

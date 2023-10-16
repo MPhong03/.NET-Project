@@ -8,8 +8,8 @@ namespace DotNETProject.Shared
         public string Name { get; set; } = string.Empty;
         public string ReleaseYear { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public double IMDBScore { get; set; } = double.MinValue;
-        public long View { get; set; } = long.MinValue;
+        public double IMDBScore { get; set; } = 0;
+        public long View { get; set; } = 0;
         public string PosterUrl { get; set; } = string.Empty;
         public string BackgroundUrl { get; set; } = string.Empty;
         public string LogoUrl { get; set; } = string.Empty;

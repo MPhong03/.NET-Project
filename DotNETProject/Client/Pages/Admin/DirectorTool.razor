@@ -38,7 +38,7 @@
                 <MudTd DataLabel="Gender">@context.Gender</MudTd>
                 <MudTd DataLabel="Nation">@context.Nation</MudTd>
                 <MudTd DataLabel="BirthDate">@context.BirthDate</MudTd>
-                <MudTd DataLabel="Description">@context.Description</MudTd>
+                <MudTd DataLabel="Description">@context.Description.Substring(0, 20)...</MudTd>
                 <MudTd DataLabel="Participate">Updating</MudTd>
                 <MudTd>
                     <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => Deletedirector(context.Id))">Delete</MudButton>

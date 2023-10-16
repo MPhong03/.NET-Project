@@ -17,5 +17,22 @@ namespace DotNETProject.Server.Data
         public DbSet<Cast> Casts { get; set; }
         public DbSet<FilmCast> FilmCasts { get; set; }
         public DbSet<Director> Directors { get; set; }
+
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    // For the "casts" table
+        //    modelBuilder.Entity<Cast>()
+        //        .Property(c => c.Id)
+        //        .UseIdentityColumn();
+
+        //    // For the "directors" table
+        //    modelBuilder.Entity<Director>()
+        //        .Property(d => d.Id)
+        //        .UseIdentityColumn();
+
+        //    base.OnModelCreating(modelBuilder);
+        //}
+
+
     }
 }
