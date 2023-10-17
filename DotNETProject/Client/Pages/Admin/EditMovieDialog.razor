@@ -317,13 +317,6 @@
 
             string imageFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.Name)}";
 
-            var existingImage = await storage.Child(folderPath).Child(imageFileName).GetDownloadUrlAsync();
-
-            if (!string.IsNullOrEmpty(existingImage))
-            {
-                return existingImage;
-            }
-
             var imageUrl = await storage.Child(folderPath)
                 .Child(imageFileName)
                 .PutAsync(file.OpenReadStream(maxAllowedSize: MAXALLOWEDSIZE));
