@@ -10,9 +10,10 @@
 <MudGrid>
     <!-- Content -->
     <MudItem xs="12">
-        <MudButton Class="m-3 ml-0" Variant="Variant.Filled" Color="Color.Primary" OnClick="@((e) => OpenDialog(maxWidth))">NEW MOVIE</MudButton>
+        <MudButton Class="m-3 ml-0" Color="Color.Primary" OnClick="@((e) => OpenDialog(maxWidth))">NEW MOVIE</MudButton>
+        <MudButton Class="m-3 ml-0" Color="Color.Error" OnClick="DeleteSelectedMovie">DELETE SELECTED</MudButton>
         <!-- Table of actor/ actress -->
-        <MudTable Items="@movie" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<MovieDto,bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
+        <MudTable MultiSelection="true" Items="@movie" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<MovieDto,bool>(FilterFunc1)" @bind-SelectedItems="selectedItems">
             <ToolBarContent>
                 <MudText Typo="Typo.h6">MOVIES</MudText>
                 <MudSpacer />
@@ -34,7 +35,8 @@
                 <MudTh>Casts</MudTh>
                 <MudTh>Directors</MudTh>
                 <MudTh>TrailerUrl</MudTh>
-                <MudTh>Action</MudTh>
+                <MudTh></MudTh>
+                <MudTh></MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd DataLabel="ID">@context.Id</MudTd>
@@ -118,6 +120,9 @@
                 <MudTd>
                     <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => DeleteMovie(context.Id))">Delete</MudButton>
                 </MudTd>
+                <MudTd>
+                     <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="@(() => EditMovie(context))">Edit</MudButton>
+                </MudTd>
             </RowTemplate>
             <PagerContent>
                 <MudTablePager />
@@ -131,7 +136,7 @@
     private bool striped = false;
     private bool bordered = false;
     private string searchString1 = "";
-    private MovieDto selectedItem1 = null;
+
     private HashSet<MovieDto> selectedItems = new HashSet<MovieDto>();
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
@@ -185,6 +190,14 @@
         return false;
     }
 
+    private void EditMovie(MovieDto movieDto)
+    {
+        DialogParameters paras = new DialogParameters();
+        paras.Add("currentMovie", movieDto);
+
+        Dialog.Show<EditMovieDialog>("Edit Movie", paras);
+    }
+
     private void OpenDialog(DialogOptions options)
     {
         Dialog.Show<NewMovieDialog>("New Movie", options);
@@ -209,4 +222,37 @@
         }
     }
 
+    private async void DeleteSelectedMovie()
+    {
+        bool? result = await Dialog.ShowMessageBox("Confirm Delete", "R u sure bout that? Data can't be change after remove!", yesText: "Yes", noText: "No");
+
+        if (result == true)
+        {
+            foreach (var item in selectedItems)
+            {
+                try
+                {
+                    HttpResponseMessage response = await httpClient.DeleteAsync($"api/Movies/{item.Id}");
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        selectedItems.Remove(item);
+                    }
+                    else
+                    {
+                        await Dialog.ShowMessageBox("Error", "Failed to delete the movie. Please try again.");
+                    }
+                }
+                catch (HttpRequestException)
+                {
+                    await Dialog.ShowMessageBox("Network Error", "Failed to connect to the server. Please check your internet connection.");
+                }
+                catch (Exception ex)
+                {
+                    await Dialog.ShowMessageBox("Error", $"An unexpected error occurred: {ex.Message}");
+                }
+            }
+            await JSRuntime.InvokeVoidAsync("refreshPage");
+        }
+    }
 }

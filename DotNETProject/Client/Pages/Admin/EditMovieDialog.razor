@@ -1,0 +1,366 @@
+﻿@page "/admin/editmoviedialog"
+@using DotNETProject.Shared;
+@using MudBlazor
+@using Firebase.Storage;
+@inject HttpClient httpClient
+@inject IDialogService Dialog
+@inject IJSRuntime JSRuntime
+
+<MudDialog>
+    <DialogContent>
+        <MudTextField @bind-Value="currentMovie.Title" Label="Title" />
+        <MudTextField @bind-Value="currentMovie.Time" Label="Time" />
+
+        <MudImage Src="@currentMovie.PosterUrl" Alt="@currentMovie.Title" Elevation="25" Class="rounded-lg" />
+        <MudImage Src="@currentMovie.BackgroundUrl" Alt="@currentMovie.Title" Elevation="25" Class="rounded-lg" />
+        <MudImage Src="@currentMovie.LogoUrl" Alt="@currentMovie.Title" Elevation="25" Class="rounded-lg" />
+
+        <MudFileUpload @bind-Files="video" Label="Video" T="IBrowserFile" Accept=".MKV .MOV .MP4">
+            <ButtonTemplate>
+                <MudButton HtmlTag="label"
+                           Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           StartIcon="@Icons.Material.Filled.CloudUpload"
+                           for="@context">
+                    Video
+                </MudButton>
+            </ButtonTemplate>
+        </MudFileUpload>
+
+        <!-- The image preview -->
+        @if (video != null)
+        {
+            <MudText Icon="@Icons.Material.Filled.AttachFile">
+                @video.Name <code>@video.Size bytes</code>
+            </MudText>
+        }
+
+        <MudTextField @bind-Value="currentMovie.Name" Label="Name" />
+        <MudTextField @bind-Value="currentMovie.ReleaseYear" Label="Release Year" />
+        <MudTextField @bind-Value="currentMovie.Description" Label="Description" Lines="5" />
+        <MudTextField @bind-Value="currentMovie.IMDBScore" Label="IMDB" Format="F1" />
+        <MudTextField @bind-Value="currentMovie.View" Label="View" />
+
+        <MudFileUpload @bind-Files="poster" Label="Poster" T="IBrowserFile" Accept=".png, .jpg">
+            <ButtonTemplate>
+                <MudButton HtmlTag="label"
+                           Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           StartIcon="@Icons.Material.Filled.CloudUpload"
+                           for="@context">
+                    Poster
+                </MudButton>
+            </ButtonTemplate>
+        </MudFileUpload>
+
+        <!-- The image preview -->
+        @if (poster != null)
+        {
+            <MudText Icon="@Icons.Material.Filled.AttachFile">
+                @poster.Name <code>@poster.Size bytes</code>
+            </MudText>
+        }
+
+        <MudFileUpload @bind-Files="background" Label="Background Image" T="IBrowserFile" Accept=".png, .jpg">
+            <ButtonTemplate>
+                <MudButton HtmlTag="label"
+                           Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           StartIcon="@Icons.Material.Filled.CloudUpload"
+                           for="@context">
+                    Background
+                </MudButton>
+            </ButtonTemplate>
+        </MudFileUpload>
+
+        <!-- The image preview -->
+        @if (background != null)
+        {
+            <MudText Icon="@Icons.Material.Filled.AttachFile">
+                @background.Name <code>@background.Size bytes</code>
+            </MudText>
+        }
+
+
+        <MudFileUpload @bind-Files="logo" Label="Logo Image" T="IBrowserFile" Accept=".png, .jpg">
+            <ButtonTemplate>
+                <MudButton HtmlTag="label"
+                           Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           StartIcon="@Icons.Material.Filled.CloudUpload"
+                           for="@context">
+                    Logo
+                </MudButton>
+            </ButtonTemplate>
+        </MudFileUpload>
+
+        <!-- The image preview -->
+        @if (logo != null)
+        {
+            <MudText Icon="@Icons.Material.Filled.AttachFile">
+                @logo.Name <code>@logo.Size bytes</code>
+            </MudText>
+        }
+
+        <MudTextField @bind-Value="currentMovie.TrailerUrl" Label="Trailer Url" />
+
+        @* INPUT CASTS DIALOG *@
+        <MudButton OnClick="OpenNestedForCast">Select Casts</MudButton>
+
+        @if (filmCastDtos.Count != 0)
+        {
+            @foreach (var item in filmCastDtos)
+            {
+                <MudText>
+                    @item.Cast.Name - @item.Role ;
+                </MudText>
+            }
+
+        }
+
+        <MudDialog @bind-IsVisible="nestedVisibleForCast">
+            <DialogContent>
+                <MudText>Choose Cast(s) and Role(s)</MudText>
+
+                <MudSelect @bind-Value="selectedCast" Label="Select Cast" Data="casts" T="CastDto">
+                    @foreach (var cast in casts)
+                    {
+                        <MudSelectItem T="CastDto" Value="@cast">@cast.Name</MudSelectItem>
+                    }
+                </MudSelect>
+
+                <!-- Text field for Role -->
+                <MudTextField @bind-Value="selectedRole" Label="Role" />
+
+            </DialogContent>
+            <DialogActions>
+                <MudButton OnClick="CloseNestedForCast">Cancel</MudButton>
+                <MudButton Color="Color.Primary" OnClick="UpdateCast">Ok</MudButton>
+            </DialogActions>
+        </MudDialog>
+
+        @* INPUT DIRECTORS DIALOG *@
+
+        <MudButton OnClick="OpenNestedForDirector">Select Director</MudButton>
+
+        @if (filmDirectorDtos.Count != 0)
+        {
+            @foreach (var item in filmDirectorDtos)
+            {
+                <MudText>
+                    @item.Director.Name;
+                </MudText>
+            }
+
+        }
+
+        <MudDialog @bind-IsVisible="nestedVisibleForDirector">
+            <DialogContent>
+                <MudText>Choose Directors</MudText>
+
+                <MudSelect @bind-Value="selectedDirector" Label="Select Director" Data="directors" T="DirectorDto">
+                    @foreach (var director in directors)
+                    {
+                        <MudSelectItem T="DirectorDto" Value="@director">@director.Name</MudSelectItem>
+                    }
+                </MudSelect>
+
+
+            </DialogContent>
+            <DialogActions>
+                <MudButton OnClick="CloseNestedForDirector">Cancel</MudButton>
+                <MudButton Color="Color.Primary" OnClick="UpdateDirector">Ok</MudButton>
+            </DialogActions>
+        </MudDialog>
+
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+<MudDialog @bind-IsVisible="nestedVisible">
+    <DialogContent>
+        <MudText Class="nested">@message</MudText>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public MovieDto currentMovie { get; set; }
+
+    public IBrowserFile poster;
+    public IBrowserFile background;
+    public IBrowserFile logo;
+    public IBrowserFile video;
+    public long MAXALLOWEDSIZE = 2147483648;
+
+    private string message;
+    private bool nestedVisible;
+    private void OpenNested() => nestedVisible = true;
+    private void CloseNested() => nestedVisible = false;
+
+    private bool nestedVisibleForCast;
+    private void OpenNestedForCast() => nestedVisibleForCast = true;
+    private void CloseNestedForCast() => nestedVisibleForCast = false;
+
+    private bool nestedVisibleForDirector;
+    private void OpenNestedForDirector() => nestedVisibleForDirector = true;
+    private void CloseNestedForDirector() => nestedVisibleForDirector = false;
+
+    private IEnumerable<CastDto> casts = new List<CastDto>();
+    private ICollection<FilmCastDto> filmCastDtos = new List<FilmCastDto>();
+    private IEnumerable<DirectorDto> directors = new List<DirectorDto>();
+    private ICollection<FilmDirectorDto> filmDirectorDtos = new List<FilmDirectorDto>();
+
+    private DirectorDto selectedDirector;
+    private CastDto selectedCast;
+    private string selectedRole;
+
+    private void UpdateCast()
+    {
+        FilmCastDto filmCastDto = new FilmCastDto();
+        filmCastDto.Cast = selectedCast;
+        filmCastDto.Role = selectedRole;
+
+        filmCastDtos.Add(filmCastDto);
+    }
+
+    private void UpdateDirector()
+    {
+        FilmDirectorDto filmDirectorDto = new FilmDirectorDto();
+        filmDirectorDto.Director = selectedDirector;
+
+        filmDirectorDtos.Add(filmDirectorDto);
+    }
+
+    async Task Submit()
+    {
+        try
+        {
+            string folderName = (currentMovie.Title).ToLower().Replace(' ', '-');
+            string posterUrl = currentMovie.PosterUrl;
+            string backgroundUrl = currentMovie.BackgroundUrl;
+            string logoUrl = currentMovie.LogoUrl;
+            string videoUrl = currentMovie.Link;
+
+            if(poster != null)
+            {
+                posterUrl = await HandleFirebaseUpload(poster, "Films/Movies/" + folderName + "/Image");
+            }
+            if(background != null)
+            {
+                backgroundUrl = await HandleFirebaseUpload(background, "Films/Movies/" + folderName + "/Image");
+            }
+            if(logo != null)
+            {
+                logoUrl = await HandleFirebaseUpload(logo, "Films/Movies/" + folderName + "/Image");
+            }
+            if(video != null)
+            {
+                videoUrl = await HandleFirebaseUpload(video, "Films/Movies/" + folderName + "/Video");
+            }
+   
+            if (!string.IsNullOrEmpty(posterUrl) && !string.IsNullOrEmpty(backgroundUrl) && !string.IsNullOrEmpty(logoUrl) && !string.IsNullOrEmpty(videoUrl))
+            {
+                currentMovie.PosterUrl = posterUrl;
+                currentMovie.BackgroundUrl = backgroundUrl;
+                currentMovie.LogoUrl = logoUrl;
+                currentMovie.Link = videoUrl;
+                currentMovie.FilmCasts = filmCastDtos;
+                currentMovie.FilmDirectors = filmDirectorDtos;
+
+                var response = await httpClient.PutAsJsonAsync($"api/Movies/{currentMovie.Id}", currentMovie);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MudDialog.Close(DialogResult.Ok(true));
+                    await JSRuntime.InvokeVoidAsync("refreshPage");
+                }
+                else
+                {
+                    var errorResponse = await response.Content.ReadAsStringAsync();
+                    message = "An error occurred while saving to the database: " + errorResponse;
+                    OpenNested();
+                }
+            }
+            else
+            {
+                message = "An error occurred while uploading to Firebase.";
+                OpenNested();
+            }
+        }
+        catch (Exception ex)
+        {
+            message = "An error occurred: " + ex.Message;
+            OpenNested();
+        }
+    }
+
+    async Task<string> HandleFirebaseUpload(IBrowserFile file, string folderPath)
+    {
+        try
+        {
+
+            var storage = new FirebaseStorage("dotnetproject-339c8.appspot.com");
+
+            folderPath = folderPath.Trim('/');
+
+            var folderRef = storage.Child(folderPath);
+            var folderExists = await FolderExistsAsync(folderRef);
+            if (!folderExists)
+            {
+                await CreateFolderAsync(folderRef);
+            }
+
+            string imageFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.Name)}";
+
+            var existingImage = await storage.Child(folderPath).Child(imageFileName).GetDownloadUrlAsync();
+
+            if (!string.IsNullOrEmpty(existingImage))
+            {
+                return existingImage;
+            }
+
+            var imageUrl = await storage.Child(folderPath)
+                .Child(imageFileName)
+                .PutAsync(file.OpenReadStream(maxAllowedSize: MAXALLOWEDSIZE));
+
+            return imageUrl;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Exception: {ex.Message}");
+            return null;
+        }
+    }
+
+    private async Task<bool> FolderExistsAsync(FirebaseStorageReference folderRef)
+    {
+        try
+        {
+            await folderRef.GetDownloadUrlAsync();
+            return true;
+        }
+        catch (FirebaseStorageException)
+        {
+            return false;
+        }
+    }
+
+    private async Task CreateFolderAsync(FirebaseStorageReference folderRef)
+    {
+        try
+        {
+            await folderRef.Child(".placeholder").PutAsync(new MemoryStream());
+        }
+        catch (FirebaseStorageException ex)
+        {
+            Console.WriteLine($"Error creating folder: {ex.Message}");
+        }
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}
