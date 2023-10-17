@@ -11,7 +11,7 @@
         <MudTextField @bind-Value="movieDto.Title" Label="Title" />
         <MudTextField @bind-Value="movieDto.Time" Label="Time" />
 
-        <MudFileUpload @bind-Files="video" Label="Video" T="IBrowserFile" Accept=".mkv .mov .mp4">
+        <MudFileUpload @bind-Files="video" Label="Video" T="IBrowserFile" Accept=".MKV .MOV .MP4">
             <ButtonTemplate>
                 <MudButton HtmlTag="label"
                            Variant="Variant.Filled"
@@ -33,7 +33,7 @@
 
         <MudTextField @bind-Value="movieDto.Name" Label="Name" />
         <MudTextField @bind-Value="movieDto.ReleaseYear" Label="Release Year" />
-        <MudTextField @bind-Value="movieDto.Description" Label="Description" />
+        <MudTextField @bind-Value="movieDto.Description" Label="Description" Lines="5" />
         <MudTextField @bind-Value="movieDto.IMDBScore" Label="IMDB" Format="F1" />
         <MudTextField @bind-Value="movieDto.View" Label="View" />
 
@@ -246,7 +246,7 @@
             string posterUrl = await HandleFirebaseUpload(poster, "Films/Movies/" + folderName + "/Image");
             string backgroundUrl = await HandleFirebaseUpload(background, "Films/Movies/" + folderName + "/Image");
             string logoUrl = await HandleFirebaseUpload(logo, "Films/Movies/" + folderName + "/Image");
-            string videoUrl = await HandleFirebaseUpload(logo, "Films/Movies/" + folderName + "/Video");
+            string videoUrl = await HandleFirebaseUpload(video, "Films/Movies/" + folderName + "/Video");
 
             if (!string.IsNullOrEmpty(posterUrl) && !string.IsNullOrEmpty(backgroundUrl) && !string.IsNullOrEmpty(logoUrl) && !string.IsNullOrEmpty(videoUrl))
             {

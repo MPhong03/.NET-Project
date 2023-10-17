@@ -11,7 +11,7 @@ namespace DotNETProject.Server.Models
         public int Id { get; set; }
         public int DirectorId { get; set; }
         [JsonIgnore]
-        public Director Director { get; set; }
+        public Director Director { get; set; } = new Director();
         public int FilmId { get; set; }
         [JsonIgnore]
         public Film Film { get; set; } = new Film();

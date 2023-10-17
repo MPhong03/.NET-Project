@@ -9,7 +9,7 @@
 <MudDialog>
     <DialogContent>
         <MudTextField @bind-Value="castDto.Name" Label="Name" />
-        <MudTextField @bind-Value="castDto.Description" Label="Description" />
+        <MudTextField @bind-Value="castDto.Description" Label="Description" Lines="5" />
         @* <MudTextField @bind-Value="castDto.AvatarUrl" Label="Avatar URL" /> *@
 
         <MudFileUpload @bind-Files="image" Label="Avatar Image" T="IBrowserFile" Accept=".png, .jpg">
@@ -60,7 +60,6 @@
     private CastDto castDto = new CastDto();
     public String Male = "Male";
     public String Female = "Female";
-    public DateTime? birth;
     public IBrowserFile image;
 
     private string message;
@@ -114,6 +113,13 @@
             string folderPath = "Casts/Avatars";
             string imageFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.Name)}";
 
+            var existingImage = await storage.Child(folderPath).Child(imageFileName).GetDownloadUrlAsync();
+
+            if (!string.IsNullOrEmpty(existingImage))
+            {
+                return existingImage;
+            }
+
             var imageUrl = await storage.Child(folderPath)
                 .Child(imageFileName)
                 .PutAsync(file.OpenReadStream());
@@ -126,8 +132,6 @@
             return null;
         }
     }
-
-
 
     void Cancel() => MudDialog.Cancel();
 }

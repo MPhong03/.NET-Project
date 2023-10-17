@@ -1,16 +1,15 @@
-﻿@page "/create-director"
+﻿@page "/admin/editdirectordialog"
 @using DotNETProject.Shared;
-@using Firebase.Storage;
 @using MudBlazor
-@inject IDialogService Dialog
+@using Firebase.Storage;
 @inject HttpClient httpClient
 @inject IJSRuntime JSRuntime
 
 <MudDialog>
     <DialogContent>
-        <MudTextField @bind-Value="directorDto.Name" Label="Name" />
-        <MudTextField @bind-Value="directorDto.Description" Label="Description" Lines="5" />
-        
+        <MudTextField @bind-Value="currentDirector.Name" Label="Name" />
+        <MudTextField @bind-Value="currentDirector.Description" Label="Description" Lines="5" />
+        <MudImage Src="@currentDirector.AvatarUrl" Alt="@currentDirector.Name" Elevation="25" Class="rounded-lg" />
         <MudFileUpload @bind-Files="image" Label="Avatar Image" T="IBrowserFile" Accept=".png, .jpg">
             <ButtonTemplate>
                 <MudButton HtmlTag="label"
@@ -31,15 +30,15 @@
             </MudText>
         }
 
-        <MudTextField @bind-Value="directorDto.Nation" Label="Nation" />
+        <MudTextField @bind-Value="currentDirector.Nation" Label="Nation" />
 
 
-        <MudSelect Label="Gender" @bind-Value="directorDto.Gender">
+        <MudSelect Label="Gender" @bind-Value="currentDirector.Gender">
             <MudSelectItem Value="Male" Text="Male" />
             <MudSelectItem Value="Female" Text="Female" />
         </MudSelect>
 
-        <MudDatePicker PickerVariant="PickerVariant.Dialog" Label="BirthDate" Editable="true" DateFormat="dd.MM.yyyy" @bind-Date="directorDto.BirthDate" Placeholder="Select Date" />
+        <MudDatePicker PickerVariant="PickerVariant.Dialog" Label="BirthDate" Editable="true" DateFormat="dd.MM.yyyy" @bind-Date="currentDirector.BirthDate" Placeholder="Select Date" />
 
     </DialogContent>
     <DialogActions>
@@ -52,14 +51,15 @@
     <DialogContent>
         <MudText Class="nested">@message</MudText>
     </DialogContent>
-    <DialogActions>
-        <MudButton Color="Color.Primary" OnClick="CloseNested">Close</MudButton>
-    </DialogActions>
 </MudDialog>
 
 @code {
-    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
-    private DirectorDto directorDto = new DirectorDto();
+    [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public int Id { get; set; }
+
+    [Parameter] public DirectorDto currentDirector { get; set; }
+
     public String Male = "Male";
     public String Female = "Female";
     public DateTime? birth;
@@ -74,12 +74,20 @@
     {
         try
         {
-            string imageUrl = await HandleFirebaseImageUpload(image);
+            string imageUrl;
+            if (image != null)
+            {
+                imageUrl = await HandleFirebaseImageUpload(image);
+            }
+            else
+            {
+                imageUrl = currentDirector.AvatarUrl;
+            }
 
             if (!string.IsNullOrEmpty(imageUrl))
             {
-                directorDto.AvatarUrl = imageUrl;
-                var response = await httpClient.PostAsJsonAsync("api/Directors", directorDto);
+                currentDirector.AvatarUrl = imageUrl;
+                var response = await httpClient.PutAsJsonAsync($"api/Directors/{currentDirector.Id}", currentDirector);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -115,6 +123,13 @@
 
             string folderPath = "Directors/Avatars";
             string imageFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.Name)}";
+
+            var existingImage = await storage.Child(folderPath).Child(imageFileName).GetDownloadUrlAsync();
+
+            if (!string.IsNullOrEmpty(existingImage))
+            {
+                return existingImage;
+            }
 
             var imageUrl = await storage.Child(folderPath)
                 .Child(imageFileName)

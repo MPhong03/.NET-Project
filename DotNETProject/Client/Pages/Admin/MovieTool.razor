@@ -21,6 +21,9 @@
             <HeaderContent>
                 <MudTh>ID</MudTh>
                 <MudTh>Title</MudTh>
+                <MudTh>Poster</MudTh>
+                <MudTh>Background</MudTh>
+                <MudTh>Logo</MudTh>
                 <MudTh>Link</MudTh>
                 <MudTh>Time</MudTh>
                 <MudTh>Name</MudTh>
@@ -28,9 +31,6 @@
                 <MudTh>Description</MudTh>
                 <MudTh>IMDBScore</MudTh>
                 <MudTh>View</MudTh>
-                <MudTh>Poster</MudTh>
-                <MudTh>Background</MudTh>
-                <MudTh>Logo</MudTh>
                 <MudTh>Casts</MudTh>
                 <MudTh>Directors</MudTh>
                 <MudTh>TrailerUrl</MudTh>
@@ -39,13 +39,6 @@
             <RowTemplate>
                 <MudTd DataLabel="ID">@context.Id</MudTd>
                 <MudTd DataLabel="Name">@context.Title</MudTd>
-                <MudTd DataLabel="Link">@context.Link</MudTd>
-                <MudTd DataLabel="Time">@context.Time</MudTd>
-                <MudTd DataLabel="Name">@context.Name</MudTd>
-                <MudTd DataLabel="ReleaseYear">@context.ReleaseYear</MudTd>
-                <MudTd DataLabel="Description">@context.Description.Substring(0, 20)...</MudTd>
-                <MudTd DataLabel="IMDBScore">@context.IMDBScore</MudTd>
-                <MudTd DataLabel="View">@context.View</MudTd>
                 <MudTd DataLabel="Poster">
                     <MudImage Src="@context.PosterUrl" Width="75" Height="75" Alt="@context.Name" Elevation="25" Class="rounded-lg" />
                 </MudTd>
@@ -55,8 +48,29 @@
                 <MudTd DataLabel="Logo">
                     <MudImage Src="@context.LogoUrl" Width="75" Height="75" Alt="@context.Name" Elevation="25" Class="rounded-lg" />
                 </MudTd>
+                <MudTd DataLabel="Link">@context.Link</MudTd>
+                <MudTd DataLabel="Time">@context.Time</MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="ReleaseYear">@context.ReleaseYear</MudTd>
+                <MudTd DataLabel="Description">
+                    @if (context.Description.Length < 20)
+                    {
+                           <MudTd DataLabel="Description">
+                            @context.Description
+                        </MudTd>
+                    }
+                    else
+                    {
+                        <MudTd DataLabel="Description">
+                            @context.Description.Substring(0, 20)...
+                        </MudTd>
+                    }
+                </MudTd>
+                <MudTd DataLabel="IMDBScore">@context.IMDBScore</MudTd>
+                <MudTd DataLabel="View">@context.View</MudTd>
+                
                 <MudTd DataLabel="Casts">
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => OpenCastNested(context.Id)">Show Casts</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => OpenCastNested(context.Id)">Show</MudButton>
 
                     <MudDialog @bind-IsVisible="showCastDialogStates[context.Id]">
                         <DialogContent>
@@ -79,7 +93,7 @@
                 </MudTd>
 
                 <MudTd DataLabel="Directors">
-                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => OpenDirectorNested(context.Id)">Show Directors</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => OpenDirectorNested(context.Id)">Show</MudButton>
 
                     <MudDialog @bind-IsVisible="showDirectorDialogStates[context.Id]">
                         <DialogContent>

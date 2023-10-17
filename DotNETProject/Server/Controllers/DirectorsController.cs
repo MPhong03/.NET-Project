@@ -98,7 +98,7 @@ namespace DotNETProject.Server.Controllers
             }
 
             Director director = new Director();
-            director.Id = id;
+            director.Id = directorDto.Id;
             director.Name = directorDto.Name;
             director.Description = directorDto.Description;
             director.AvatarUrl = directorDto.AvatarUrl;
