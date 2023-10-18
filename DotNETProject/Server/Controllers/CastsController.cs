@@ -72,20 +72,50 @@ namespace DotNETProject.Server.Controllers
 
         // GET: api/Casts/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Cast>> GetCast(int id)
+        public async Task<ActionResult<CastDto>> GetCast(int id)
         {
             if (_context.Casts == null)
             {
                 return NotFound();
             }
-            var cast = await _context.Casts.FindAsync(id);
 
-            if (cast == null)
+            var castEntity = await _context.Casts
+                .Include(cast => cast.FilmCasts)
+                .ThenInclude(filmCast => filmCast.Film)
+                .FirstOrDefaultAsync(c => c.Id == id);
+
+            if (castEntity == null)
             {
                 return NotFound();
             }
 
-            return cast;
+            var castDto = new CastDto()
+            {
+                Id = castEntity.Id,
+                Name = castEntity.Name,
+                Description = castEntity.Description,
+                BirthDate = castEntity.BirthDate,
+                AvatarUrl = castEntity.AvatarUrl,
+                Gender = castEntity.Gender,
+                Nation = castEntity.Nation,
+            };
+
+            foreach (var filmCast in castEntity.FilmCasts)
+            {
+                var filmCastDto = new FilmCastDto()
+                {
+                    Film = new FilmDto()
+                    {
+                        Name = filmCast.Film.Name,
+                        Id = filmCast.Id,
+                        PosterUrl = filmCast.Film.PosterUrl
+                    },
+                    Role = filmCast.Role
+                };
+                castDto.FilmCasts.Add(filmCastDto);
+            }
+
+            return castDto;
         }
 
         // PUT: api/Casts/5

@@ -67,7 +67,9 @@ namespace DotNETProject.Server.Controllers
                         },
                         Cast = new CastDto()
                         {
-                            Name = filmCast.Cast.Name
+                            Name = filmCast.Cast.Name,
+                            AvatarUrl = filmCast.Cast.AvatarUrl,
+                            Id = filmCast.Cast.Id
                         },
                         Role = filmCast.Role
                     };
@@ -108,20 +110,86 @@ namespace DotNETProject.Server.Controllers
 
         // GET: api/TVSeries/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TVSeries>> GetTVSeries(int id)
+        public async Task<ActionResult<TVSeriesDto>> GetTVSeries(int id)
         {
             if (_context.TVSeries == null)
             {
                 return NotFound();
             }
-            var tVSeries = await _context.TVSeries.FindAsync(id);
 
-            if (tVSeries == null)
+            var tVSeriesEntity = await _context.TVSeries
+                .Include(tVSeries => tVSeries.FilmCasts)
+                .ThenInclude(filmCast => filmCast.Cast)
+                .Include(tVSeries => tVSeries.FilmDirectors)
+                .ThenInclude(filmDirector => filmDirector.Director)
+                .Include(tVSeries => tVSeries.episodes)
+                .FirstOrDefaultAsync(t => t.Id == id);
+
+            if (tVSeriesEntity == null)
             {
                 return NotFound();
             }
 
-            return tVSeries;
+            var tVSeriesDto = new TVSeriesDto()
+            {
+                Id = tVSeriesEntity.Id,
+                Name = tVSeriesEntity.Name,
+                ReleaseYear = tVSeriesEntity.ReleaseYear,
+                Description = tVSeriesEntity.Description,
+                IMDBScore = tVSeriesEntity.IMDBScore,
+                View = tVSeriesEntity.View,
+                PosterUrl = tVSeriesEntity.PosterUrl,
+                BackgroundUrl = tVSeriesEntity.BackgroundUrl,
+                LogoUrl = tVSeriesEntity.LogoUrl,
+                TrailerUrl = tVSeriesEntity.TrailerUrl,
+            };
+
+            foreach (var filmCast in tVSeriesEntity.FilmCasts)
+            {
+                var filmCastDto = new FilmCastDto()
+                {
+                    Film = new FilmDto()
+                    {
+                        Name = filmCast.Film.Name
+                    },
+                    Cast = new CastDto()
+                    {
+                        Name = filmCast.Cast.Name,
+                        AvatarUrl = filmCast.Cast.AvatarUrl,
+                        Id = filmCast.Cast.Id
+                    },
+                    Role = filmCast.Role
+                };
+                tVSeriesDto.FilmCasts.Add(filmCastDto);
+            }
+
+            foreach (var filmDirector in tVSeriesEntity.FilmDirectors)
+            {
+                var filmDirectorDto = new FilmDirectorDto()
+                {
+                    DirectorId = filmDirector.DirectorId,
+                    Director = new DirectorDto()
+                    {
+                        Name = filmDirector.Director.Name
+                    }
+                };
+                tVSeriesDto.FilmDirectors.Add(filmDirectorDto);
+            }
+
+            foreach (var episode in tVSeriesEntity.episodes)
+            {
+                var episodeDto = new EpisodeDto()
+                {
+                    Id = episode.Id,
+                    EpisodeName = episode.EpisodeName,
+                    Link = episode.Link,
+                    Time = episode.Time,
+                    View = episode.View
+                };
+                tVSeriesDto.episodes.Add(episodeDto);
+            }
+
+            return tVSeriesDto;
         }
 
         // PUT: api/TVSeries/5

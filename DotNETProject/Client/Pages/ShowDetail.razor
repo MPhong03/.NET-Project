@@ -1,0 +1,102 @@
+﻿@page "/show/{Id}"
+@using DotNETProject.Shared;
+@inject HttpClient httpClient
+
+<PageTitle>Chi Tiết Phim</PageTitle>
+<!-- Banner Start -->
+<div class="container">
+    <img id="banner" src="@show.BackgroundUrl" class="d-block w-100" alt="...">
+    <button><a href="#">XEM NGAY</a></button>
+    <div class="main-content movie">
+        <section class="movie-detail container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="trending-info g-border">
+                        <h1 class="trending-text big-title text-uppercase mt-0">@show.Name</h1>
+                        <ul class="p-0 list-inline d-flex align-items-center movie-content">
+                            <li class="text-white">Hành Động</li>
+                            <li class="text-white">Phiêu Lưu</li>
+                            <li class="text-white">Viễn Tưởng</li>
+                        </ul>
+                        <div class="d-flex align-items-center text-white text-detail">
+                            <span class="trending-year">@show.ReleaseYear</span>
+                        </div>
+                        <p class="trending-dec w-100 mb-0">
+                            @show.Description
+                            @* Jaime Reyes-mới tốt nghiệp trở về quê nhà để tìm kiếm tương lai mới nhưng mọi
+                            thứ quá khó khăn cho cậu. Cuộc đời Jaime bỗng rẽ hướng với món cổ vật cậu nhặt
+                            được-Scarab chọn cậu làm vật chủ và trở thành siêu anh hùng BLUE BEETLE với
+                            bộ áo giáp tối tân nhất. *@
+                        </p><br>
+                        <h4 class="text-white">Diễn Viên</h4><br>
+                        <div class="container list">
+
+                            <div class="row">
+                                @foreach (var item in show.FilmCasts)
+                                {
+                                    <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6">
+                                        <a href="/cast/@item.Cast.Id">
+                                            <img id="cast" src="@item.Cast.AvatarUrl" alt="@item.Cast.Name" />
+                                            <p>@item.Cast.Name</p><p>@item.Role</p>
+                                        </a>
+                                    </div>
+
+                                    Console.WriteLine($"Name: {@item.Cast.Name}");
+                                    Console.WriteLine($"Url: {@item.Cast.AvatarUrl}");
+                                }
+                            </div>
+
+                            @* <div class="row">
+                            <div class="col-md-4">
+                            <div class="row">
+                            <div class="col-6"><a href=""><img id="cast" src="img/cast/cast-1-1.jpg"><p>Xolo Maridueña</p></a></div>
+                            <div class="col-6"><a href=""><img id="cast" src="img/cast/cast-1-1.jpg"><p>Xolo </p></a></div>
+                            </div>
+                            </div>
+                            <div class="col-md-4">
+                            <div class="row">
+                            <div class="col-6"><a href=""><img id="cast" src="img/cast/cast-1-1.jpg"><p>Xolo Maridueña</p></a></div>
+                            <div class="col-6"><a href=""><img id="cast" src="img/cast/cast-1-1.jpg"><p>Xolo Maridueña</p></a></div>
+                            </div>
+                            </div>
+                            <div class="col-md-4">
+                            <div class="row">
+                            <div class="col-6"><a href=""><img id="cast" src="img/cast/cast-1-1.jpg"><p>Xolo Maridueña</p></a></div>
+                            <div class="col-6"><a href=""><img id="cast" src="img/cast/cast-1-1.jpg"><p>Xolo Maridueña</p></a></div>
+                            </div>
+                            </div>
+                            </div> *@
+                        </div>
+
+                        <h4 class="text-white">Danh sách các tập</h4><br>
+
+                        <ul class="list-group list-group-flush">
+
+                            @foreach (var item in show.episodes)
+                            {
+                                <button type="button" class="list-group-item list-group-item-action">
+                                    Tập @item.Id - @item.EpisodeName
+                                </button>
+                            }
+
+                        </ul>
+                        
+
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Id { get; set; }
+
+    private TVSeriesDto show = new TVSeriesDto();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        show = await httpClient.GetFromJsonAsync<TVSeriesDto>($"api/TVSeries/{Int32.Parse(Id)}");
+    }
+}

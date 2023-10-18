@@ -19,6 +19,34 @@
     <div class="row mt-3">
         <div class="col-md-12">
             <h3 class="text-light">Các phim đã tham gia</h3>
+
+            <div class="container">
+                <div class="row">
+                    @foreach (var item in cast.FilmCasts)
+                    {
+                        var movieDto = item.Film as MovieDto;
+                        if (movieDto != null)
+                        {
+                            <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6"><a href="/movie/@movieDto.Id"><img src="@movieDto.PosterUrl"><p>@movieDto.Name</p></a></div>
+                        }
+                        else
+                        {
+                            var showDto = item.Film as TVSeriesDto;
+                            if (showDto != null)
+                            {
+                                <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6"><a href="/show/@showDto.Id"><img src="@showDto.PosterUrl"><p>@showDto.Name</p></a></div>
+                            }
+                            else
+                            {
+                                <p>Diễn viên chưa tham gia bất kỳ bộ phim nào!</p>
+                            }
+                        }
+                    }
+
+                </div>
+            </div>
+            
+
         </div>
     </div>
 </div>
