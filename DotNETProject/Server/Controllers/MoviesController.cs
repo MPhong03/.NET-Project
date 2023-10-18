@@ -124,7 +124,6 @@ namespace DotNETProject.Server.Controllers
                 return BadRequest();
             }
 
-            // Retrieve the movie from the database by Id
             var movie = await _context.Movies
                 .Include(m => m.FilmCasts)
                 .Include(m => m.FilmDirectors)
@@ -135,11 +134,9 @@ namespace DotNETProject.Server.Controllers
                 return NotFound();
             }
 
-            // Clear the existing FilmCasts and FilmDirectors for this movie
             movie.FilmCasts.Clear();
             movie.FilmDirectors.Clear();
 
-            // Update the movie entity with the data from movieDto
             movie.Title = movieDto.Title;
             movie.Time = movieDto.Time;
             movie.Link = movieDto.Link;
@@ -153,16 +150,13 @@ namespace DotNETProject.Server.Controllers
             movie.LogoUrl = movieDto.LogoUrl;
             movie.TrailerUrl = movieDto.TrailerUrl;
 
-            // Update the FilmCasts relationships
             if (movieDto.FilmCasts != null)
             {
                 foreach (var filmCastDto in movieDto.FilmCasts)
                 {
-                    // Retrieve the corresponding Cast entity from the database by Id
                     var cast = await _context.Casts.FindAsync(filmCastDto.Cast.Id);
                     if (cast != null)
                     {
-                        // Create a new FilmCast and associate it with the Cast
                         var filmCast = new FilmCast
                         {
                             Cast = cast,
@@ -173,16 +167,13 @@ namespace DotNETProject.Server.Controllers
                 }
             }
 
-            // Update the FilmDirectors relationships
             if (movieDto.FilmDirectors != null)
             {
                 foreach (var filmDirectorDto in movieDto.FilmDirectors)
                 {
-                    // Retrieve the corresponding Director entity from the database by Id
                     var director = await _context.Directors.FindAsync(filmDirectorDto.Director.Id);
                     if (director != null)
                     {
-                        // Create a new FilmDirector and associate it with the Director
                         var filmDirector = new FilmDirector
                         {
                             Director = director

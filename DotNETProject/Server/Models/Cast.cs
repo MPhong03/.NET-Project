@@ -16,7 +16,6 @@ namespace DotNETProject.Server.Models
         public string Nation { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         [JsonIgnore]
-
         public ICollection<FilmCast> FilmCasts { get; set; } = new List<FilmCast>();
     }
 }

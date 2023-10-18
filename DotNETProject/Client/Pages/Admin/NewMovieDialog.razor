@@ -8,166 +8,243 @@
 
 <MudDialog>
     <DialogContent>
-        <MudTextField @bind-Value="movieDto.Title" Label="Title" />
-        <MudTextField @bind-Value="movieDto.Time" Label="Time" />
 
-        <MudFileUpload @bind-Files="video" Label="Video" T="IBrowserFile" Accept=".MKV .MOV .MP4">
-            <ButtonTemplate>
-                <MudButton HtmlTag="label"
-                           Variant="Variant.Filled"
-                           Color="Color.Primary"
-                           StartIcon="@Icons.Material.Filled.CloudUpload"
-                           for="@context">
-                    Video
-                </MudButton>
-            </ButtonTemplate>
-        </MudFileUpload>
+        <MudGrid>
 
-        <!-- The image preview -->
-        @if (video != null)
-        {
-            <MudText Icon="@Icons.Material.Filled.AttachFile">
-                @video.Name <code>@video.Size bytes</code>
-            </MudText>
-        }
+            <MudItem xs=12>
+                <MudTextField @bind-Value="movieDto.Title" Label="Title" />
 
-        <MudTextField @bind-Value="movieDto.Name" Label="Name" />
-        <MudTextField @bind-Value="movieDto.ReleaseYear" Label="Release Year" />
-        <MudTextField @bind-Value="movieDto.Description" Label="Description" Lines="5" />
-        <MudTextField @bind-Value="movieDto.IMDBScore" Label="IMDB" Format="F1" />
-        <MudTextField @bind-Value="movieDto.View" Label="View" />
+                <MudTextField @bind-Value="movieDto.Time" Label="Time" />
 
-        <MudFileUpload @bind-Files="poster" Label="Poster" T="IBrowserFile" Accept=".png, .jpg">
-            <ButtonTemplate>
-                <MudButton HtmlTag="label"
-                           Variant="Variant.Filled"
-                           Color="Color.Primary"
-                           StartIcon="@Icons.Material.Filled.CloudUpload"
-                           for="@context">
-                    Poster
-                </MudButton>
-            </ButtonTemplate>
-        </MudFileUpload>
+                <MudTextField @bind-Value="movieDto.TrailerUrl" Label="Trailer Url" />
 
-        <!-- The image preview -->
-        @if (poster != null)
-        {
-            <MudText Icon="@Icons.Material.Filled.AttachFile">
-                @poster.Name <code>@poster.Size bytes</code>
-            </MudText>
-        }
+                <MudTextField @bind-Value="movieDto.Name" Label="Name" />
 
-        <MudFileUpload @bind-Files="background" Label="Background Image" T="IBrowserFile" Accept=".png, .jpg">
-            <ButtonTemplate>
-                <MudButton HtmlTag="label"
-                           Variant="Variant.Filled"
-                           Color="Color.Primary"
-                           StartIcon="@Icons.Material.Filled.CloudUpload"
-                           for="@context">
-                    Background
-                </MudButton>
-            </ButtonTemplate>
-        </MudFileUpload>
+                <MudTextField @bind-Value="movieDto.ReleaseYear" Label="Release Year" />
 
-        <!-- The image preview -->
-        @if (background != null)
-        {
-            <MudText Icon="@Icons.Material.Filled.AttachFile">
-                @background.Name <code>@background.Size bytes</code>
-            </MudText>
-        }
-        
+                <MudTextField @bind-Value="movieDto.Description" Label="Description" Lines="5" />
 
-        <MudFileUpload @bind-Files="logo" Label="Logo Image" T="IBrowserFile" Accept=".png, .jpg">
-            <ButtonTemplate>
-                <MudButton HtmlTag="label"
-                           Variant="Variant.Filled"
-                           Color="Color.Primary"
-                           StartIcon="@Icons.Material.Filled.CloudUpload"
-                           for="@context">
-                    Logo
-                </MudButton>
-            </ButtonTemplate>
-        </MudFileUpload>
+                <MudTextField @bind-Value="movieDto.IMDBScore" Label="IMDB" Format="F1" />
 
-        <!-- The image preview -->
-        @if (logo != null)
-        {
-            <MudText Icon="@Icons.Material.Filled.AttachFile">
-                @logo.Name <code>@logo.Size bytes</code>
-            </MudText>
-        }
-        
-        <MudTextField @bind-Value="movieDto.TrailerUrl" Label="Trailer Url" />
+                <MudTextField @bind-Value="movieDto.View" Label="View" />
 
-        @* INPUT CASTS DIALOG *@
-        <MudButton OnClick="OpenNestedForCast">Select Casts</MudButton>
+                <MudGrid>
 
-        @if(filmCastDtos.Count != 0)
-        {
-            @foreach(var item in filmCastDtos)
-            {
+                    <MudItem xs="3">
+                        <MudFileUpload @bind-Files="video" Label="Video" T="IBrowserFile" Accept=".MKV .MOV .MP4">
+                            <ButtonTemplate>
+                                <MudButton HtmlTag="label"
+                                           Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           StartIcon="@Icons.Material.Filled.CloudUpload"
+                                           for="@context">
+                                    Upload Movie
+                                </MudButton>
+                            </ButtonTemplate>
+                        </MudFileUpload>
+                    </MudItem>
+
+                    <MudItem xs="3">
+                        <MudFileUpload @bind-Files="poster" Label="Poster" T="IBrowserFile" Accept=".png, .jpg">
+                            <ButtonTemplate>
+                                <MudButton HtmlTag="label"
+                                           Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           StartIcon="@Icons.Material.Filled.CloudUpload"
+                                           for="@context">
+                                    Upload Poster
+                                </MudButton>
+                            </ButtonTemplate>
+                        </MudFileUpload>
+                    </MudItem>
+
+                    <MudItem xs="3">
+                        <MudFileUpload @bind-Files="background" Label="Background Image" T="IBrowserFile" Accept=".png, .jpg">
+                            <ButtonTemplate>
+                                <MudButton HtmlTag="label"
+                                           Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           StartIcon="@Icons.Material.Filled.CloudUpload"
+                                           for="@context">
+                                    Upload Background
+                                </MudButton>
+                            </ButtonTemplate>
+                        </MudFileUpload>
+                    </MudItem>
+
+                    <MudItem xs="3">
+                        <MudFileUpload @bind-Files="logo" Label="Logo Image" T="IBrowserFile" Accept=".png, .jpg">
+                            <ButtonTemplate>
+                                <MudButton HtmlTag="label"
+                                           Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           StartIcon="@Icons.Material.Filled.CloudUpload"
+                                           for="@context">
+                                    Upload Logo
+                                </MudButton>
+                            </ButtonTemplate>
+                        </MudFileUpload>
+                    </MudItem>
+
+                </MudGrid>
+
+                <!-- The video preview -->
+                @if (video != null)
+                {
+                    <MudText Icon="@Icons.Material.Filled.AttachFile">
+                        @video.Name <code>@video.Size bytes</code>
+                    </MudText>
+                }
+
+                <!-- The video preview -->
+                @if (poster != null)
+                {
+                    <MudText Icon="@Icons.Material.Filled.AttachFile">
+                        @poster.Name <code>@poster.Size bytes</code>
+                    </MudText>
+                }
+
+                <!-- The background preview -->
+                @if (background != null)
+                {
+                    <MudText Icon="@Icons.Material.Filled.AttachFile">
+                        @background.Name <code>@background.Size bytes</code>
+                    </MudText>
+                }
+
+                <!-- The logo preview -->
+                @if (logo != null)
+                {
+                    <MudText Icon="@Icons.Material.Filled.AttachFile">
+                        @logo.Name <code>@logo.Size bytes</code>
+                    </MudText>
+                }
+
+            </MudItem>
+
+            <MudItem xs="6">
+                @* INPUT CASTS DIALOG *@
+                <MudButton OnClick="OpenNestedForCast">Select Casts</MudButton>
+
+                @* @if (filmCastDtos.Count != 0)
+                {
+                @foreach (var item in filmCastDtos)
+                {
                 <MudText>
-                    @item.Cast.Name - @item.Role ;
+                > @item.Cast.Name - @item.Role ;
                 </MudText>
-            }
-            
-        }
+                }
 
-        <MudDialog @bind-IsVisible="nestedVisibleForCast">
-            <DialogContent>
-                <MudText>Choose Cast(s) and Role(s)</MudText>
+                } *@
 
-                <MudSelect @bind-Value="selectedCast" Label="Select Cast" Data="casts" T="CastDto">
-                    @foreach(var cast in casts)
-                    {
-                        <MudSelectItem T="CastDto" Value="@cast">@cast.Name</MudSelectItem>
-                    }
-                </MudSelect>
+                <MudTable T="FilmCastDto" Items="@filmCastDtos" MultiSelection="true" Hover="true">
+                    <HeaderContent>
+                        <MudTh>Id</MudTh>
+                        <MudTh>Name</MudTh>
+                        <MudTh>Role</MudTh>
+                        @* <MudTh></MudTh>
+                        <MudTh></MudTh> *@
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Id">@context.Cast.Id</MudTd>
+                        <MudTd DataLabel="Name">@context.Cast.Name</MudTd>
+                        <MudTd DataLabel="Role">@context.Role</MudTd>
 
-                <!-- Text field for Role -->
-                <MudTextField @bind-Value="selectedRole" Label="Role" />
+                        @* <MudTd DataLabel="Remove">
 
-            </DialogContent>
-            <DialogActions>
-                <MudButton OnClick="CloseNestedForCast">Cancel</MudButton>
-                <MudButton Color="Color.Primary" OnClick="UpdateCast">Ok</MudButton>
-            </DialogActions>
-        </MudDialog>
+                        </MudTd>
+                        <MudTd DataLabel="Delete">
 
-        @* INPUT DIRECTORS DIALOG *@
+                        </MudTd> *@
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager PageSizeOptions="new int[]{50, 100}" />
+                    </PagerContent>
+                    <FooterContent>
+                        <MudTd colspan="5">Select All</MudTd>
+                    </FooterContent>
+                </MudTable>
 
-        <MudButton OnClick="OpenNestedForDirector">Select Director</MudButton>
+                <MudDialog @bind-IsVisible="nestedVisibleForCast">
+                    <DialogContent>
+                        <MudText>Choose Cast(s) and Role(s)</MudText>
 
-        @if (filmDirectorDtos.Count != 0)
-        {
-            @foreach (var item in filmDirectorDtos)
-            {
+                        <MudSelect @bind-Value="selectedCast" Label="Select Cast" Data="casts" T="CastDto">
+                            @foreach (var cast in casts)
+                            {
+                                <MudSelectItem T="CastDto" Value="@cast">@cast.Name</MudSelectItem>
+                            }
+                        </MudSelect>
+
+                        <!-- Text field for Role -->
+                        <MudTextField @bind-Value="selectedRole" Label="Role" />
+
+                    </DialogContent>
+                    <DialogActions>
+                        <MudButton OnClick="CloseNestedForCast">Cancel</MudButton>
+                        <MudButton Color="Color.Primary" OnClick="UpdateCast">Ok</MudButton>
+                    </DialogActions>
+                </MudDialog>
+            </MudItem>
+
+            <MudItem xs="6">
+                @* INPUT DIRECTORS DIALOG *@
+
+                <MudButton OnClick="OpenNestedForDirector">Select Director</MudButton>
+
+                @* @if (filmDirectorDtos.Count != 0)
+                {
+                @foreach (var item in filmDirectorDtos)
+                {
                 <MudText>
-                    @item.Director.Name;
+                > @item.Director.Name
                 </MudText>
-            }
+                }
 
-        }
+                } *@
 
-        <MudDialog @bind-IsVisible="nestedVisibleForDirector">
-            <DialogContent>
-                <MudText>Choose Directors</MudText>
+                <MudTable T="FilmDirectorDto" Items="@filmDirectorDtos" MultiSelection="true" Hover="true">
+                    <HeaderContent>
+                        <MudTh>Id</MudTh>
+                        <MudTh>Name</MudTh>
 
-                <MudSelect @bind-Value="selectedDirector" Label="Select Director" Data="directors" T="DirectorDto">
-                    @foreach (var director in directors)
-                    {
-                        <MudSelectItem T="DirectorDto" Value="@director">@director.Name</MudSelectItem>
-                    }
-                </MudSelect>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Id">@context.Director.Id</MudTd>
+                        <MudTd DataLabel="Name">@context.Director.Name</MudTd>
 
-                
-            </DialogContent>
-            <DialogActions>
-                <MudButton OnClick="CloseNestedForDirector">Cancel</MudButton>
-                <MudButton Color="Color.Primary" OnClick="UpdateDirector">Ok</MudButton>
-            </DialogActions>
-        </MudDialog>
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager PageSizeOptions="new int[]{50, 100}" />
+                    </PagerContent>
+                    <FooterContent>
+                        <MudTd colspan="5">Select All</MudTd>
+                    </FooterContent>
+                </MudTable>
+
+                <MudDialog @bind-IsVisible="nestedVisibleForDirector">
+                    <DialogContent>
+                        <MudText>Choose Directors</MudText>
+
+                        <MudSelect @bind-Value="selectedDirector" Label="Select Director" Data="directors" T="DirectorDto">
+                            @foreach (var director in directors)
+                            {
+                                <MudSelectItem T="DirectorDto" Value="@director">@director.Name</MudSelectItem>
+                            }
+                        </MudSelect>
+
+
+                    </DialogContent>
+
+                    <DialogActions>
+                        <MudButton OnClick="CloseNestedForDirector">Cancel</MudButton>
+                        <MudButton Color="Color.Primary" OnClick="UpdateDirector">Ok</MudButton>
+                    </DialogActions>
+
+                </MudDialog>
+            </MudItem>
+
+        </MudGrid>
 
     </DialogContent>
     <DialogActions>

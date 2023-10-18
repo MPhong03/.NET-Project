@@ -1,4 +1,4 @@
-﻿@page "/create-cast"
+﻿@page "/edit-episode"
 @using DotNETProject.Shared;
 @using Firebase.Storage;
 @using MudBlazor
@@ -8,39 +8,31 @@
 
 <MudDialog>
     <DialogContent>
-        <MudTextField @bind-Value="castDto.Name" Label="Name" />
-        <MudTextField @bind-Value="castDto.Description" Label="Description" Lines="5" />
-        @* <MudTextField @bind-Value="castDto.AvatarUrl" Label="Avatar URL" /> *@
+        <MudText Typo="Typo.h5">New Episode for @TVName</MudText>
 
-        <MudFileUpload @bind-Files="image" Label="Avatar Image" T="IBrowserFile" Accept=".png, .jpg">
+        <MudTextField @bind-Value="currentEpisode.EpisodeName" Label="Name" />
+        <MudTextField @bind-Value="currentEpisode.Time" Label="Time" />
+        <MudTextField @bind-Value="currentEpisode.View" Label="Nation" />
+
+        <MudFileUpload @bind-Files="video" Label="Video" T="IBrowserFile" Accept=".MKV .MOV .MP4">
             <ButtonTemplate>
                 <MudButton HtmlTag="label"
                            Variant="Variant.Filled"
                            Color="Color.Primary"
                            StartIcon="@Icons.Material.Filled.CloudUpload"
                            for="@context">
-                    Avatar
+                    Upload Video
                 </MudButton>
             </ButtonTemplate>
         </MudFileUpload>
 
-        <!-- The image preview -->
-        @if (image != null)
+        <!-- The video preview -->
+        @if (video != null)
         {
             <MudText Icon="@Icons.Material.Filled.AttachFile">
-                @image.Name <code>@image.Size bytes</code>
+                @video.Name <code>@video.Size bytes</code>
             </MudText>
         }
-
-        <MudTextField @bind-Value="castDto.Nation" Label="Nation" />
-
-
-        <MudSelect Label="Gender" @bind-Value="castDto.Gender">
-            <MudSelectItem Value="Male" Text="Male" />
-            <MudSelectItem Value="Female" Text="Female" />
-        </MudSelect>
-
-        <MudDatePicker PickerVariant="PickerVariant.Dialog" Label="BirthDate" Editable="true" DateFormat="dd.MM.yyyy" @bind-Date="castDto.BirthDate" Placeholder="Select Date" />
 
     </DialogContent>
     <DialogActions>
@@ -57,10 +49,15 @@
 
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
-    private CastDto castDto = new CastDto();
-    public String Male = "Male";
-    public String Female = "Female";
+
+    [Parameter] public string TVName { get; set; }
+
+    [Parameter] public EpisodeDto currentEpisode { get; set;  }
+
     public IBrowserFile image;
+    public IBrowserFile video;
+
+    public long MAXALLOWEDSIZE = 2147483648;
 
     private string message;
     private bool nestedVisible;
@@ -71,12 +68,21 @@
     {
         try
         {
-            string imageUrl = await HandleFirebaseImageUpload(image);
+            string folderName = (TVName).ToLower().Replace(' ', '-');
+            string childFolderName = (currentEpisode.EpisodeName).ToLower().Replace(' ', '-');
 
-            if (!string.IsNullOrEmpty(imageUrl))
+            string videoUrl = currentEpisode.Link;
+
+            if(video != null)
             {
-                castDto.AvatarUrl = imageUrl;
-                var response = await httpClient.PostAsJsonAsync("api/Casts", castDto);
+                videoUrl = await HandleFirebaseUpload(video, $"Films/TVSeries/{folderName}/{childFolderName}/Video");
+            }
+
+            if (!string.IsNullOrEmpty(videoUrl))
+            {
+                currentEpisode.Link = videoUrl;
+
+                var response = await httpClient.PutAsJsonAsync($"api/Episodes/{currentEpisode.Id}", currentEpisode);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -89,6 +95,8 @@
                     message = "An error occurred while saving to the database: " + errorResponse;
                     OpenNested();
                 }
+
+                MudDialog.Close(DialogResult.Ok(currentEpisode));
             }
             else
             {
@@ -103,19 +111,27 @@
         }
     }
 
-    async Task<string> HandleFirebaseImageUpload(IBrowserFile file)
+    async Task<string> HandleFirebaseUpload(IBrowserFile file, string folderPath)
     {
         try
         {
 
             var storage = new FirebaseStorage("dotnetproject-339c8.appspot.com");
 
-            string folderPath = "Casts/Avatars";
+            folderPath = folderPath.Trim('/');
+
+            var folderRef = storage.Child(folderPath);
+            var folderExists = await FolderExistsAsync(folderRef);
+            if (!folderExists)
+            {
+                await CreateFolderAsync(folderRef);
+            }
+
             string imageFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.Name)}";
 
             var imageUrl = await storage.Child(folderPath)
                 .Child(imageFileName)
-                .PutAsync(file.OpenReadStream());
+                .PutAsync(file.OpenReadStream(maxAllowedSize: MAXALLOWEDSIZE));
 
             return imageUrl;
         }
@@ -123,6 +139,31 @@
         {
             Console.WriteLine($"Exception: {ex.Message}");
             return null;
+        }
+    }
+
+    private async Task<bool> FolderExistsAsync(FirebaseStorageReference folderRef)
+    {
+        try
+        {
+            await folderRef.GetDownloadUrlAsync();
+            return true;
+        }
+        catch (FirebaseStorageException)
+        {
+            return false;
+        }
+    }
+
+    private async Task CreateFolderAsync(FirebaseStorageReference folderRef)
+    {
+        try
+        {
+            await folderRef.Child(".placeholder").PutAsync(new MemoryStream());
+        }
+        catch (FirebaseStorageException ex)
+        {
+            Console.WriteLine($"Error creating folder: {ex.Message}");
         }
     }
 

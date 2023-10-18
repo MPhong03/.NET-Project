@@ -1,9 +1,9 @@
-﻿@page "/admin/editmoviedialog"
+﻿@page "/create-tv"
 @using DotNETProject.Shared;
-@using MudBlazor
 @using Firebase.Storage;
-@inject HttpClient httpClient
+@using MudBlazor
 @inject IDialogService Dialog
+@inject HttpClient httpClient
 @inject IJSRuntime JSRuntime
 
 <MudDialog>
@@ -11,59 +11,30 @@
 
         <MudGrid>
 
-            <MudItem xs=4>
-                <MudImage Fluid="true" Src="@currentMovie.LogoUrl" Alt="@currentMovie.Title" Elevation="25" Class="rounded-lg" />
-            </MudItem>
+            <MudItem xs=12>
 
-            <MudItem xs=8>
-                <MudImage Fluid="true" Src="@currentMovie.BackgroundUrl" Alt="@currentMovie.Title" Elevation="25" Class="rounded-lg" />
-            </MudItem>
+                <MudTextField @bind-Value="tVSeriesDto.Name" Label="Name" />
 
-            <MudItem xs=4>
-                <MudImage Fluid="true" Src="@currentMovie.PosterUrl" Alt="@currentMovie.Title" Elevation="25" Class="rounded-lg" />
-            </MudItem>
+                <MudTextField @bind-Value="tVSeriesDto.TrailerUrl" Label="Trailer Url" />
 
-            <MudItem xs=8>
-                <MudTextField @bind-Value="currentMovie.Title" Label="Title" />
+                <MudTextField @bind-Value="tVSeriesDto.ReleaseYear" Label="Release Year" />
 
-                <MudTextField @bind-Value="currentMovie.Time" Label="Time" />
+                <MudTextField @bind-Value="tVSeriesDto.Description" Label="Description" Lines="5" />
 
-                <MudTextField @bind-Value="currentMovie.TrailerUrl" Label="Trailer Url" />
+                <MudTextField @bind-Value="tVSeriesDto.IMDBScore" Label="IMDB" Format="F1" />
 
-                <MudTextField @bind-Value="currentMovie.Name" Label="Name" />
+                <MudTextField @bind-Value="tVSeriesDto.View" Label="View" />
 
-                <MudTextField @bind-Value="currentMovie.ReleaseYear" Label="Release Year" />
-
-                <MudTextField @bind-Value="currentMovie.Description" Label="Description" Lines="5" />
-
-                <MudTextField @bind-Value="currentMovie.IMDBScore" Label="IMDB" Format="F1" />
-
-                <MudTextField @bind-Value="currentMovie.View" Label="View" />
-
-                <MudGrid>
+                <MudGrid>                    
 
                     <MudItem xs="3">
-                        <MudFileUpload @bind-Files="video" Label="Video" T="IBrowserFile" Accept=".MKV .MOV .MP4">
+                        <MudFileUpload @bind-Files="poster" Label="Poster" T="IBrowserFile" Accept=".png, .jpg">
                             <ButtonTemplate>
                                 <MudButton HtmlTag="label"
                                            Variant="Variant.Filled"
                                            Color="Color.Primary"
                                            StartIcon="@Icons.Material.Filled.CloudUpload"
                                            for="@context">
-                                    Upload Movie
-                                </MudButton>
-                            </ButtonTemplate>
-                        </MudFileUpload>
-                    </MudItem>
-
-                    <MudItem xs="3">
-                        <MudFileUpload @bind-Files="poster" Label="Poster" T="IBrowserFile" Accept=".png, .jpg">
-                            <ButtonTemplate>
-                                <MudButton HtmlTag="label"
-                                            Variant="Variant.Filled"
-                                            Color="Color.Primary"
-                                            StartIcon="@Icons.Material.Filled.CloudUpload"
-                                            for="@context">
                                     Upload Poster
                                 </MudButton>
                             </ButtonTemplate>
@@ -101,20 +72,12 @@
                 </MudGrid>
 
                 <!-- The video preview -->
-                @if (video != null)
-                {
-                    <MudText Icon="@Icons.Material.Filled.AttachFile">
-                        @video.Name <code>@video.Size bytes</code>
-                    </MudText>
-                }
-
-                <!-- The video preview -->
                 @if (poster != null)
                 {
                     <MudText Icon="@Icons.Material.Filled.AttachFile">
                         @poster.Name <code>@poster.Size bytes</code>
                     </MudText>
-                }                
+                }
 
                 <!-- The background preview -->
                 @if (background != null)
@@ -130,7 +93,7 @@
                     <MudText Icon="@Icons.Material.Filled.AttachFile">
                         @logo.Name <code>@logo.Size bytes</code>
                     </MudText>
-                }               
+                }
 
             </MudItem>
 
@@ -140,12 +103,12 @@
 
                 @* @if (filmCastDtos.Count != 0)
                 {
-                    @foreach (var item in filmCastDtos)
-                    {
-                        <MudText>
-                            > @item.Cast.Name - @item.Role ;
-                        </MudText>
-                    }
+                @foreach (var item in filmCastDtos)
+                {
+                <MudText>
+                > @item.Cast.Name - @item.Role ;
+                </MudText>
+                }
 
                 } *@
 
@@ -206,12 +169,12 @@
 
                 @* @if (filmDirectorDtos.Count != 0)
                 {
-                    @foreach (var item in filmDirectorDtos)
-                    {
-                        <MudText>
-                            > @item.Director.Name
-                        </MudText>
-                    }
+                @foreach (var item in filmDirectorDtos)
+                {
+                <MudText>
+                > @item.Director.Name
+                </MudText>
+                }
 
                 } *@
 
@@ -219,7 +182,7 @@
                     <HeaderContent>
                         <MudTh>Id</MudTh>
                         <MudTh>Name</MudTh>
-                        
+
                     </HeaderContent>
                     <RowTemplate>
                         <MudTd DataLabel="Id">@context.Director.Id</MudTd>
@@ -256,7 +219,33 @@
                 </MudDialog>
             </MudItem>
 
-        </MudGrid>        
+            <MudButton OnClick="() => NewEpisode(maxWidth)">NEW EPISODE</MudButton>
+
+            <MudItem xs="12">
+                <MudTable T="EpisodeDto" Items="@episodes" MultiSelection="true" Hover="true">
+                    <HeaderContent>
+                        <MudTh>Name</MudTh>
+                        <MudTh>Time</MudTh>
+                        <MudTh>Link</MudTh>
+                        <MudTh>View</MudTh>
+
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Name">@context.EpisodeName</MudTd>
+                        <MudTd DataLabel="Time">@context.Time</MudTd>
+                        <MudTd DataLabel="Link">@context.Link</MudTd>
+                        <MudTd DataLabel="View">@context.View</MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager PageSizeOptions="new int[]{50, 100}" />
+                    </PagerContent>
+                    <FooterContent>
+                        <MudTd colspan="5">Select All</MudTd>
+                    </FooterContent>
+                </MudTable>
+            </MudItem>
+
+        </MudGrid>
 
     </DialogContent>
     <DialogActions>
@@ -272,14 +261,12 @@
 </MudDialog>
 
 @code {
-    [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
-
-    [Parameter] public MovieDto currentMovie { get; set; }
-
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    private TVSeriesDto tVSeriesDto = new TVSeriesDto();
+    public DateTime? realseDate;
     public IBrowserFile poster;
     public IBrowserFile background;
     public IBrowserFile logo;
-    public IBrowserFile video;
     public long MAXALLOWEDSIZE = 2147483648;
 
     private string message;
@@ -299,25 +286,18 @@
     private ICollection<FilmCastDto> filmCastDtos = new List<FilmCastDto>();
     private IEnumerable<DirectorDto> directors = new List<DirectorDto>();
     private ICollection<FilmDirectorDto> filmDirectorDtos = new List<FilmDirectorDto>();
+    private ICollection<EpisodeDto> episodes = new List<EpisodeDto>();
 
     private DirectorDto selectedDirector;
     private CastDto selectedCast;
     private string selectedRole;
 
+    DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
+
     protected override async Task OnInitializedAsync()
     {
         casts = await httpClient.GetFromJsonAsync<List<CastDto>>($"api/Casts");
         directors = await httpClient.GetFromJsonAsync<List<DirectorDto>>($"api/Directors");
-
-        foreach(var item in currentMovie.FilmCasts)
-        {
-            filmCastDtos.Add(item);
-        }
-
-        foreach (var item in currentMovie.FilmDirectors)
-        {
-            filmDirectorDtos.Add(item);
-        }
     }
 
     private void UpdateCast()
@@ -337,43 +317,42 @@
         filmDirectorDtos.Add(filmDirectorDto);
     }
 
+    private async Task NewEpisode(DialogOptions options)
+    {
+        DialogParameters paras = new DialogParameters();
+        paras.Add("TVName", tVSeriesDto.Name);
+        var dialog = Dialog.Show<NewEpisodeDialog>("New Episode", paras, options);
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            if (result.Data is EpisodeDto episode)
+            {
+                episodes.Add(episode);
+            }
+        }
+    }
+
     async Task Submit()
     {
         try
         {
-            string folderName = (currentMovie.Title).ToLower().Replace(' ', '-');
-            string posterUrl = currentMovie.PosterUrl;
-            string backgroundUrl = currentMovie.BackgroundUrl;
-            string logoUrl = currentMovie.LogoUrl;
-            string videoUrl = currentMovie.Link;
+            string folderName = (tVSeriesDto.Name).ToLower().Replace(' ', '-');
 
-            if(poster != null)
-            {
-                posterUrl = await HandleFirebaseUpload(poster, "Films/Movies/" + folderName + "/Image");
-            }
-            if(background != null)
-            {
-                backgroundUrl = await HandleFirebaseUpload(background, "Films/Movies/" + folderName + "/Image");
-            }
-            if(logo != null)
-            {
-                logoUrl = await HandleFirebaseUpload(logo, "Films/Movies/" + folderName + "/Image");
-            }
-            if(video != null)
-            {
-                videoUrl = await HandleFirebaseUpload(video, "Films/Movies/" + folderName + "/Video");
-            }
-   
-            if (!string.IsNullOrEmpty(posterUrl) && !string.IsNullOrEmpty(backgroundUrl) && !string.IsNullOrEmpty(logoUrl) && !string.IsNullOrEmpty(videoUrl))
-            {
-                currentMovie.PosterUrl = posterUrl;
-                currentMovie.BackgroundUrl = backgroundUrl;
-                currentMovie.LogoUrl = logoUrl;
-                currentMovie.Link = videoUrl;
-                currentMovie.FilmCasts = filmCastDtos;
-                currentMovie.FilmDirectors = filmDirectorDtos;
+            string posterUrl = await HandleFirebaseUpload(poster, "Films/TVSeries/" + folderName + "/Image");
+            string backgroundUrl = await HandleFirebaseUpload(background, "Films/TVSeries/" + folderName + "/Image");
+            string logoUrl = await HandleFirebaseUpload(logo, "Films/TVSeries/" + folderName + "/Image");
 
-                var response = await httpClient.PutAsJsonAsync($"api/Movies/{currentMovie.Id}", currentMovie);
+            if (!string.IsNullOrEmpty(posterUrl) && !string.IsNullOrEmpty(backgroundUrl) && !string.IsNullOrEmpty(logoUrl))
+            {
+                tVSeriesDto.PosterUrl = posterUrl;
+                tVSeriesDto.BackgroundUrl = backgroundUrl;
+                tVSeriesDto.LogoUrl = logoUrl;
+                tVSeriesDto.FilmCasts = filmCastDtos;
+                tVSeriesDto.FilmDirectors = filmDirectorDtos;
+                tVSeriesDto.episodes = episodes;
+
+                var response = await httpClient.PostAsJsonAsync("api/TVSeries", tVSeriesDto);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -455,6 +434,7 @@
             Console.WriteLine($"Error creating folder: {ex.Message}");
         }
     }
+
 
     void Cancel() => MudDialog.Cancel();
 }

@@ -1,4 +1,4 @@
-﻿@page "/admin/movie-management"
+﻿@page "/admin/TVSeries-management"
 @using DotNETProject.Shared;
 @using MudBlazor
 @inject HttpClient httpClient
@@ -10,23 +10,20 @@
 <MudGrid>
     <!-- Content -->
     <MudItem xs="12">
-        <MudButton Class="m-3 ml-0" Color="Color.Primary" OnClick="@((e) => OpenDialog(maxWidth))">NEW MOVIE</MudButton>
-        <MudButton Class="m-3 ml-0" Color="Color.Error" OnClick="DeleteSelectedMovie">DELETE SELECTED</MudButton>
+        <MudButton Class="m-3 ml-0" Color="Color.Primary" OnClick="@((e) => OpenDialog(maxWidth))">NEW TVSERIES</MudButton>
+        <MudButton Class="m-3 ml-0" Color="Color.Error" OnClick="DeleteSelectedTVSeries">DELETE SELECTED</MudButton>
         <!-- Table of actor/ actress -->
-        <MudTable MultiSelection="true" Items="@movie" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<MovieDto,bool>(FilterFunc1)" @bind-SelectedItems="selectedItems">
+        <MudTable MultiSelection="true" Items="@TVSeries" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<TVSeriesDto,bool>(FilterFunc1)" @bind-SelectedItems="selectedItems">
             <ToolBarContent>
-                <MudText Typo="Typo.h6">MOVIES</MudText>
+                <MudText Typo="Typo.h6">TVSERIES</MudText>
                 <MudSpacer />
                 <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
             </ToolBarContent>
             <HeaderContent>
                 <MudTh>ID</MudTh>
-                <MudTh>Title</MudTh>
                 <MudTh>Poster</MudTh>
                 <MudTh>Background</MudTh>
                 <MudTh>Logo</MudTh>
-                <MudTh>Link</MudTh>
-                <MudTh>Time</MudTh>
                 <MudTh>Name</MudTh>
                 <MudTh>ReleaseYear</MudTh>
                 <MudTh>Description</MudTh>
@@ -35,12 +32,12 @@
                 <MudTh>Casts</MudTh>
                 <MudTh>Directors</MudTh>
                 <MudTh>TrailerUrl</MudTh>
+                <MudTh>Episodes</MudTh>
                 <MudTh></MudTh>
                 <MudTh></MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd DataLabel="ID">@context.Id</MudTd>
-                <MudTd DataLabel="Name">@context.Title</MudTd>
                 <MudTd DataLabel="Poster">
                     <MudImage Src="@context.PosterUrl" Width="75" Height="75" Alt="@context.Name" Elevation="25" Class="rounded-lg" />
                 </MudTd>
@@ -50,14 +47,12 @@
                 <MudTd DataLabel="Logo">
                     <MudImage Src="@context.LogoUrl" Width="75" Height="75" Alt="@context.Name" Elevation="25" Class="rounded-lg" />
                 </MudTd>
-                <MudTd DataLabel="Link">@context.Link</MudTd>
-                <MudTd DataLabel="Time">@context.Time</MudTd>
                 <MudTd DataLabel="Name">@context.Name</MudTd>
                 <MudTd DataLabel="ReleaseYear">@context.ReleaseYear</MudTd>
                 <MudTd DataLabel="Description">
                     @if (context.Description.Length < 20)
                     {
-                           <MudTd DataLabel="Description">
+                        <MudTd DataLabel="Description">
                             @context.Description
                         </MudTd>
                     }
@@ -70,7 +65,7 @@
                 </MudTd>
                 <MudTd DataLabel="IMDBScore">@context.IMDBScore</MudTd>
                 <MudTd DataLabel="View">@context.View</MudTd>
-                
+
                 <MudTd DataLabel="Casts">
                     <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => OpenCastNested(context.Id)">Show</MudButton>
 
@@ -118,10 +113,13 @@
                 </MudTd>
                 <MudTd DataLabel="TrailerUrl">@context.TrailerUrl</MudTd>
                 <MudTd>
-                    <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => DeleteMovie(context.Id))">Delete</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Warning" OnClick="() => OpenEpisodesNested(context.episodes, context.Name, fullScreen)">Show</MudButton>
                 </MudTd>
                 <MudTd>
-                     <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="@(() => EditMovie(context, maxWidth))">Edit</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => DeleteTVSeries(context.Id))">Delete</MudButton>
+                </MudTd>
+                <MudTd>
+                    <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="@(() => EditTVSeries(context, maxWidth))">Edit</MudButton>
                 </MudTd>
             </RowTemplate>
             <PagerContent>
@@ -137,50 +135,59 @@
     private bool bordered = false;
     private string searchString1 = "";
 
-    private HashSet<MovieDto> selectedItems = new HashSet<MovieDto>();
-    
+    private HashSet<TVSeriesDto> selectedItems = new HashSet<TVSeriesDto>();
+
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
+    DialogOptions fullScreen = new DialogOptions() { FullScreen = true, CloseButton = true };
 
     Dictionary<int, bool> showCastDialogStates = new Dictionary<int, bool>();
     Dictionary<int, bool> showDirectorDialogStates = new Dictionary<int, bool>();
 
-    private IEnumerable<MovieDto> movie = new List<MovieDto>();
+    private IEnumerable<TVSeriesDto> TVSeries = new List<TVSeriesDto>();
 
     protected override async Task OnInitializedAsync()
     {
-        movie = await httpClient.GetFromJsonAsync<List<MovieDto>>($"api/Movies");
+        TVSeries = await httpClient.GetFromJsonAsync<List<TVSeriesDto>>($"api/TVSeries");
 
-        foreach (var movieDto in movie)
+        foreach (var TVSeriesDto in TVSeries)
         {
-            showCastDialogStates[movieDto.Id] = false;
-            showDirectorDialogStates[movieDto.Id] = false;
+            showCastDialogStates[TVSeriesDto.Id] = false;
+            showDirectorDialogStates[TVSeriesDto.Id] = false;
         }
     }
 
-    void OpenCastNested(int movieId)
+    void OpenCastNested(int TVSeriesId)
     {
-        showCastDialogStates[movieId] = true;
+        showCastDialogStates[TVSeriesId] = true;
     }
 
-    void CloseCastNested(int movieId)
+    void CloseCastNested(int TVSeriesId)
     {
-        showCastDialogStates[movieId] = false;
+        showCastDialogStates[TVSeriesId] = false;
     }
 
-    void OpenDirectorNested(int movieId)
+    void OpenDirectorNested(int TVSeriesId)
     {
-        showDirectorDialogStates[movieId] = true;
+        showDirectorDialogStates[TVSeriesId] = true;
     }
 
-    void CloseDirectorNested(int movieId)
+    void CloseDirectorNested(int TVSeriesId)
     {
-        showDirectorDialogStates[movieId] = false;
+        showDirectorDialogStates[TVSeriesId] = false;
     }
 
+    void OpenEpisodesNested(ICollection<EpisodeDto> episodes, string TVName, DialogOptions options)
+    {
+        DialogParameters paras = new DialogParameters();
+        paras.Add("episodes", episodes);
+        paras.Add("TVName", TVName);
 
-    private bool FilterFunc1(MovieDto element) => FilterFunc(element, searchString1);
+        Dialog.Show<EpisodeTool>("EPISODES", paras, options);
+    }
 
-    private bool FilterFunc(MovieDto element, string searchString)
+    private bool FilterFunc1(TVSeriesDto element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(TVSeriesDto element, string searchString)
     {
         if (string.IsNullOrWhiteSpace(searchString))
             return true;
@@ -191,39 +198,39 @@
         return false;
     }
 
-    private void EditMovie(MovieDto movieDto, DialogOptions options)
+    private void EditTVSeries(TVSeriesDto TVSeriesDto, DialogOptions options)
     {
         DialogParameters paras = new DialogParameters();
-        paras.Add("currentMovie", movieDto);
+        paras.Add("currentTVSeriesDto", TVSeriesDto);
 
-        Dialog.Show<EditMovieDialog>("Edit Movie", paras, options);
+        Dialog.Show<EditTVSeriesDialog>("Edit TVSeries", paras, options);
     }
 
     private void OpenDialog(DialogOptions options)
     {
-        Dialog.Show<NewMovieDialog>("New Movie", options);
+        Dialog.Show<NewTVSeriesDialog>("New TVSeries", options);
     }
 
-    private async void DeleteMovie(int movieId)
+    private async void DeleteTVSeries(int TVSeriesId)
     {
-        bool? result = await Dialog.ShowMessageBox("Confirm Delete", "Are you sure you want to delete this movie?", yesText: "Yes", noText: "No");
+        bool? result = await Dialog.ShowMessageBox("Confirm Delete", "Are you sure you want to delete this TVSeries?", yesText: "Yes", noText: "No");
         if (result == true)
         {
-            HttpResponseMessage response = await httpClient.DeleteAsync($"api/Movies/{movieId}");
+            HttpResponseMessage response = await httpClient.DeleteAsync($"api/TVSeriess/{TVSeriesId}");
 
             if (response.IsSuccessStatusCode)
             {
-                movie = movie.Where(c => c.Id != movieId).ToList();
+                TVSeries = TVSeries.Where(c => c.Id != TVSeriesId).ToList();
                 await JSRuntime.InvokeVoidAsync("refreshPage");
             }
             else
             {
-                await Dialog.ShowMessageBox("Error", "Failed to delete the movie. Please try again.");
+                await Dialog.ShowMessageBox("Error", "Failed to delete the TVSeries. Please try again.");
             }
         }
     }
 
-    private async void DeleteSelectedMovie()
+    private async void DeleteSelectedTVSeries()
     {
         bool? result = await Dialog.ShowMessageBox("Confirm Delete", "R u sure bout that? Data can't be change after remove!", yesText: "Yes", noText: "No");
 
@@ -233,7 +240,7 @@
             {
                 try
                 {
-                    HttpResponseMessage response = await httpClient.DeleteAsync($"api/Movies/{item.Id}");
+                    HttpResponseMessage response = await httpClient.DeleteAsync($"api/TVSeriess/{item.Id}");
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -241,7 +248,7 @@
                     }
                     else
                     {
-                        await Dialog.ShowMessageBox("Error", "Failed to delete the movie. Please try again.");
+                        await Dialog.ShowMessageBox("Error", "Failed to delete the TVSeries. Please try again.");
                     }
                 }
                 catch (HttpRequestException)

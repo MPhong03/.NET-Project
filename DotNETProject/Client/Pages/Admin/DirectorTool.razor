@@ -81,7 +81,7 @@
                     <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => DeleteDirector(context.Id))">Delete</MudButton>
                 </MudTd>
                 <MudTd>
-                    <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="@(() => EditDirector(context.Id, context))">Edit</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="@(() => EditDirector(context.Id, context, maxWidth))">Edit</MudButton>
                 </MudTd>
             </RowTemplate>
 
@@ -147,7 +147,7 @@
         Dialog.Show<NewDirectorDialog>("New Director", options);
     }
 
-    private void EditDirector(int directorId, DirectorDto currentDirector)
+    private void EditDirector(int directorId, DirectorDto currentDirector, DialogOptions options)
     {
         DialogParameters paras = new DialogParameters();
         string message = "Hello world!";
@@ -156,7 +156,7 @@
         paras.Add("Id", directorId);
         paras.Add("currentDirector", currentDirector);
 
-        Dialog.Show<EditDirectorDialog>("Edit Director", paras);
+        Dialog.Show<EditDirectorDialog>("Edit Director", paras, options);
 
     }
 

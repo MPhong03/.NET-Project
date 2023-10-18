@@ -7,38 +7,50 @@
 
 <MudDialog>
     <DialogContent>
-        <MudTextField @bind-Value="currentDirector.Name" Label="Name" />
-        <MudTextField @bind-Value="currentDirector.Description" Label="Description" Lines="5" />
-        <MudImage Src="@currentDirector.AvatarUrl" Alt="@currentDirector.Name" Elevation="25" Class="rounded-lg" />
-        <MudFileUpload @bind-Files="image" Label="Avatar Image" T="IBrowserFile" Accept=".png, .jpg">
-            <ButtonTemplate>
-                <MudButton HtmlTag="label"
-                           Variant="Variant.Filled"
-                           Color="Color.Primary"
-                           StartIcon="@Icons.Material.Filled.CloudUpload"
-                           for="@context">
-                    Avatar
-                </MudButton>
-            </ButtonTemplate>
-        </MudFileUpload>
 
-        <!-- The image preview -->
-        @if (image != null)
-        {
-            <MudText Icon="@Icons.Material.Filled.AttachFile">
-                @image.Name <code>@image.Size bytes</code>
-            </MudText>
-        }
+        <MudGrid>
 
-        <MudTextField @bind-Value="currentDirector.Nation" Label="Nation" />
+            <MudItem xs="4">
+                <MudImage Src="@currentDirector.AvatarUrl" Alt="@currentDirector.Name" Elevation="25" Class="rounded-lg" />
+            </MudItem>
 
+            <MudItem xs="8">
+                <MudTextField @bind-Value="currentDirector.Name" Label="Name" />
 
-        <MudSelect Label="Gender" @bind-Value="currentDirector.Gender">
-            <MudSelectItem Value="Male" Text="Male" />
-            <MudSelectItem Value="Female" Text="Female" />
-        </MudSelect>
+                <MudSelect Label="Gender" @bind-Value="currentDirector.Gender">
+                    <MudSelectItem Value="Male" Text="Male" />
+                    <MudSelectItem Value="Female" Text="Female" />
+                </MudSelect>
 
-        <MudDatePicker PickerVariant="PickerVariant.Dialog" Label="BirthDate" Editable="true" DateFormat="dd.MM.yyyy" @bind-Date="currentDirector.BirthDate" Placeholder="Select Date" />
+                <MudTextField @bind-Value="currentDirector.Description" Label="Description" Lines="5" />
+
+                <MudTextField @bind-Value="currentDirector.Nation" Label="Nation" />
+
+                <MudDatePicker PickerVariant="PickerVariant.Dialog" Label="BirthDate" Editable="true" DateFormat="dd.MM.yyyy" @bind-Date="currentDirector.BirthDate" Placeholder="Select Date" />
+
+                <MudFileUpload @bind-Files="image" Label="Avatar Image" T="IBrowserFile" Accept=".png, .jpg">
+                    <ButtonTemplate>
+                        <MudButton HtmlTag="label"
+                                   Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   StartIcon="@Icons.Material.Filled.CloudUpload"
+                                   for="@context">
+                            Avatar
+                        </MudButton>
+                    </ButtonTemplate>
+                </MudFileUpload>
+
+                <!-- The image preview -->
+                @if (image != null)
+                {
+                    <MudText Icon="@Icons.Material.Filled.AttachFile">
+                        @image.Name <code>@image.Size bytes</code>
+                    </MudText>
+                }
+
+            </MudItem>
+
+        </MudGrid>
 
     </DialogContent>
     <DialogActions>

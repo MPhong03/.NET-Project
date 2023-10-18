@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DotNETProject.Server.Data;
 using DotNETProject.Server.Models;
+using DotNETProject.Shared;
 
 namespace DotNETProject.Server.Controllers
 {
@@ -25,29 +26,40 @@ namespace DotNETProject.Server.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Episode>>> GetEpisodes()
         {
-          if (_context.Episodes == null)
-          {
-              return NotFound();
-          }
+            if (_context.Episodes == null)
+            {
+                return NotFound();
+            }
             return await _context.Episodes.ToListAsync();
         }
 
         // GET: api/Episodes/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Episode>> GetEpisode(int id)
+        public async Task<ActionResult<EpisodeDto>> GetEpisode(int id)
         {
-          if (_context.Episodes == null)
-          {
-              return NotFound();
-          }
-            var episode = await _context.Episodes.FindAsync(id);
-
+            if (_context.Episodes == null)
+            {
+                return NotFound();
+            }
+            var episode = await _context.Episodes
+                        .Include(e => e.Series)
+                        .FirstOrDefaultAsync(e => e.Id == id);
             if (episode == null)
             {
                 return NotFound();
             }
 
-            return episode;
+            EpisodeDto episodeDto = new EpisodeDto();
+            episodeDto.Id = id;
+            episodeDto.EpisodeName = episode.EpisodeName;
+            episodeDto.Link = episode.Link;
+            episodeDto.Time = episode.Time;
+            episodeDto.View = episode.View;
+            episodeDto.Series.Name = episode.Series.Name;
+
+            
+
+            return episodeDto;
         }
 
         // PUT: api/Episodes/5
@@ -86,10 +98,10 @@ namespace DotNETProject.Server.Controllers
         [HttpPost]
         public async Task<ActionResult<Episode>> PostEpisode(Episode episode)
         {
-          if (_context.Episodes == null)
-          {
-              return Problem("Entity set 'ApplicationDbContext.Episodes'  is null.");
-          }
+            if (_context.Episodes == null)
+            {
+                return Problem("Entity set 'ApplicationDbContext.Episodes'  is null.");
+            }
             _context.Episodes.Add(episode);
             await _context.SaveChangesAsync();
 
