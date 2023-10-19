@@ -24,22 +24,18 @@
                 <div class="row">
                     @foreach (var item in cast.FilmCasts)
                     {
-                        var movieDto = item.Film as MovieDto;
-                        if (movieDto != null)
+                        string filmType = filmTypes[item.Film.Id];
+                        if (filmType == "MOVIE")
                         {
-                            <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6"><a href="/movie/@movieDto.Id"><img src="@movieDto.PosterUrl"><p>@movieDto.Name</p></a></div>
+                            <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6"><a href="/movie/@item.Film.Id"><img src="@item.Film.PosterUrl"><p>@item.Film.Name</p></a></div>
+                        }
+                        else if (filmType == "TV")
+                        {
+                            <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6"><a href="/show/@item.Film.Id"><img src="@item.Film.PosterUrl"><p>@item.Film.Name</p></a></div>
                         }
                         else
                         {
-                            var showDto = item.Film as TVSeriesDto;
-                            if (showDto != null)
-                            {
-                                <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6"><a href="/show/@showDto.Id"><img src="@showDto.PosterUrl"><p>@showDto.Name</p></a></div>
-                            }
-                            else
-                            {
-                                <p>Diễn viên chưa tham gia bất kỳ bộ phim nào!</p>
-                            }
+                            <p>Diễn viên chưa tham gia bất kỳ bộ phim nào!</p>
                         }
                     }
 
@@ -56,10 +52,18 @@
     [Parameter]
     public string Id { get; set; }
     private CastDto cast = new CastDto();
+    private Dictionary<int, string> filmTypes = new Dictionary<int, string>();
 
     protected override async Task OnInitializedAsync()
     {
         int getId = Int32.Parse(Id);
         cast = await httpClient.GetFromJsonAsync<CastDto>($"api/Casts/{getId}");
+
+        foreach(var item in cast.FilmCasts)
+        {
+            string flag = await httpClient.GetStringAsync($"api/Films/{item.Film.Id}");
+            filmTypes.Add(item.Film.Id, flag);
+        }
     }
+
 }

@@ -106,8 +106,8 @@ namespace DotNETProject.Server.Controllers
                 {
                     Film = new FilmDto()
                     {
-                        Name = filmCast.Film.Name,
-                        Id = filmCast.Id,
+                        Name = filmCast.Film.Name,      
+                        Id = filmCast.Film.Id,
                         PosterUrl = filmCast.Film.PosterUrl
                     },
                     Role = filmCast.Role

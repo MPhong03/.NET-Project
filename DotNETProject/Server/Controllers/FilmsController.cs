@@ -21,6 +21,33 @@ namespace DotNETProject.Server.Controllers
             _context = context;
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<string>> GetFilmType(int id)
+        {
+            if (_context.Films == null)
+            {
+                return NotFound();
+            }
+            var film = await _context.Films.FindAsync(id);
+
+            string flag = "NOTFOUND";
+
+            if (film.GetType() == typeof(Movie))
+            {
+                flag = "MOVIE";
+            } else if (film.GetType() == typeof(TVSeries))
+            {
+                flag = "TV";
+            }
+
+            if (film == null)
+            {
+                return NotFound();
+            }
+
+            return flag;
+        }
+
         // GET: api/Films
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Film>>> GetFilms()
@@ -33,22 +60,22 @@ namespace DotNETProject.Server.Controllers
         }
 
         // GET: api/Films/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Film>> GetFilm(int id)
-        {
-            if (_context.Films == null)
-            {
-                return NotFound();
-            }
-            var film = await _context.Films.FindAsync(id);
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<Film>> GetFilm(int id)
+        //{
+        //    if (_context.Films == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    var film = await _context.Films.FindAsync(id);
 
-            if (film == null)
-            {
-                return NotFound();
-            }
+        //    if (film == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return film;
-        }
+        //    return film;
+        //}
 
         // PUT: api/Films/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
