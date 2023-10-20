@@ -1,0 +1,31 @@
+﻿@page "/movieplay/{Id}"
+@using DotNETProject.Shared;
+@inject HttpClient httpClient
+
+<PageTitle>Xem Phim @movie.Name</PageTitle>
+<div class="container">
+    <video id="banner" controls loop poster="@movie.BackgroundUrl" class="d-block w-100">
+        <source src="/vid/1.mp4" type="video/mp4"/>
+    </video>
+    <h1 class="trending-text big-title text-uppercase mt-0">@movie.Name</h1>
+
+    <div class="subtitle movie">
+        <h3 class="text-white">PHỤ ĐỀ</h3>
+        <p class="text-white">
+            Dưới đây là các phụ đề của phim @movie.Name được lấy từ subscene.com. Hãy chọn thử để tìm ra
+            phụ đề phù hợp với bạn nhất!
+            </p>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Id { get; set; }
+
+    private MovieDto movie = new MovieDto();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        movie = await httpClient.GetFromJsonAsync<MovieDto>($"api/Movies/{Int32.Parse(Id)}");
+    }
+}

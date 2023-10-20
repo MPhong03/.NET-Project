@@ -4,21 +4,25 @@
 
 <div class="container" height="100%">
     <div class="row">
-        <div class="col-md-4">
-            <img src="@cast.AvatarUrl" class="img-fluid rounded-3" alt="Actor Avatar">
+        <div class="col-md-3">
+            <img id="cast-img" src="@cast.AvatarUrl" class="img-fluid rounded-3" alt="Actor Avatar">
         </div>
-        <div class="col-md-8">
-            <h2>Diễn viên: @cast.Name</h2>
-            <p><strong>Ngày sinh:</strong> @cast.BirthDate</p>
-            <p><strong>Giới tính:</strong> @cast.Gender</p>
-            <p><strong>Quốc gia:</strong> @cast.Nation</p>
-            <p><strong>Mô tả:</strong> @cast.Description</p>
+        <div class="col-md-9 pl-5">
+            <h2 class="text-white lg"><strong>@cast.Name</strong></h2><br>
+            <h4 class="text-white">Tiểu Sử</h4>
+            <p>@cast.Description</p>
+            <h4 class="text-white">Ngày Sinh</h4>
+            <p>@cast.BirthDate</p>
+            <h4 class="text-white">Giới Tính</h4>
+            <p>@cast.Gender</p>
+            <h4 class="text-white">Quốc Gia</h4>
+            <p>@cast.Nation</p>
         </div>
     </div>
 
     <div class="row mt-3">
         <div class="col-md-12">
-            <h3 class="text-light">Các phim đã tham gia</h3>
+            <h3 class="text-light">Các phim có sự tham gia của @cast.Name</h3>
 
             <div class="container">
                 <div class="row">
