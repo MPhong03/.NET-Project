@@ -94,6 +94,7 @@ namespace DotNETProject.Server.Controllers
                     var episodeDto = new EpisodeDto()
                     {
                         Id = episode.Id,
+                        EpisodeNumber = episode.EpisodeNumber,
                         EpisodeName = episode.EpisodeName,
                         Link = episode.Link,
                         Time = episode.Time,
@@ -181,6 +182,7 @@ namespace DotNETProject.Server.Controllers
                 var episodeDto = new EpisodeDto()
                 {
                     Id = episode.Id,
+                    EpisodeNumber = episode.EpisodeNumber,
                     EpisodeName = episode.EpisodeName,
                     Link = episode.Link,
                     Time = episode.Time,
@@ -267,6 +269,7 @@ namespace DotNETProject.Server.Controllers
                     var episode = new Episode
                     {
                         Id = itemDto.Id,
+                        EpisodeNumber = itemDto.EpisodeNumber,
                         EpisodeName = itemDto.EpisodeName,
                         Link = itemDto.Link,
                         Time = itemDto.Time,
@@ -360,6 +363,7 @@ namespace DotNETProject.Server.Controllers
                     var episode = new Episode
                     {
                         Id = itemDto.Id,
+                        EpisodeNumber = itemDto.EpisodeNumber,
                         EpisodeName = itemDto.EpisodeName,
                         Link = itemDto.Link,
                         Time = itemDto.Time,

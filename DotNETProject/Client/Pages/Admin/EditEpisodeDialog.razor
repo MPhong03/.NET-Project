@@ -10,6 +10,7 @@
     <DialogContent>
         <MudText Typo="Typo.h5">New Episode for @TVName</MudText>
 
+        <MudNumericField @bind-Value="currentEpisode.EpisodeNumber" Variant="Variant.Text" Label="Number" />
         <MudTextField @bind-Value="currentEpisode.EpisodeName" Label="Name" />
         <MudTextField @bind-Value="currentEpisode.Time" Label="Time" />
         <MudTextField @bind-Value="currentEpisode.View" Label="Nation" />

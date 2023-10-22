@@ -21,13 +21,12 @@
             </ToolBarContent>
             <HeaderContent>
                 <MudTh>ID</MudTh>
-                <MudTh>Title</MudTh>
+                <MudTh>Name</MudTh>
                 <MudTh>Poster</MudTh>
                 <MudTh>Background</MudTh>
                 <MudTh>Logo</MudTh>
                 <MudTh>Link</MudTh>
                 <MudTh>Time</MudTh>
-                <MudTh>Name</MudTh>
                 <MudTh>ReleaseYear</MudTh>
                 <MudTh>Description</MudTh>
                 <MudTh>IMDBScore</MudTh>
@@ -40,7 +39,7 @@
             </HeaderContent>
             <RowTemplate>
                 <MudTd DataLabel="ID">@context.Id</MudTd>
-                <MudTd DataLabel="Name">@context.Title</MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
                 <MudTd DataLabel="Poster">
                     <MudImage Src="@context.PosterUrl" Width="75" Height="75" Alt="@context.Name" Elevation="25" Class="rounded-lg" />
                 </MudTd>
@@ -52,7 +51,6 @@
                 </MudTd>
                 <MudTd DataLabel="Link">@context.Link</MudTd>
                 <MudTd DataLabel="Time">@context.Time</MudTd>
-                <MudTd DataLabel="Name">@context.Name</MudTd>
                 <MudTd DataLabel="ReleaseYear">@context.ReleaseYear</MudTd>
                 <MudTd DataLabel="Description">
                     @if (context.Description.Length < 20)

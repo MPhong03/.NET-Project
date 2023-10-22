@@ -1,0 +1,84 @@
+﻿@page "/tv/play/{Id}/{Episode}"
+@using DotNETProject.Shared;
+@inject HttpClient httpClient
+@using Blazored.Video
+@using Blazored.Video.Support
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Xem Phim @show.Name</PageTitle>
+<div class="container">
+
+    <div id="movie"></div>
+
+    <h1 class="trending-text big-title text-uppercase mt-0">@show.Name</h1>
+    <p class="lead">
+        @show.Description
+    </p>
+
+    <div class="container">
+        <div class="row">
+            @foreach (EpisodeDto episode in episodes)
+            {
+                <div class="col-1">
+                    <button type="button" class="@GetButtonClass(episode)" @onclick="() => OnSelectEpisode(episode)">Tập @episode.EpisodeNumber</button>
+                </div>
+            }
+            
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string Id { get; set; }
+    [Parameter] public string Episode { get; set; }
+
+    private TVSeriesDto show = new TVSeriesDto();
+
+    private ICollection<EpisodeDto> episodes = new List<EpisodeDto>();
+
+    private int selectedEpisodeId = -1;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        show = await httpClient.GetFromJsonAsync<TVSeriesDto>($"api/TVSeries/{Int32.Parse(Id)}");
+
+        episodes = show.episodes;
+
+        foreach (EpisodeDto episode in episodes)
+        {
+            if (episode.Id == Int32.Parse(Episode))
+            {
+                selectedEpisodeId = episode.Id;
+                await JSRuntime.InvokeVoidAsync("initializeJWPlayer", episode.Link, show.BackgroundUrl);
+            }
+
+        }
+    }
+
+    protected async void OnSelectEpisode(EpisodeDto episodeDto)
+    {
+        selectedEpisodeId = episodeDto.Id;
+
+        foreach (EpisodeDto episode in episodes)
+        {
+            if (episode.Id == episodeDto.Id)
+            {
+                await JSRuntime.InvokeVoidAsync("initializeJWPlayer", episode.Link, show.BackgroundUrl);
+            }
+
+        }
+    }
+
+    private string GetButtonClass(EpisodeDto episode)
+    {
+        if (episode.Id == selectedEpisodeId)
+        {
+            return "btn btn-success";
+        }
+        else
+        {
+            return "btn btn-outline-success";
+        }
+    }
+}

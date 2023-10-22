@@ -10,6 +10,7 @@
     <DialogContent>
         <MudText Typo="Typo.h5">New Episode for @TVName</MudText>
 
+        <MudNumericField @bind-Value="episodeDto.EpisodeNumber" Variant="Variant.Text" Label="Number" />
         <MudTextField @bind-Value="episodeDto.EpisodeName" Label="Name" />
         <MudTextField @bind-Value="episodeDto.Time" Label="Time" />
         <MudTextField @bind-Value="episodeDto.View" Label="Nation" />
@@ -76,6 +77,20 @@
             {
                 episodeDto.Link = videoUrl;
 
+                var response = await httpClient.PostAsJsonAsync($"api/Episodes", episodeDto);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MudDialog.Close(DialogResult.Ok(true));
+                    await JSRuntime.InvokeVoidAsync("refreshPage");
+                }
+                else
+                {
+                    var errorResponse = await response.Content.ReadAsStringAsync();
+                    message = "An error occurred while saving to the database: " + errorResponse;
+                    OpenNested();
+                }
+
                 MudDialog.Close(DialogResult.Ok(episodeDto));
             }
             else
@@ -139,13 +154,21 @@
     {
         try
         {
-            await folderRef.Child(".placeholder").PutAsync(new MemoryStream());
+            if (folderRef != null)
+            {
+                await folderRef.Child(".placeholder").PutAsync(new MemoryStream());
+            }
+            else
+            {
+                Console.WriteLine("Folder reference is null.");
+            }
         }
         catch (FirebaseStorageException ex)
         {
             Console.WriteLine($"Error creating folder: {ex.Message}");
         }
     }
+
 
     void Cancel() => MudDialog.Cancel();
 }

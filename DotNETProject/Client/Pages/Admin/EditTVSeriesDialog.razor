@@ -236,6 +236,7 @@
             <MudItem xs="12">
                 <MudTable T="EpisodeDto" Items="@episodes" MultiSelection="true" Hover="true">
                     <HeaderContent>
+                        <MudTh>Episode</MudTh>
                         <MudTh>Name</MudTh>
                         <MudTh>Time</MudTh>
                         <MudTh>Link</MudTh>
@@ -243,6 +244,7 @@
 
                     </HeaderContent>
                     <RowTemplate>
+                        <MudTd DataLabel="Episode">@context.EpisodeNumber</MudTd>
                         <MudTd DataLabel="Name">@context.EpisodeName</MudTd>
                         <MudTd DataLabel="Time">@context.Time</MudTd>
                         <MudTd DataLabel="Link">@context.Link</MudTd>

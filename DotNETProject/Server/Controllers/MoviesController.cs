@@ -47,7 +47,6 @@ namespace DotNETProject.Server.Controllers
                 {
                     Id = movieEntity.Id,
                     Time = movieEntity.Time,
-                    Title = movieEntity.Title,
                     Link = movieEntity.Link,
                     Name = movieEntity.Name,
                     ReleaseYear = movieEntity.ReleaseYear,
@@ -122,7 +121,6 @@ namespace DotNETProject.Server.Controllers
             {
                 Id = movie.Id,
                 Time = movie.Time,
-                Title = movie.Title,
                 Link = movie.Link,
                 Name = movie.Name,
                 ReleaseYear = movie.ReleaseYear,
@@ -193,7 +191,6 @@ namespace DotNETProject.Server.Controllers
             movie.FilmCasts.Clear();
             movie.FilmDirectors.Clear();
 
-            movie.Title = movieDto.Title;
             movie.Time = movieDto.Time;
             movie.Link = movieDto.Link;
             movie.Name = movieDto.Name;
@@ -277,7 +274,6 @@ namespace DotNETProject.Server.Controllers
 
             Movie movie = new Movie
             {
-                Title = movieDto.Title,
                 Time = movieDto.Time,
                 Link = movieDto.Link,
                 Name = movieDto.Name,

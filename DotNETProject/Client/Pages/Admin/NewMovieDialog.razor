@@ -12,13 +12,12 @@
         <MudGrid>
 
             <MudItem xs=12>
-                <MudTextField @bind-Value="movieDto.Title" Label="Title" />
+
+                <MudTextField @bind-Value="movieDto.Name" Label="Name" />
 
                 <MudTextField @bind-Value="movieDto.Time" Label="Time" />
 
                 <MudTextField @bind-Value="movieDto.TrailerUrl" Label="Trailer Url" />
-
-                <MudTextField @bind-Value="movieDto.Name" Label="Name" />
 
                 <MudTextField @bind-Value="movieDto.ReleaseYear" Label="Release Year" />
 
@@ -318,7 +317,7 @@
     {
         try
         {
-            string folderName = (movieDto.Title).ToLower().Replace(' ', '-');
+            string folderName = (movieDto.Name).ToLower().Replace(' ', '-');
 
             string posterUrl = await HandleFirebaseUpload(poster, "Films/Movies/" + folderName + "/Image");
             string backgroundUrl = await HandleFirebaseUpload(background, "Films/Movies/" + folderName + "/Image");

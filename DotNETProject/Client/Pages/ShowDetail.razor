@@ -1,4 +1,4 @@
-﻿@page "/show/{Id}"
+﻿@page "/tv/{Id}"
 @using DotNETProject.Shared;
 @inject HttpClient httpClient
 
@@ -6,7 +6,7 @@
 <!-- Banner Start -->
 <div class="container">
     <img id="banner" src="@show.BackgroundUrl" class="d-block w-100" alt="...">
-    <button><a href="#">XEM NGAY</a></button>
+    <a href="/tv/play/@show.Id/@show.episodes.First().Id"><button>XEM NGAY</button></a>
     <div class="main-content movie">
         <section class="movie-detail container-fluid">
             <div class="row">
@@ -74,9 +74,9 @@
 
                             @foreach (var item in show.episodes)
                             {
-                                <button type="button" class="list-group-item list-group-item-action">
-                                    Tập @item.Id - @item.EpisodeName
-                                </button>
+                                <a href="/tv/play/@show.Id/@item.Id" type="button" class="list-group-item list-group-item-action">
+                                    Tập @item.EpisodeNumber - @item.EpisodeName
+                                </a>
                             }
 
                         </ul>

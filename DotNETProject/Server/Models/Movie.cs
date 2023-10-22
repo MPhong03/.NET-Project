@@ -6,7 +6,6 @@ namespace DotNETProject.Server.Models
     public class Movie : Film
     {
         public string Time { get; set; } = string.Empty;
-        public string Title { get; set; } = string.Empty;
         public string Link { get; set; } = string.Empty;
     }
 }

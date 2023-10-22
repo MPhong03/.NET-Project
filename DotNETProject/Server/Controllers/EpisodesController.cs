@@ -51,6 +51,7 @@ namespace DotNETProject.Server.Controllers
 
             EpisodeDto episodeDto = new EpisodeDto();
             episodeDto.Id = id;
+            episodeDto.EpisodeNumber = episode.EpisodeNumber;
             episodeDto.EpisodeName = episode.EpisodeName;
             episodeDto.Link = episode.Link;
             episodeDto.Time = episode.Time;
@@ -65,14 +66,25 @@ namespace DotNETProject.Server.Controllers
         // PUT: api/Episodes/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutEpisode(int id, Episode episode)
+        public async Task<IActionResult> PutEpisode(int id, EpisodeDto episodeDto)
         {
-            if (id != episode.Id)
+            if (id != episodeDto.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(episode).State = EntityState.Modified;
+            var episode = await _context.Episodes.FindAsync(id);
+
+            if (episode == null)
+            {
+                return NotFound();
+            }
+
+            episode.EpisodeNumber = episodeDto.EpisodeNumber;
+            episode.EpisodeName = episodeDto.EpisodeName;
+            episode.Link = episodeDto.Link;
+            episode.Time = episodeDto.Time;
+            episode.View = episodeDto.View;
 
             try
             {
@@ -96,16 +108,33 @@ namespace DotNETProject.Server.Controllers
         // POST: api/Episodes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Episode>> PostEpisode(Episode episode)
+        public async Task<ActionResult<EpisodeDto>> PostEpisode(EpisodeDto episodeDto)
         {
-            if (_context.Episodes == null)
+            var episode = new Episode
             {
-                return Problem("Entity set 'ApplicationDbContext.Episodes'  is null.");
-            }
+                EpisodeNumber = episodeDto.EpisodeNumber,
+                EpisodeName = episodeDto.EpisodeName,
+                Link = episodeDto.Link,
+                Time = episodeDto.Time,
+                View = episodeDto.View,
+                Series = await _context.TVSeries.FindAsync(episodeDto.Series.Id)
+            };
+
             _context.Episodes.Add(episode);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetEpisode", new { id = episode.Id }, episode);
+            var createdEpisodeDto = new EpisodeDto
+            {
+                Id = episode.Id,
+                EpisodeNumber = episode.EpisodeNumber,
+                EpisodeName = episode.EpisodeName,
+                Link = episode.Link,
+                Time = episode.Time,
+                View = episode.View,
+                Series = episodeDto.Series
+            };
+
+            return CreatedAtAction("GetEpisode", new { id = createdEpisodeDto.Id }, createdEpisodeDto);
         }
 
         // DELETE: api/Episodes/5

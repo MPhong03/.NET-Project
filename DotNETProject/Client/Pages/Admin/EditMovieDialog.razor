@@ -12,25 +12,24 @@
         <MudGrid>
 
             <MudItem xs=4>
-                <MudImage Fluid="true" Src="@currentMovie.LogoUrl" Alt="@currentMovie.Title" Elevation="25" Class="rounded-lg" />
+                <MudImage Fluid="true" Src="@currentMovie.LogoUrl" Alt="@currentMovie.Name" Elevation="25" Class="rounded-lg" />
             </MudItem>
 
             <MudItem xs=8>
-                <MudImage Fluid="true" Src="@currentMovie.BackgroundUrl" Alt="@currentMovie.Title" Elevation="25" Class="rounded-lg" />
+                <MudImage Fluid="true" Src="@currentMovie.BackgroundUrl" Alt="@currentMovie.Name" Elevation="25" Class="rounded-lg" />
             </MudItem>
 
             <MudItem xs=4>
-                <MudImage Fluid="true" Src="@currentMovie.PosterUrl" Alt="@currentMovie.Title" Elevation="25" Class="rounded-lg" />
+                <MudImage Fluid="true" Src="@currentMovie.PosterUrl" Alt="@currentMovie.Name" Elevation="25" Class="rounded-lg" />
             </MudItem>
 
             <MudItem xs=8>
-                <MudTextField @bind-Value="currentMovie.Title" Label="Title" />
+
+                <MudTextField @bind-Value="currentMovie.Name" Label="Name" />
 
                 <MudTextField @bind-Value="currentMovie.Time" Label="Time" />
 
                 <MudTextField @bind-Value="currentMovie.TrailerUrl" Label="Trailer Url" />
-
-                <MudTextField @bind-Value="currentMovie.Name" Label="Name" />
 
                 <MudTextField @bind-Value="currentMovie.ReleaseYear" Label="Release Year" />
 
@@ -341,7 +340,7 @@
     {
         try
         {
-            string folderName = (currentMovie.Title).ToLower().Replace(' ', '-');
+            string folderName = (currentMovie.Name).ToLower().Replace(' ', '-');
             string posterUrl = currentMovie.PosterUrl;
             string backgroundUrl = currentMovie.BackgroundUrl;
             string logoUrl = currentMovie.LogoUrl;

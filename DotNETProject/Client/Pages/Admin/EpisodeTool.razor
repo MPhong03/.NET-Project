@@ -12,7 +12,6 @@
         <MudGrid>
             <!-- Content -->
             <MudItem xs="12">
-                <MudButton Class="m-3 ml-0" Color="Color.Primary" OnClick="@((e) => OpenDialog(maxWidth))">NEW EPISODE</MudButton>
                 <MudButton Class="m-3 ml-0" Color="Color.Error" OnClick="DeleteSelectedEpisode">DELETE SELECTED</MudButton>
                 <!-- Table of actor/ actress -->
                 <MudTable MultiSelection="true" Items="@episodes" T="EpisodeDto" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<EpisodeDto,bool>(FilterFunc1)" @bind-SelectedItems="selectedItems">
@@ -23,6 +22,7 @@
                     </ToolBarContent>
                     <HeaderContent>
                         <MudTh>ID</MudTh>
+                        <MudTh>Episode</MudTh>
                         <MudTh>Name</MudTh>
                         <MudTh>Time</MudTh>
                         <MudTh>Link</MudTh>
@@ -32,6 +32,7 @@
                     </HeaderContent>
                     <RowTemplate>
                         <MudTd DataLabel="ID">@context.Id</MudTd>
+                        <MudTd DataLabel="Number">@context.EpisodeNumber</MudTd>
                         <MudTd DataLabel="Name">@context.EpisodeName</MudTd>
                         <MudTd DataLabel="Time">@context.Time</MudTd>
                         <MudTd DataLabel="Link">@context.Link</MudTd>
@@ -39,9 +40,9 @@
                         <MudTd>
                             <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => DeleteEpisode(context.Id))">Delete</MudButton>
                         </MudTd>
-                        @* <MudTd>
+                        <MudTd>
                             <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="@(() => EditEpisode(context.Id, context, maxWidth))">Edit</MudButton>
-                        </MudTd> *@
+                        </MudTd>
 
                     </RowTemplate>
 
@@ -120,18 +121,16 @@
         Dialog.Show<NewEpisodeDialog>($"New Episode for {TVName}", options);
     }
 
-    // private void EditEpisode(int EpisodeId, EpisodeDto currentEpisode, DialogOptions options)
-    // {
-    //     DialogParameters paras = new DialogParameters();
-    //     string message = "Hello world!";
-    //     bool state = true;
+    private void EditEpisode(int EpisodeId, EpisodeDto currentEpisode, DialogOptions options)
+    {
+        DialogParameters paras = new DialogParameters();
 
-    //     paras.Add("Id", EpisodeId);
-    //     paras.Add("currentEpisode", currentEpisode);
+        paras.Add("currentEpisode", currentEpisode);
+        paras.Add("TVName", TVName);
 
-    //     Dialog.Show<EditEpisodeDialog>("Edit Episode", paras, options);
+        Dialog.Show<EditEpisodeDialog>("Edit Episode", paras, options);
 
-    // }
+    }
 
     private async void DeleteEpisode(int episodeId)
     {

@@ -9,6 +9,7 @@ namespace DotNETProject.Server.Models
     {
         [Key]
         public int Id { get; set; }
+        public int EpisodeNumber { get; set; }
         public string EpisodeName { get; set; } = string.Empty;
         public string Time { get; set; } = string.Empty;
         public string Link { get; set; } = string.Empty;
