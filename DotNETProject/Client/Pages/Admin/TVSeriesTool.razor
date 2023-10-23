@@ -33,6 +33,7 @@
                 <MudTh>Directors</MudTh>
                 <MudTh>TrailerUrl</MudTh>
                 <MudTh>Episodes</MudTh>
+                <MudTh>Genres</MudTh>
                 <MudTh></MudTh>
                 <MudTh></MudTh>
             </HeaderContent>
@@ -115,6 +116,30 @@
                 <MudTd>
                     <MudButton Variant="Variant.Filled" Color="Color.Warning" OnClick="() => OpenEpisodesNested(context.episodes, context.Name, fullScreen)">Show</MudButton>
                 </MudTd>
+                <MudTd DataLabel="Genres">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => OpenGenreNested(context.Id)">Show</MudButton>
+
+                    <MudDialog @bind-IsVisible="showGenreDialogStates[context.Id]">
+                        <DialogContent>
+                            @if (context.FilmGenres.Count != 0)
+                            {
+                                @foreach (var genre in context.FilmGenres)
+                                {
+                                    <MudText>@genre.Genre.Name</MudText>
+                                    Console.WriteLine(genre.Genre.Name);
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine(context.FilmGenres.Count);
+                                <MudText>There is no genre</MudText>
+                            }
+                        </DialogContent>
+                        <DialogActions>
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => CloseGenreNested(context.Id)">Close</MudButton>
+                        </DialogActions>
+                    </MudDialog>
+                </MudTd>
                 <MudTd>
                     <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => DeleteTVSeries(context.Id))">Delete</MudButton>
                 </MudTd>
@@ -142,6 +167,7 @@
 
     Dictionary<int, bool> showCastDialogStates = new Dictionary<int, bool>();
     Dictionary<int, bool> showDirectorDialogStates = new Dictionary<int, bool>();
+    Dictionary<int, bool> showGenreDialogStates = new Dictionary<int, bool>();
 
     private IEnumerable<TVSeriesDto> TVSeries = new List<TVSeriesDto>();
 
@@ -153,6 +179,7 @@
         {
             showCastDialogStates[TVSeriesDto.Id] = false;
             showDirectorDialogStates[TVSeriesDto.Id] = false;
+            showGenreDialogStates[TVSeriesDto.Id] = false;
         }
     }
 
@@ -183,6 +210,16 @@
         paras.Add("TVName", TVName);
 
         Dialog.Show<EpisodeTool>("EPISODES", paras, options);
+    }
+
+    void OpenGenreNested(int movieId)
+    {
+        showGenreDialogStates[movieId] = true;
+    }
+
+    void CloseGenreNested(int movieId)
+    {
+        showGenreDialogStates[movieId] = false;
     }
 
     private bool FilterFunc1(TVSeriesDto element) => FilterFunc(element, searchString1);

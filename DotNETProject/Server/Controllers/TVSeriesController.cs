@@ -37,6 +37,8 @@ namespace DotNETProject.Server.Controllers
                 .Include(tVSeries => tVSeries.FilmDirectors)
                 .ThenInclude(filmDirector => filmDirector.Director)
                 .Include(tVSeries => tVSeries.episodes)
+                .Include(tVSeries => tVSeries.FilmGenres)
+                .ThenInclude(filmGenre => filmGenre.Genre)
                 .ToListAsync();
 
             var TVSeriesDtos = new List<TVSeriesDto>();
@@ -137,6 +139,8 @@ namespace DotNETProject.Server.Controllers
                 .Include(tVSeries => tVSeries.FilmDirectors)
                 .ThenInclude(filmDirector => filmDirector.Director)
                 .Include(tVSeries => tVSeries.episodes)
+                .Include(tVSeries => tVSeries.FilmGenres)
+                .ThenInclude(filmGenre => filmGenre.Genre)
                 .FirstOrDefaultAsync(t => t.Id == id);
 
             if (tVSeriesEntity == null)
@@ -233,6 +237,7 @@ namespace DotNETProject.Server.Controllers
             var tVSeries = await _context.TVSeries
                 .Include(m => m.FilmCasts)
                 .Include(m => m.FilmDirectors)
+                .Include(m => m.FilmGenres)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (tVSeries == null)
