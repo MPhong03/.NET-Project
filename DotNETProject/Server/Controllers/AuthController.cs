@@ -53,7 +53,8 @@ namespace DotNETProject.Server.Controllers
                 Email = request.Email,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
-                createdDate = DateTime.Now
+                createdDate = DateTime.Now,
+                Role = await _context.Roles.FirstOrDefaultAsync(x => x.Id == 1)
             };
 
             _context.Users.Add(user);
@@ -66,7 +67,9 @@ namespace DotNETProject.Server.Controllers
         public async Task<ActionResult<string>> Login(UserDto request)
         {
 
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == request.Email);
+            var user = await _context.Users
+                .Include(x => x.Role)
+                .FirstOrDefaultAsync(x => x.Email == request.Email);
 
             if (user == null)
             {
@@ -193,7 +196,7 @@ namespace DotNETProject.Server.Controllers
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Name, user.Email),
-                new Claim(ClaimTypes.Role, "User")
+                new Claim(ClaimTypes.Role, user.Role.Name)
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(

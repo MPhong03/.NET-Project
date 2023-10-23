@@ -1,12 +1,14 @@
 ﻿@page "/login"
 @layout AuthenticationLayout
 
+@using DotNETProject.Client.Service;
 @using DotNETProject.Shared;
 @using Newtonsoft.Json;
 @inject HttpClient HttpClient
 @inject NavigationManager NavigationManager
 @using Blazored.LocalStorage
 @inject ILocalStorageService localStorage
+@inject CustomAuthStateProvider AuthStateProvider
 
 <div class="container">
     <div class="row">
@@ -87,6 +89,7 @@
                 await localStorage.SetItemAsync("email", userDto.Email);
                 await localStorage.SetItemAsync("tokenExpiration", responseDto.tokenExpired);
                 
+                await AuthStateProvider.MarkUserAsAuthenticated(responseDto.token);
 
                 Console.WriteLine("Token: " + localStorage.GetItemAsStringAsync("token"));
 

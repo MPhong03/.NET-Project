@@ -20,7 +20,7 @@ namespace DotNETProject.Server.Data
         public DbSet<FilmDirector> FilmDirectors { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<FilmGenre> FilmGenres { get; set; }
-
+        public DbSet<Role> Roles { get; set; }
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{
         //    // For the "casts" table

@@ -22,5 +22,7 @@ namespace DotNETProject.Server.Models
         public DateTime ResetPasswordExpiry { get; set; }
         public bool IsPermit { get; set; } = false;
         public DateTime createdDate { get; set; }
+        public int RoleId { get; set; }
+        public Role Role { get; set; } = new Role();
     }
 }
