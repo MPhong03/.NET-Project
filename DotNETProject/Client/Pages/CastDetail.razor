@@ -31,11 +31,11 @@
                         string filmType = filmTypes[item.Film.Id];
                         if (filmType == "MOVIE")
                         {
-                            <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6"><a href="/movie/@item.Film.Id"><img src="@item.Film.PosterUrl"><p>@item.Film.Name</p></a></div>
+                            <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6"><a href="/movie/@item.Film.Id"><img class="w-100" src="@item.Film.PosterUrl"><p class="film-name">@item.Film.Name</p></a></div>
                         }
                         else if (filmType == "TV")
                         {
-                            <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6"><a href="/tv/@item.Film.Id"><img src="@item.Film.PosterUrl"><p>@item.Film.Name</p></a></div>
+                            <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6"><a href="/tv/@item.Film.Id"><img class="w-100" src="@item.Film.PosterUrl"><p class="film-naem">@item.Film.Name</p></a></div>
                         }
                         else
                         {

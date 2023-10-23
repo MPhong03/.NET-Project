@@ -1,0 +1,17 @@
+﻿#cast-img {
+    position: relative;
+    height: 60vh;
+    width: 100%;
+    object-fit: cover;
+}
+
+p {
+    text-align: left;
+}
+
+.film-name {
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: larger;
+}

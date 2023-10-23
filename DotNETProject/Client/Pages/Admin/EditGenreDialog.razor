@@ -1,0 +1,77 @@
+﻿@page "/admin/editgenredialog"
+@using DotNETProject.Shared;
+@using MudBlazor
+@using Firebase.Storage;
+@inject HttpClient httpClient
+@inject IJSRuntime JSRuntime
+
+<MudDialog>
+    <DialogContent>
+
+        <MudGrid>
+
+
+            <MudItem xs="8">
+                <MudTextField @bind-Value="currentGenre.Name" Label="Name" />
+
+            </MudItem>
+
+        </MudGrid>
+
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+<MudDialog @bind-IsVisible="nestedVisible">
+    <DialogContent>
+        <MudText Class="nested">@message</MudText>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public int Id { get; set; }
+
+    [Parameter] public GenreDto currentGenre { get; set; }
+
+    public String Male = "Male";
+    public String Female = "Female";
+    public DateTime? birth;
+    public IBrowserFile image;
+
+    private string message;
+    private bool nestedVisible;
+    private void OpenNested() => nestedVisible = true;
+    private void CloseNested() => nestedVisible = false;
+
+    async Task Submit()
+    {
+        try
+        {
+            var response = await httpClient.PutAsJsonAsync($"api/Genres/{currentGenre.Id}", currentGenre);
+
+            if (response.IsSuccessStatusCode)
+            {
+                MudDialog.Close(DialogResult.Ok(true));
+                await JSRuntime.InvokeVoidAsync("refreshPage");
+            }
+            else
+            {
+                var errorResponse = await response.Content.ReadAsStringAsync();
+                message = "An error occurred while saving to the database: " + errorResponse;
+                OpenNested();
+            }
+        }
+        catch (Exception ex)
+        {
+            message = "An error occurred: " + ex.Message;
+            OpenNested();
+        }
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}

@@ -14,14 +14,25 @@
                         <div class="trending-info g-border">
                             <h1 class="trending-text big-title text-uppercase mt-0">@movie.Name</h1>
                             <ul class="p-0 list-inline d-flex align-items-center movie-content">
-                                <li class="text-white">Hành Động</li>
+                                @* <li class="text-white">Hành Động</li>
                                 <li class="text-white">Phiêu Lưu</li>
-                                <li class="text-white">Viễn Tưởng</li>
+                                <li class="text-white">Viễn Tưởng</li> *@
+                                @foreach (var genre in movie.FilmGenres)
+                                {
+                                    <li class="text-white">@genre.Genre.Name</li>
+                                }
                             </ul>
                             <div class="d-flex align-items-center text-white text-detail">
                                 <span class="trending-year">@movie.ReleaseYear</span>
                                 <span class="ml-3">@movie.Time</span>
                             </div>
+                            <ul class="p-0 text-light list-inline d-flex align-items-center movie-content">
+                                <span>Đạo diễn: </span>
+                                @foreach (var genre in movie.FilmDirectors)
+                                {
+                                <li class="text-white"><a href="/director/@genre.Director.Id">@genre.Director.Name</a></li>
+                                }
+                            </ul>
                             <p class="trending-dec w-100 mb-0">
                                 @movie.Description
                             @* Jaime Reyes-mới tốt nghiệp trở về quê nhà để tìm kiếm tương lai mới nhưng mọi 

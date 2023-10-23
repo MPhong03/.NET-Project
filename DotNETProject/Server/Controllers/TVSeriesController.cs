@@ -103,6 +103,19 @@ namespace DotNETProject.Server.Controllers
                     TVSeriesDto.episodes.Add(episodeDto);
                 }
 
+                foreach (var filmGenre in tVSeriesEntity.FilmGenres)
+                {
+                    var filmGenreDto = new FilmGenreDto()
+                    {
+                        Id = filmGenre.Id,
+                        Genre = new GenreDto()
+                        {
+                            Name = filmGenre.Genre.Name
+                        }
+                    };
+                    TVSeriesDto.FilmGenres.Add(filmGenreDto);
+                }
+
                 TVSeriesDtos.Add(TVSeriesDto);
             }
 
@@ -189,6 +202,19 @@ namespace DotNETProject.Server.Controllers
                     View = episode.View
                 };
                 tVSeriesDto.episodes.Add(episodeDto);
+            }
+
+            foreach (var filmGenre in tVSeriesEntity.FilmGenres)
+            {
+                var filmGenreDto = new FilmGenreDto()
+                {
+                    Id = filmGenre.Id,
+                    Genre = new GenreDto()
+                    {
+                        Name = filmGenre.Genre.Name
+                    }
+                };
+                tVSeriesDto.FilmGenres.Add(filmGenreDto);
             }
 
             return tVSeriesDto;
@@ -279,6 +305,21 @@ namespace DotNETProject.Server.Controllers
                 }
             }
 
+            if (tVSeriesDto.FilmGenres != null)
+            {
+                foreach (var filmGenreDto in tVSeriesDto.FilmGenres)
+                {
+                    var genre = await _context.Genres.FindAsync(filmGenreDto.Genre.Id);
+                    if (genre != null)
+                    {
+                        var filmGenre = new FilmGenre
+                        {
+                            Genre = genre
+                        };
+                        tVSeries.FilmGenres.Add(filmGenre);
+                    }
+                }
+            }
 
             _context.Entry(tVSeries).State = EntityState.Modified;
 
@@ -370,6 +411,20 @@ namespace DotNETProject.Server.Controllers
                         View = itemDto.View
                     };
                     tVSeries.episodes.Add(episode);
+                }
+            }
+
+            if (tVSeriesDto.FilmGenres != null)
+            {
+                foreach (var filmGenreDto in tVSeriesDto.FilmGenres)
+                {
+
+                    FilmGenre filmGenre = new FilmGenre
+                    {
+                        Genre = await _context.Genres.FindAsync(filmGenreDto.Genre.Id),
+                    };
+
+                    tVSeries.FilmGenres.Add(filmGenre);
                 }
             }
 

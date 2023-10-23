@@ -71,20 +71,48 @@ namespace DotNETProject.Server.Controllers
 
         // GET: api/Directors/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Director>> GetDirector(int id)
+        public async Task<ActionResult<DirectorDto>> GetDirector(int id)
         {
             if (_context.Directors == null)
             {
                 return NotFound();
             }
-            var director = await _context.Directors.FindAsync(id);
+            var directorEntity = await _context.Directors
+                .Include(director => director.FilmDirectors)
+                .ThenInclude(filmDirector => filmDirector.Film)
+                .FirstOrDefaultAsync(c => c.Id == id);
 
-            if (director == null)
+            if (directorEntity == null)
             {
                 return NotFound();
             }
 
-            return director;
+            var directorDto = new DirectorDto()
+            {
+                Id = directorEntity.Id,
+                Name = directorEntity.Name,
+                Description = directorEntity.Description,
+                BirthDate = directorEntity.BirthDate,
+                AvatarUrl = directorEntity.AvatarUrl,
+                Gender = directorEntity.Gender,
+                Nation = directorEntity.Nation,
+            };
+
+            foreach (var filmDirector in directorEntity.FilmDirectors)
+            {
+                var filmDirectorDto = new FilmDirectorDto()
+                {
+                    Film = new FilmDto()
+                    {
+                        Name = filmDirector.Film.Name,
+                        Id = filmDirector.Film.Id,
+                        PosterUrl = filmDirector.Film.PosterUrl
+                    },
+                };
+                directorDto.FilmDirectors.Add(filmDirectorDto);
+            }
+
+            return directorDto;
         }
 
         // PUT: api/Directors/5

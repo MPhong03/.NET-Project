@@ -8,3 +8,10 @@
 p{
     text-align:left;
 }
+
+.film-name {
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: larger;
+}

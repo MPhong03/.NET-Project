@@ -4,6 +4,7 @@ using DotNETProject.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DotNETProject.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231023004934_UpdateGenre")]
+    partial class UpdateGenre
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -55,7 +58,7 @@ namespace DotNETProject.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("casts", (string)null);
+                    b.ToTable("casts");
                 });
 
             modelBuilder.Entity("DotNETProject.Server.Models.Director", b =>
@@ -91,7 +94,7 @@ namespace DotNETProject.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("directors", (string)null);
+                    b.ToTable("directors");
                 });
 
             modelBuilder.Entity("DotNETProject.Server.Models.Episode", b =>
@@ -127,7 +130,7 @@ namespace DotNETProject.Server.Migrations
 
                     b.HasIndex("SeriesId");
 
-                    b.ToTable("episodes", (string)null);
+                    b.ToTable("episodes");
                 });
 
             modelBuilder.Entity("DotNETProject.Server.Models.Film", b =>
@@ -174,7 +177,7 @@ namespace DotNETProject.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("films", (string)null);
+                    b.ToTable("films");
 
                     b.UseTptMappingStrategy();
                 });
@@ -203,7 +206,7 @@ namespace DotNETProject.Server.Migrations
 
                     b.HasIndex("FilmId");
 
-                    b.ToTable("filmcasts", (string)null);
+                    b.ToTable("filmcasts");
                 });
 
             modelBuilder.Entity("DotNETProject.Server.Models.FilmDirector", b =>
@@ -226,7 +229,7 @@ namespace DotNETProject.Server.Migrations
 
                     b.HasIndex("FilmId");
 
-                    b.ToTable("filmdirectors", (string)null);
+                    b.ToTable("filmdirectors");
                 });
 
             modelBuilder.Entity("DotNETProject.Server.Models.FilmGenre", b =>
@@ -249,7 +252,7 @@ namespace DotNETProject.Server.Migrations
 
                     b.HasIndex("GenreId");
 
-                    b.ToTable("filmgenres", (string)null);
+                    b.ToTable("filmgenres");
                 });
 
             modelBuilder.Entity("DotNETProject.Server.Models.Genre", b =>
@@ -266,7 +269,7 @@ namespace DotNETProject.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("genres", (string)null);
+                    b.ToTable("genres");
                 });
 
             modelBuilder.Entity("DotNETProject.Server.Models.User", b =>
@@ -310,7 +313,7 @@ namespace DotNETProject.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("users", (string)null);
+                    b.ToTable("users");
                 });
 
             modelBuilder.Entity("DotNETProject.Server.Models.Movie", b =>
@@ -325,14 +328,14 @@ namespace DotNETProject.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("movies", (string)null);
+                    b.ToTable("movies");
                 });
 
             modelBuilder.Entity("DotNETProject.Server.Models.TVSeries", b =>
                 {
                     b.HasBaseType("DotNETProject.Server.Models.Film");
 
-                    b.ToTable("tvseries", (string)null);
+                    b.ToTable("tvseries");
                 });
 
             modelBuilder.Entity("DotNETProject.Server.Models.Episode", b =>

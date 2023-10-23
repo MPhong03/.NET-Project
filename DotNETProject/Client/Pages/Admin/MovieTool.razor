@@ -33,6 +33,7 @@
                 <MudTh>View</MudTh>
                 <MudTh>Casts</MudTh>
                 <MudTh>Directors</MudTh>
+                <MudTh>Genres</MudTh>
                 <MudTh>TrailerUrl</MudTh>
                 <MudTh></MudTh>
                 <MudTh></MudTh>
@@ -114,7 +115,34 @@
                         </DialogActions>
                     </MudDialog>
                 </MudTd>
+
+                <MudTd DataLabel="Genres">
+                    <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => OpenGenreNested(context.Id)">Show</MudButton>
+
+                    <MudDialog @bind-IsVisible="showGenreDialogStates[context.Id]">
+                        <DialogContent>
+                            @if (context.FilmGenres.Count != 0)
+                            {
+                                @foreach (var genre in context.FilmGenres)
+                                {
+                                    <MudText>@genre.Genre.Name</MudText>
+                                    Console.WriteLine(genre.Genre.Name);
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine(context.FilmGenres.Count);
+                                <MudText>There is no genre</MudText>
+                            }
+                        </DialogContent>
+                        <DialogActions>
+                            <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => CloseGenreNested(context.Id)">Close</MudButton>
+                        </DialogActions>
+                    </MudDialog>
+                </MudTd>
+
                 <MudTd DataLabel="TrailerUrl">@context.TrailerUrl</MudTd>
+
                 <MudTd>
                     <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => DeleteMovie(context.Id))">Delete</MudButton>
                 </MudTd>
@@ -136,11 +164,12 @@
     private string searchString1 = "";
 
     private HashSet<MovieDto> selectedItems = new HashSet<MovieDto>();
-    
+
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
     Dictionary<int, bool> showCastDialogStates = new Dictionary<int, bool>();
     Dictionary<int, bool> showDirectorDialogStates = new Dictionary<int, bool>();
+    Dictionary<int, bool> showGenreDialogStates = new Dictionary<int, bool>();
 
     private IEnumerable<MovieDto> movie = new List<MovieDto>();
 
@@ -152,6 +181,7 @@
         {
             showCastDialogStates[movieDto.Id] = false;
             showDirectorDialogStates[movieDto.Id] = false;
+            showGenreDialogStates[movieDto.Id] = false;
         }
     }
 
@@ -175,6 +205,15 @@
         showDirectorDialogStates[movieId] = false;
     }
 
+    void OpenGenreNested(int movieId)
+    {
+        showGenreDialogStates[movieId] = true;
+    }
+
+    void CloseGenreNested(int movieId)
+    {
+        showGenreDialogStates[movieId] = false;
+    }
 
     private bool FilterFunc1(MovieDto element) => FilterFunc(element, searchString1);
 

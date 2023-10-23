@@ -18,6 +18,7 @@ namespace DotNETProject.Server.Models
         public string LogoUrl { get; set; } = string.Empty;
         public ICollection<FilmCast> FilmCasts { get; set; } = new List<FilmCast>();
         public ICollection<FilmDirector> FilmDirectors { get; set; } = new List<FilmDirector>();
+        public ICollection<FilmGenre> FilmGenres { get; set; } = new List<FilmGenre>();
         public string TrailerUrl { get; set; } = string.Empty;
         
     }

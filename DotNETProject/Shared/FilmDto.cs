@@ -16,6 +16,7 @@ namespace DotNETProject.Shared
         public string LogoUrl { get; set; } = string.Empty;
         public ICollection<FilmCastDto> FilmCasts { get; set; } = new List<FilmCastDto>();
         public ICollection<FilmDirectorDto> FilmDirectors { get; set; } = new List<FilmDirectorDto>();
+        public ICollection<FilmGenreDto> FilmGenres { get; set; } = new List<FilmGenreDto>();
         public string TrailerUrl { get; set; } = string.Empty;
         
     }

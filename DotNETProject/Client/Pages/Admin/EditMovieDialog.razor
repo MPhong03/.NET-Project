@@ -255,6 +255,52 @@
                 </MudDialog>
             </MudItem>
 
+            <MudItem xs="6">
+                @* INPUT GENRES DIALOG *@
+
+                <MudButton OnClick="OpenNestedForGenre">Select Genre</MudButton>
+
+                <MudTable T="FilmGenreDto" Items="@filmGenreDtos" MultiSelection="true" Hover="true">
+                    <HeaderContent>
+                        <MudTh>Id</MudTh>
+                        <MudTh>Name</MudTh>
+
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Id">@context.Genre.Id</MudTd>
+                        <MudTd DataLabel="Name">@context.Genre.Name</MudTd>
+
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager PageSizeOptions="new int[]{50, 100}" />
+                    </PagerContent>
+                    <FooterContent>
+                        <MudTd colspan="5">Select All</MudTd>
+                    </FooterContent>
+                </MudTable>
+
+                <MudDialog @bind-IsVisible="nestedVisibleForGenre">
+                    <DialogContent>
+                        <MudText>Choose Genres</MudText>
+
+                        <MudSelect @bind-Value="selectedGenre" Label="Select Genre" Data="genres" T="GenreDto">
+                            @foreach (var genre in genres)
+                            {
+                                <MudSelectItem T="GenreDto" Value="@genre">@genre.Name</MudSelectItem>
+                            }
+                        </MudSelect>
+
+
+                    </DialogContent>
+
+                    <DialogActions>
+                        <MudButton OnClick="CloseNestedForGenre">Cancel</MudButton>
+                        <MudButton Color="Color.Primary" OnClick="UpdateGenre">Ok</MudButton>
+                    </DialogActions>
+
+                </MudDialog>
+            </MudItem>
+
         </MudGrid>        
 
     </DialogContent>
@@ -294,19 +340,27 @@
     private void OpenNestedForDirector() => nestedVisibleForDirector = true;
     private void CloseNestedForDirector() => nestedVisibleForDirector = false;
 
+    private bool nestedVisibleForGenre;
+    private void OpenNestedForGenre() => nestedVisibleForGenre = true;
+    private void CloseNestedForGenre() => nestedVisibleForGenre = false;
+
     private IEnumerable<CastDto> casts = new List<CastDto>();
     private ICollection<FilmCastDto> filmCastDtos = new List<FilmCastDto>();
     private IEnumerable<DirectorDto> directors = new List<DirectorDto>();
     private ICollection<FilmDirectorDto> filmDirectorDtos = new List<FilmDirectorDto>();
+    private IEnumerable<GenreDto> genres = new List<GenreDto>();
+    private ICollection<FilmGenreDto> filmGenreDtos = new List<FilmGenreDto>();
 
     private DirectorDto selectedDirector;
     private CastDto selectedCast;
+    private GenreDto selectedGenre;
     private string selectedRole;
 
     protected override async Task OnInitializedAsync()
     {
         casts = await httpClient.GetFromJsonAsync<List<CastDto>>($"api/Casts");
         directors = await httpClient.GetFromJsonAsync<List<DirectorDto>>($"api/Directors");
+        genres = await httpClient.GetFromJsonAsync<List<GenreDto>>($"api/Genres");
 
         foreach(var item in currentMovie.FilmCasts)
         {
@@ -316,6 +370,11 @@
         foreach (var item in currentMovie.FilmDirectors)
         {
             filmDirectorDtos.Add(item);
+        }
+
+        foreach (var item in currentMovie.FilmGenres)
+        {
+            filmGenreDtos.Add(item);
         }
     }
 
@@ -334,6 +393,14 @@
         filmDirectorDto.Director = selectedDirector;
 
         filmDirectorDtos.Add(filmDirectorDto);
+    }
+
+    private void UpdateGenre()
+    {
+        FilmGenreDto filmGenreDto = new FilmGenreDto();
+        filmGenreDto.Genre = selectedGenre;
+
+        filmGenreDtos.Add(filmGenreDto);
     }
 
     async Task Submit()
@@ -371,6 +438,7 @@
                 currentMovie.Link = videoUrl;
                 currentMovie.FilmCasts = filmCastDtos;
                 currentMovie.FilmDirectors = filmDirectorDtos;
+                currentMovie.FilmGenres = filmGenreDtos;
 
                 var response = await httpClient.PutAsJsonAsync($"api/Movies/{currentMovie.Id}", currentMovie);
 

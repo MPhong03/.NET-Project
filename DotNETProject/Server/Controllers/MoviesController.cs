@@ -37,6 +37,8 @@ namespace DotNETProject.Server.Controllers
                 .ThenInclude(filmCast => filmCast.Cast)
                 .Include(movie => movie.FilmDirectors)
                 .ThenInclude(filmDirector => filmDirector.Director)
+                .Include(movie => movie.FilmGenres)
+                .ThenInclude(filmGenre => filmGenre.Genre)
                 .ToListAsync();
 
             var movieDtos = new List<MovieDto>();
@@ -82,13 +84,27 @@ namespace DotNETProject.Server.Controllers
                 {
                     var filmDirectorDto = new FilmDirectorDto()
                     {
-                        DirectorId = filmDirector.DirectorId,
                         Director = new DirectorDto()
                         {
-                            Name = filmDirector.Director.Name
+                            Name = filmDirector.Director.Name,
+                            Id = filmDirector.Director.Id
                         }
                     };
                     movieDto.FilmDirectors.Add(filmDirectorDto);
+                }
+
+                foreach (var filmGenre in movieEntity.FilmGenres)
+                {
+                    var filmGenreDto = new FilmGenreDto()
+                    {
+                        Id = filmGenre.Id,
+                        Genre = new GenreDto()
+                        {
+                            Name = filmGenre.Genre.Name,
+                            Id = filmGenre.Genre.Id
+                        }
+                    };
+                    movieDto.FilmGenres.Add(filmGenreDto);
                 }
 
                 movieDtos.Add(movieDto);
@@ -110,6 +126,8 @@ namespace DotNETProject.Server.Controllers
                 .ThenInclude(filmCast => filmCast.Cast)
                 .Include(m => m.FilmDirectors)
                 .ThenInclude(filmDirector => filmDirector.Director)
+                .Include(m => m.FilmGenres)
+                .ThenInclude(filmGenre => filmGenre.Genre)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (movie == null)
@@ -156,13 +174,26 @@ namespace DotNETProject.Server.Controllers
             {
                 var filmDirectorDto = new FilmDirectorDto()
                 {
-                    DirectorId = filmDirector.DirectorId,
                     Director = new DirectorDto()
                     {
-                        Name = filmDirector.Director.Name
+                        Name = filmDirector.Director.Name,
+                        Id = filmDirector.Director.Id
                     }
                 };
                 movieDto.FilmDirectors.Add(filmDirectorDto);
+            }
+
+            foreach (var filmGenre in movie.FilmGenres)
+            {
+                var filmGenreDto = new FilmGenreDto()
+                {
+                    Genre = new GenreDto()
+                    {
+                        Name = filmGenre.Genre.Name,
+                        Id = filmGenre.Genre.Id
+                    }
+                };
+                movieDto.FilmGenres.Add(filmGenreDto);
             }
 
             return movieDto;
@@ -181,6 +212,7 @@ namespace DotNETProject.Server.Controllers
             var movie = await _context.Movies
                 .Include(m => m.FilmCasts)
                 .Include(m => m.FilmDirectors)
+                .Include(m => m.FilmGenres)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (movie == null)
@@ -232,6 +264,22 @@ namespace DotNETProject.Server.Controllers
                             Director = director
                         };
                         movie.FilmDirectors.Add(filmDirector);
+                    }
+                }
+            }
+
+            if (movieDto.FilmGenres != null)
+            {
+                foreach (var filmGenreDto in movieDto.FilmGenres)
+                {
+                    var genre = await _context.Genres.FindAsync(filmGenreDto.Genre.Id);
+                    if (genre != null)
+                    {
+                        var filmGenre = new FilmGenre
+                        {
+                            Genre = genre
+                        };
+                        movie.FilmGenres.Add(filmGenre);
                     }
                 }
             }
@@ -331,6 +379,20 @@ namespace DotNETProject.Server.Controllers
                     };
 
                     movie.FilmDirectors.Add(filmDirector);
+                }
+            }
+
+            if (movieDto.FilmGenres != null)
+            {
+                foreach (var filmGenreDto in movieDto.FilmGenres)
+                {
+
+                    FilmGenre filmGenre = new FilmGenre
+                    {
+                        Genre = await _context.Genres.FindAsync(filmGenreDto.Genre.Id),
+                    };
+
+                    movie.FilmGenres.Add(filmGenre);
                 }
             }
 

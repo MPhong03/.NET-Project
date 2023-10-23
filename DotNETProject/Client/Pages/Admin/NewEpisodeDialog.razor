@@ -81,7 +81,7 @@
 
                 if (response.IsSuccessStatusCode)
                 {
-                    MudDialog.Close(DialogResult.Ok(true));
+                    MudDialog.Close(DialogResult.Ok(episodeDto));
                     await JSRuntime.InvokeVoidAsync("refreshPage");
                 }
                 else
