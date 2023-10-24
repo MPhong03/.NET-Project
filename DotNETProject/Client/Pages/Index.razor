@@ -10,12 +10,21 @@
     <div class="content-container">
         <div id="carouselCaptions" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-indicators">
-                <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                @if (banners.Count > 0)
+                {
+                    var isFirstItem = true;
+                    for (var i = 0; i < banners.Count; i++)
+                    {
+                        <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="@i" class="@(isFirstItem ? "active" : "")" aria-current="true" aria-label="Slide @i"></button>
+                        isFirstItem = false;
+                    }
+                }
+                @* <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                 <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button> *@
             </div>
             <div class="carousel-inner">
-                <div class="carousel-item active">
+                @* <div class="carousel-item active">
                     <img src="img/f-1.jpg" style="height: 80vh;" class="d-block w-100" alt="...">
                     <div class="carousel-caption d-none d-md-block">
                         <img src="img/f-t-1.png" class="featured-title" alt="...">
@@ -38,20 +47,38 @@
                         </p>
                         <button class="featured-button">XEM NGAY</button>
                     </div>
-                </div>
+                </div> *@
+                @if (banners.Count > 0)
+                {
+                    var isFirstItem = true;
+                    foreach (var banner in banners)
+                    {
 
-                <div class="carousel-item">
-                    <img src="img/f-3.jpg" style="height: 80vh;" class="d-block w-100" alt="...">
-                    <div class="carousel-caption d-none d-md-block">
-                        <img src="img/f-t-3.png" class="featured-title" alt="...">
-                        <p class="text-light">
-                            Thành phố Gotham xuất hiện một tên tội phạm kỳ lạ tên Riddler chuyên nhắm vào nhân vật tai to mặt lớn.
-                            Và sau mỗi lần phạm tội, hắn đều để lại một câu đố bí ẩn cho Batman. Khi bắt tay vào phá giải các câu đố
-                            này, Batman dần lật mở những bí ẩn động trời giữa gia đình anh và tên trùm tội phạm Carmine Falcon..
-                        </p>
-                        <button class="featured-button">XEM NGAY</button>
-                    </div>
-                </div>
+                        <div class="carousel-item @(isFirstItem ? "active" : "")">
+                            <img src="@banner.BackgroundUrl" style="height: 80vh;" class="d-block w-100" alt="...">
+                            <div class="carousel-caption d-none d-md-block">
+                                <img src="@banner.LogoUrl" class="featured-title" alt="...">
+                                <p class="text-light">
+                                    @banner.Description
+                                </p>
+
+                                @if (filmTypes[banner.Id] == "MOVIE")
+                                {
+                                    <a href="/movie/@banner.Id" class="btn featured-button">XEM NGAY</a>
+                                }
+                                else
+                                {
+                                    <a href="/tv/@banner.Id" class="btn featured-button">XEM NGAY</a>
+                                }
+
+                            </div>
+                        </div>
+
+                        isFirstItem = false;
+                    }
+                }
+                
+                
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselCaptions" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -62,7 +89,9 @@
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
-    </div><br><br>
+    </div>
+    
+    <br><br>
 
     <div class="container list">
         <h3>Phim Lẻ Đề Cử</h3>
@@ -172,10 +201,27 @@
 @code {
     private ICollection<MovieDto> movies = new List<MovieDto>();
     private ICollection<TVSeriesDto> tvseries = new List<TVSeriesDto>();
+    private ICollection<FilmDto> banners = new List<FilmDto>();
+    private Dictionary<int, string> filmTypes = new Dictionary<int, string>();
 
     protected override async Task OnInitializedAsync()
     {
         movies = await httpClient.GetFromJsonAsync<List<MovieDto>>("api/Movies");
         tvseries = await httpClient.GetFromJsonAsync<List<TVSeriesDto>>("api/TVSeries");
+        var films = await httpClient.GetFromJsonAsync<List<FilmDto>>("api/Films");
+
+        foreach (var item in films)
+        {
+            if(item.isActiveBanner == true)
+            {
+                banners.Add(item);
+            }
+        }
+
+        foreach (var item in banners)
+        {
+            string flag = await httpClient.GetStringAsync($"api/Films/{item.Id}");
+            filmTypes.Add(item.Id, flag);
+        }
     }
 }

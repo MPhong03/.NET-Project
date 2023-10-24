@@ -59,6 +59,7 @@ namespace DotNETProject.Server.Controllers
                     BackgroundUrl = movieEntity.BackgroundUrl,
                     LogoUrl = movieEntity.LogoUrl,
                     TrailerUrl = movieEntity.TrailerUrl,
+                    isActiveBanner = movieEntity.isActiveBanner
                 };
 
                 foreach (var filmCast in movieEntity.FilmCasts)
@@ -149,6 +150,8 @@ namespace DotNETProject.Server.Controllers
                 BackgroundUrl = movie.BackgroundUrl,
                 LogoUrl = movie.LogoUrl,
                 TrailerUrl = movie.TrailerUrl,
+                isActiveBanner = movie.isActiveBanner
+
             };
 
             foreach (var filmCast in movie.FilmCasts)
@@ -234,6 +237,7 @@ namespace DotNETProject.Server.Controllers
             movie.BackgroundUrl = movieDto.BackgroundUrl;
             movie.LogoUrl = movieDto.LogoUrl;
             movie.TrailerUrl = movieDto.TrailerUrl;
+            movie.isActiveBanner = movieDto.isActiveBanner;
 
             if (movieDto.FilmCasts != null)
             {
@@ -332,7 +336,8 @@ namespace DotNETProject.Server.Controllers
                 PosterUrl = movieDto.PosterUrl,
                 BackgroundUrl = movieDto.BackgroundUrl,
                 LogoUrl = movieDto.LogoUrl,
-                TrailerUrl = movieDto.TrailerUrl
+                TrailerUrl = movieDto.TrailerUrl,
+                isActiveBanner = movieDto.isActiveBanner
             };
 
             if (movieDto.FilmCasts != null)

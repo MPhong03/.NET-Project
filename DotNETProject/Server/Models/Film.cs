@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace DotNETProject.Server.Models
 {
@@ -20,6 +21,6 @@ namespace DotNETProject.Server.Models
         public ICollection<FilmDirector> FilmDirectors { get; set; } = new List<FilmDirector>();
         public ICollection<FilmGenre> FilmGenres { get; set; } = new List<FilmGenre>();
         public string TrailerUrl { get; set; } = string.Empty;
-        
+        public bool isActiveBanner { get; set; } = false;
     }
 }

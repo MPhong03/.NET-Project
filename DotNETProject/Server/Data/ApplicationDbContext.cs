@@ -1,5 +1,6 @@
 ﻿using DotNETProject.Server.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace DotNETProject.Server.Data
 {
@@ -21,21 +22,6 @@ namespace DotNETProject.Server.Data
         public DbSet<Genre> Genres { get; set; }
         public DbSet<FilmGenre> FilmGenres { get; set; }
         public DbSet<Role> Roles { get; set; }
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    // For the "casts" table
-        //    modelBuilder.Entity<Cast>()
-        //        .Property(c => c.Id)
-        //        .UseIdentityColumn();
-
-        //    // For the "directors" table
-        //    modelBuilder.Entity<Director>()
-        //        .Property(d => d.Id)
-        //        .UseIdentityColumn();
-
-        //    base.OnModelCreating(modelBuilder);
-        //}
-
 
     }
 }

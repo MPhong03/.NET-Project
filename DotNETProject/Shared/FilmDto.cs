@@ -18,6 +18,6 @@ namespace DotNETProject.Shared
         public ICollection<FilmDirectorDto> FilmDirectors { get; set; } = new List<FilmDirectorDto>();
         public ICollection<FilmGenreDto> FilmGenres { get; set; } = new List<FilmGenreDto>();
         public string TrailerUrl { get; set; } = string.Empty;
-        
+        public bool isActiveBanner { get; set; } = false;
     }
 }

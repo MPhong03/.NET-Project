@@ -36,6 +36,7 @@
                 <MudTh>Genres</MudTh>
                 <MudTh></MudTh>
                 <MudTh></MudTh>
+                <MudTh>Add to banner</MudTh>
             </HeaderContent>
             <RowTemplate>
                 <MudTd DataLabel="ID">@context.Id</MudTd>
@@ -146,6 +147,16 @@
                 <MudTd>
                     <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="@(() => EditTVSeries(context, maxWidth))">Edit</MudButton>
                 </MudTd>
+                <MudTd>
+                    @if (context.isActiveBanner == false)
+                    {
+                        <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="@(() => ActiveTV(context))">ON</MudButton>
+                    }
+                    else
+                    {
+                        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => ActiveTV(context))">OFF</MudButton>
+                    }
+                </MudTd>
             </RowTemplate>
             <PagerContent>
                 <MudTablePager />
@@ -153,12 +164,19 @@
         </MudTable>
     </MudItem>
 </MudGrid>
+
+<MudDialog @bind-IsVisible="nestedVisible">
+    <DialogContent>
+        <MudText Class="nested">@message</MudText>
+    </DialogContent>
+</MudDialog>
 @code {
     private bool dense = false;
     private bool hover = true;
     private bool striped = false;
     private bool bordered = false;
     private string searchString1 = "";
+    private string message = "";
 
     private HashSet<TVSeriesDto> selectedItems = new HashSet<TVSeriesDto>();
 
@@ -170,6 +188,10 @@
     Dictionary<int, bool> showGenreDialogStates = new Dictionary<int, bool>();
 
     private IEnumerable<TVSeriesDto> TVSeries = new List<TVSeriesDto>();
+
+    private bool nestedVisible;
+    private void OpenNested() => nestedVisible = true;
+    private void CloseNested() => nestedVisible = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -241,6 +263,37 @@
         paras.Add("currentTVSeriesDto", TVSeriesDto);
 
         Dialog.Show<EditTVSeriesDialog>("Edit TVSeries", paras, options);
+    }
+
+    private async Task ActiveTV(TVSeriesDto tVSeriesDto)
+    {
+        try
+        {
+            if (tVSeriesDto.isActiveBanner == false)
+            {
+                tVSeriesDto.isActiveBanner = true;
+            }
+            else
+            {
+                tVSeriesDto.isActiveBanner = false;
+            }
+
+            var response = await httpClient.PutAsJsonAsync($"api/TVSeries/{tVSeriesDto.Id}", tVSeriesDto);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorResponse = await response.Content.ReadAsStringAsync();
+                message = "An error occurred while saving to the database: " + errorResponse;
+                OpenNested();
+            }
+            
+        }
+        catch (Exception ex)
+        {
+            message = "An error occurred: " + ex.Message;
+            OpenNested();
+        }
+
     }
 
     private void OpenDialog(DialogOptions options)

@@ -4,6 +4,7 @@ using DotNETProject.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DotNETProject.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231024042750_UpdateAdvertise")]
+    partial class UpdateAdvertise
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,26 @@ namespace DotNETProject.Server.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("DotNETProject.Server.Models.Advertise", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Maximum")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("advertises");
+                });
 
             modelBuilder.Entity("DotNETProject.Server.Models.Cast", b =>
                 {
@@ -138,6 +161,9 @@ namespace DotNETProject.Server.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("AdvertiseId")
+                        .HasColumnType("int");
+
                     b.Property<string>("BackgroundUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -172,10 +198,9 @@ namespace DotNETProject.Server.Migrations
                     b.Property<long>("View")
                         .HasColumnType("bigint");
 
-                    b.Property<bool>("isActiveBanner")
-                        .HasColumnType("bit");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("AdvertiseId");
 
                     b.ToTable("films");
 
@@ -371,6 +396,15 @@ namespace DotNETProject.Server.Migrations
                     b.Navigation("Series");
                 });
 
+            modelBuilder.Entity("DotNETProject.Server.Models.Film", b =>
+                {
+                    b.HasOne("DotNETProject.Server.Models.Advertise", "Advertise")
+                        .WithMany("Films")
+                        .HasForeignKey("AdvertiseId");
+
+                    b.Navigation("Advertise");
+                });
+
             modelBuilder.Entity("DotNETProject.Server.Models.FilmCast", b =>
                 {
                     b.HasOne("DotNETProject.Server.Models.Cast", "Cast")
@@ -455,6 +489,11 @@ namespace DotNETProject.Server.Migrations
                         .HasForeignKey("DotNETProject.Server.Models.TVSeries", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("DotNETProject.Server.Models.Advertise", b =>
+                {
+                    b.Navigation("Films");
                 });
 
             modelBuilder.Entity("DotNETProject.Server.Models.Cast", b =>

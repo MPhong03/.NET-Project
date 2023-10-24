@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DotNETProject.Server.Data;
 using DotNETProject.Server.Models;
+using DotNETProject.Shared;
 
 namespace DotNETProject.Server.Controllers
 {
@@ -50,13 +51,33 @@ namespace DotNETProject.Server.Controllers
 
         // GET: api/Films
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Film>>> GetFilms()
+        public async Task<ActionResult<IEnumerable<FilmDto>>> GetFilms()
         {
             if (_context.Films == null)
             {
                 return NotFound();
             }
-            return await _context.Films.ToListAsync();
+
+            var list = await _context.Films.ToListAsync();
+            var listDto = new List<FilmDto>();
+
+            foreach (var item in list)
+            {
+                var film = new FilmDto
+                {
+                    Id = item.Id,
+                    BackgroundUrl = item.BackgroundUrl,
+                    Description = item.Description,
+                    LogoUrl = item.LogoUrl,
+                    PosterUrl = item.PosterUrl,
+                    Name = item.Name,
+                    isActiveBanner = item.isActiveBanner
+                };
+
+                listDto.Add(film);
+            }
+
+            return listDto;
         }
 
         // GET: api/Films/5

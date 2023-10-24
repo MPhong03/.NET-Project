@@ -4,6 +4,7 @@ using DotNETProject.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DotNETProject.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231024035150_UpdateBanner")]
+    partial class UpdateBanner
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +24,22 @@ namespace DotNETProject.Server.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("DotNETProject.Server.Models.Banner", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Maximum")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("banners");
+                });
 
             modelBuilder.Entity("DotNETProject.Server.Models.Cast", b =>
                 {
@@ -142,6 +161,9 @@ namespace DotNETProject.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("BannerId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -172,10 +194,9 @@ namespace DotNETProject.Server.Migrations
                     b.Property<long>("View")
                         .HasColumnType("bigint");
 
-                    b.Property<bool>("isActiveBanner")
-                        .HasColumnType("bit");
-
                     b.HasKey("Id");
+
+                    b.HasIndex("BannerId");
 
                     b.ToTable("films");
 
@@ -371,6 +392,13 @@ namespace DotNETProject.Server.Migrations
                     b.Navigation("Series");
                 });
 
+            modelBuilder.Entity("DotNETProject.Server.Models.Film", b =>
+                {
+                    b.HasOne("DotNETProject.Server.Models.Banner", null)
+                        .WithMany("Films")
+                        .HasForeignKey("BannerId");
+                });
+
             modelBuilder.Entity("DotNETProject.Server.Models.FilmCast", b =>
                 {
                     b.HasOne("DotNETProject.Server.Models.Cast", "Cast")
@@ -455,6 +483,11 @@ namespace DotNETProject.Server.Migrations
                         .HasForeignKey("DotNETProject.Server.Models.TVSeries", "Id")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("DotNETProject.Server.Models.Banner", b =>
+                {
+                    b.Navigation("Films");
                 });
 
             modelBuilder.Entity("DotNETProject.Server.Models.Cast", b =>
