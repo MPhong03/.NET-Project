@@ -26,8 +26,15 @@
     {
 
         movie = await httpClient.GetFromJsonAsync<MovieDto>($"api/Movies/{Int32.Parse(Id)}");
+
         Console.WriteLine("Link: " + movie.Link);
 
         await JSRuntime.InvokeVoidAsync("initializeJWPlayer", movie.Link, movie.BackgroundUrl);
+
+        if (movie != null)
+        {
+            movie.View += 1;
+            await httpClient.PutAsJsonAsync<MovieDto>($"api/Movies/{Int32.Parse(Id)}", movie);
+        }
     }
 }

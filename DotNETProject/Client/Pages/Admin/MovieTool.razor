@@ -31,10 +31,10 @@
                 <MudTh>Description</MudTh>
                 <MudTh>IMDBScore</MudTh>
                 <MudTh>View</MudTh>
+                <MudTh>TrailerUrl</MudTh>
                 <MudTh>Casts</MudTh>
                 <MudTh>Directors</MudTh>
                 <MudTh>Genres</MudTh>
-                <MudTh>TrailerUrl</MudTh>
                 <MudTh></MudTh>
                 <MudTh></MudTh>
                 <MudTh>Add to banner</MudTh>
@@ -70,6 +70,7 @@
                 </MudTd>
                 <MudTd DataLabel="IMDBScore">@context.IMDBScore</MudTd>
                 <MudTd DataLabel="View">@context.View</MudTd>
+                <MudTd DataLabel="TrailerUrl">@context.TrailerUrl</MudTd>
                 
                 <MudTd DataLabel="Casts">
                     <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => OpenCastNested(context.Id)">Show</MudButton>
@@ -141,8 +142,6 @@
                         </DialogActions>
                     </MudDialog>
                 </MudTd>
-
-                <MudTd DataLabel="TrailerUrl">@context.TrailerUrl</MudTd>
 
                 <MudTd>
                     <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => DeleteMovie(context.Id))">Delete</MudButton>

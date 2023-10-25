@@ -225,6 +225,7 @@ namespace DotNETProject.Server.Controllers
 
             movie.FilmCasts.Clear();
             movie.FilmDirectors.Clear();
+            movie.FilmGenres.Clear();
 
             movie.Time = movieDto.Time;
             movie.Link = movieDto.Link;

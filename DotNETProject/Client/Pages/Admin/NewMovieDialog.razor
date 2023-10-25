@@ -27,6 +27,9 @@
 
                 <MudTextField @bind-Value="movieDto.View" Label="View" />
 
+            </MudItem>
+
+            <MudItem xs="12">
                 <MudGrid>
 
                     <MudItem xs="3">
@@ -37,7 +40,7 @@
                                            Color="Color.Primary"
                                            StartIcon="@Icons.Material.Filled.CloudUpload"
                                            for="@context">
-                                    Upload Movie
+                                    Movie
                                 </MudButton>
                             </ButtonTemplate>
                         </MudFileUpload>
@@ -51,7 +54,7 @@
                                            Color="Color.Primary"
                                            StartIcon="@Icons.Material.Filled.CloudUpload"
                                            for="@context">
-                                    Upload Poster
+                                    Poster
                                 </MudButton>
                             </ButtonTemplate>
                         </MudFileUpload>
@@ -65,7 +68,7 @@
                                            Color="Color.Primary"
                                            StartIcon="@Icons.Material.Filled.CloudUpload"
                                            for="@context">
-                                    Upload Background
+                                    Background
                                 </MudButton>
                             </ButtonTemplate>
                         </MudFileUpload>
@@ -79,7 +82,7 @@
                                            Color="Color.Primary"
                                            StartIcon="@Icons.Material.Filled.CloudUpload"
                                            for="@context">
-                                    Upload Logo
+                                    Logo
                                 </MudButton>
                             </ButtonTemplate>
                         </MudFileUpload>
@@ -121,9 +124,10 @@
 
             </MudItem>
 
-            <MudItem xs="6">
+            <MudItem xs="12">
                 @* INPUT CASTS DIALOG *@
                 <MudButton OnClick="OpenNestedForCast">Select Casts</MudButton>
+                <MudButton Color="Color.Error" OnClick="DeleteCasts">Delete Selected</MudButton>
 
                 @* @if (filmCastDtos.Count != 0)
                 {
@@ -136,25 +140,21 @@
 
                 } *@
 
-                <MudTable T="FilmCastDto" Items="@filmCastDtos" MultiSelection="true" Hover="true">
+                <MudTable T="FilmCastDto" Items="@filmCastDtos" MultiSelection="true" Hover="true" @bind-SelectedItems="selectedCasts">
                     <HeaderContent>
                         <MudTh>Id</MudTh>
                         <MudTh>Name</MudTh>
                         <MudTh>Role</MudTh>
-                        @* <MudTh></MudTh>
-                        <MudTh></MudTh> *@
+                        <MudTh></MudTh>
                     </HeaderContent>
                     <RowTemplate>
                         <MudTd DataLabel="Id">@context.Cast.Id</MudTd>
                         <MudTd DataLabel="Name">@context.Cast.Name</MudTd>
                         <MudTd DataLabel="Role">@context.Role</MudTd>
 
-                        @* <MudTd DataLabel="Remove">
-
+                        <MudTd>
+                            <MudButton StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="() => DeleteCast(context)"></MudButton>
                         </MudTd>
-                        <MudTd DataLabel="Delete">
-
-                        </MudTd> *@
                     </RowTemplate>
                     <PagerContent>
                         <MudTablePager PageSizeOptions="new int[]{50, 100}" />
@@ -186,10 +186,11 @@
                 </MudDialog>
             </MudItem>
 
-            <MudItem xs="6">
+            <MudItem xs="12">
                 @* INPUT DIRECTORS DIALOG *@
 
                 <MudButton OnClick="OpenNestedForDirector">Select Director</MudButton>
+                <MudButton Color="Color.Error" OnClick="DeleteDirectors">Delete Selected</MudButton>
 
                 @* @if (filmDirectorDtos.Count != 0)
                 {
@@ -202,15 +203,19 @@
 
                 } *@
 
-                <MudTable T="FilmDirectorDto" Items="@filmDirectorDtos" MultiSelection="true" Hover="true">
+                <MudTable T="FilmDirectorDto" Items="@filmDirectorDtos" MultiSelection="true" Hover="true" @bind-SelectedItems="selectedDirectors">
                     <HeaderContent>
                         <MudTh>Id</MudTh>
                         <MudTh>Name</MudTh>
+                        <MudTh></MudTh>
 
                     </HeaderContent>
                     <RowTemplate>
                         <MudTd DataLabel="Id">@context.Director.Id</MudTd>
                         <MudTd DataLabel="Name">@context.Director.Name</MudTd>
+                        <MudTd>
+                            <MudButton StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="() => DeleteDirector(context)"></MudButton>
+                        </MudTd>
 
                     </RowTemplate>
                     <PagerContent>
@@ -243,20 +248,25 @@
                 </MudDialog>
             </MudItem>
 
-            <MudItem xs="6">
+            <MudItem xs="12">
                 @* INPUT GENRES DIALOG *@
 
                 <MudButton OnClick="OpenNestedForGenre">Select Genre</MudButton>
+                <MudButton Color="Color.Error" OnClick="DeleteGenres">Delete Selected</MudButton>
 
-                <MudTable T="FilmGenreDto" Items="@filmGenreDtos" MultiSelection="true" Hover="true">
+                <MudTable T="FilmGenreDto" Items="@filmGenreDtos" MultiSelection="true" Hover="true" @bind-SelectedItems="selectedGenres">
                     <HeaderContent>
                         <MudTh>Id</MudTh>
                         <MudTh>Name</MudTh>
+                        <MudTh>Action</MudTh>
 
                     </HeaderContent>
                     <RowTemplate>
                         <MudTd DataLabel="Id">@context.Genre.Id</MudTd>
                         <MudTd DataLabel="Name">@context.Genre.Name</MudTd>
+                        <MudTd>
+                            <MudButton StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="() => DeleteGenre(context)"></MudButton>
+                        </MudTd>
 
                     </RowTemplate>
                     <PagerContent>
@@ -343,6 +353,10 @@
     private GenreDto selectedGenre;
     private string selectedRole;
 
+    private HashSet<FilmGenreDto> selectedGenres = new HashSet<FilmGenreDto>();
+    private HashSet<FilmCastDto> selectedCasts = new HashSet<FilmCastDto>();
+    private HashSet<FilmDirectorDto> selectedDirectors = new HashSet<FilmDirectorDto>();
+
     protected override async Task OnInitializedAsync()
     {
         casts = await httpClient.GetFromJsonAsync<List<CastDto>>($"api/Casts");
@@ -359,6 +373,19 @@
         filmCastDtos.Add(filmCastDto);
     }
 
+    private void DeleteCasts()
+    {
+        foreach (var item in selectedCasts)
+        {
+            filmCastDtos.Remove(item);
+        }
+    }
+
+    private void DeleteCast(FilmCastDto item)
+    {
+        filmCastDtos.Remove(item);
+    }
+
     private void UpdateDirector()
     {
         FilmDirectorDto filmDirectorDto = new FilmDirectorDto();
@@ -367,12 +394,38 @@
         filmDirectorDtos.Add(filmDirectorDto);
     }
 
+    private void DeleteDirectors()
+    {
+        foreach (var item in selectedDirectors)
+        {
+            filmDirectorDtos.Remove(item);
+        }
+    }
+
+    private void DeleteDirector(FilmDirectorDto item)
+    {
+        filmDirectorDtos.Remove(item);
+    }
+
     private void UpdateGenre()
     {
         FilmGenreDto filmGenreDto = new FilmGenreDto();
         filmGenreDto.Genre = selectedGenre;
 
         filmGenreDtos.Add(filmGenreDto);
+    }
+
+    private void DeleteGenres()
+    {
+        foreach (var item in selectedGenres)
+        {
+            filmGenreDtos.Remove(item);
+        }
+    }
+
+    private void DeleteGenre(FilmGenreDto item)
+    {
+        filmGenreDtos.Remove(item);
     }
 
     async Task Submit()

@@ -29,11 +29,11 @@
                 <MudTh>Description</MudTh>
                 <MudTh>IMDBScore</MudTh>
                 <MudTh>View</MudTh>
+                <MudTh>TrailerUrl</MudTh>
                 <MudTh>Casts</MudTh>
                 <MudTh>Directors</MudTh>
-                <MudTh>TrailerUrl</MudTh>
-                <MudTh>Episodes</MudTh>
                 <MudTh>Genres</MudTh>
+                <MudTh>Episodes</MudTh>
                 <MudTh></MudTh>
                 <MudTh></MudTh>
                 <MudTh>Add to banner</MudTh>
@@ -67,6 +67,7 @@
                 </MudTd>
                 <MudTd DataLabel="IMDBScore">@context.IMDBScore</MudTd>
                 <MudTd DataLabel="View">@context.View</MudTd>
+                <MudTd DataLabel="TrailerUrl">@context.TrailerUrl</MudTd>
 
                 <MudTd DataLabel="Casts">
                     <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => OpenCastNested(context.Id)">Show</MudButton>
@@ -113,10 +114,7 @@
                         </DialogActions>
                     </MudDialog>
                 </MudTd>
-                <MudTd DataLabel="TrailerUrl">@context.TrailerUrl</MudTd>
-                <MudTd>
-                    <MudButton Variant="Variant.Filled" Color="Color.Warning" OnClick="() => OpenEpisodesNested(context.episodes, context.Name, fullScreen)">Show</MudButton>
-                </MudTd>
+                
                 <MudTd DataLabel="Genres">
                     <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => OpenGenreNested(context.Id)">Show</MudButton>
 
@@ -140,6 +138,9 @@
                             <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => CloseGenreNested(context.Id)">Close</MudButton>
                         </DialogActions>
                     </MudDialog>
+                </MudTd>
+                <MudTd>
+                    <MudButton Variant="Variant.Filled" Color="Color.Warning" OnClick="() => OpenEpisodesNested(context.episodes, context.Name, fullScreen)">Show</MudButton>
                 </MudTd>
                 <MudTd>
                     <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => DeleteTVSeries(context.Id))">Delete</MudButton>

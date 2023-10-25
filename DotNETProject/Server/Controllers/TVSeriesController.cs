@@ -67,6 +67,7 @@ namespace DotNETProject.Server.Controllers
                     {
                         Film = new FilmDto()
                         {
+                            Id = filmCast.Film.Id,
                             Name = filmCast.Film.Name
                         },
                         Cast = new CastDto()
@@ -84,9 +85,9 @@ namespace DotNETProject.Server.Controllers
                 {
                     var filmDirectorDto = new FilmDirectorDto()
                     {
-                        DirectorId = filmDirector.DirectorId,
                         Director = new DirectorDto()
                         {
+                            Id = filmDirector.Director.Id,
                             Name = filmDirector.Director.Name
                         }
                     };
@@ -111,9 +112,9 @@ namespace DotNETProject.Server.Controllers
                 {
                     var filmGenreDto = new FilmGenreDto()
                     {
-                        Id = filmGenre.Id,
                         Genre = new GenreDto()
                         {
+                            Id = filmGenre.Genre.Id,
                             Name = filmGenre.Genre.Name
                         }
                     };
@@ -172,6 +173,7 @@ namespace DotNETProject.Server.Controllers
                 {
                     Film = new FilmDto()
                     {
+                        Id = filmCast.Id,
                         Name = filmCast.Film.Name
                     },
                     Cast = new CastDto()
@@ -189,9 +191,9 @@ namespace DotNETProject.Server.Controllers
             {
                 var filmDirectorDto = new FilmDirectorDto()
                 {
-                    DirectorId = filmDirector.DirectorId,
                     Director = new DirectorDto()
                     {
+                        Id = filmDirector.Film.Id,
                         Name = filmDirector.Director.Name
                     }
                 };
@@ -216,9 +218,9 @@ namespace DotNETProject.Server.Controllers
             {
                 var filmGenreDto = new FilmGenreDto()
                 {
-                    Id = filmGenre.Id,
                     Genre = new GenreDto()
                     {
+                        Id = filmGenre.Genre.Id,
                         Name = filmGenre.Genre.Name
                     }
                 };
@@ -251,6 +253,7 @@ namespace DotNETProject.Server.Controllers
 
             tVSeries.FilmCasts.Clear();
             tVSeries.FilmDirectors.Clear();
+            tVSeries.FilmGenres.Clear();
 
             tVSeries.Name = tVSeriesDto.Name;
             tVSeries.ReleaseYear = tVSeriesDto.ReleaseYear;

@@ -65,6 +65,12 @@
             if (episode.Id == episodeDto.Id)
             {
                 await JSRuntime.InvokeVoidAsync("initializeJWPlayer", episode.Link, show.BackgroundUrl);
+
+                if (episode != null)
+                {
+                    episode.View += 1;
+                    await httpClient.PutAsJsonAsync<EpisodeDto>($"api/Episodes/{episode.Id}", episode);
+                }
             }
 
         }
