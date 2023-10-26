@@ -57,7 +57,8 @@ namespace DotNETProject.Server.Controllers
                     BackgroundUrl = tVSeriesEntity.BackgroundUrl,
                     LogoUrl = tVSeriesEntity.LogoUrl,
                     TrailerUrl = tVSeriesEntity.TrailerUrl,
-                    isActiveBanner = tVSeriesEntity.isActiveBanner
+                    isActiveBanner = tVSeriesEntity.isActiveBanner,
+                    UploadDate = tVSeriesEntity.UploadDate
 
                 };
 
@@ -163,7 +164,8 @@ namespace DotNETProject.Server.Controllers
                 BackgroundUrl = tVSeriesEntity.BackgroundUrl,
                 LogoUrl = tVSeriesEntity.LogoUrl,
                 TrailerUrl = tVSeriesEntity.TrailerUrl,
-                isActiveBanner = tVSeriesEntity.isActiveBanner
+                isActiveBanner = tVSeriesEntity.isActiveBanner,
+                UploadDate = tVSeriesEntity.UploadDate
 
             };
 
@@ -265,6 +267,7 @@ namespace DotNETProject.Server.Controllers
             tVSeries.LogoUrl = tVSeriesDto.LogoUrl;
             tVSeries.TrailerUrl = tVSeriesDto.TrailerUrl;
             tVSeries.isActiveBanner = tVSeriesDto.isActiveBanner;
+            tVSeries.UploadDate = tVSeriesDto.UploadDate;
 
             if (tVSeriesDto.FilmCasts != null)
             {
@@ -381,8 +384,8 @@ namespace DotNETProject.Server.Controllers
                 BackgroundUrl = tVSeriesDto.BackgroundUrl,
                 LogoUrl = tVSeriesDto.LogoUrl,
                 TrailerUrl = tVSeriesDto.TrailerUrl,
-                isActiveBanner = tVSeriesDto.isActiveBanner
-
+                isActiveBanner = tVSeriesDto.isActiveBanner,
+                UploadDate = tVSeriesDto.UploadDate
             };
 
             if (tVSeriesDto.FilmCasts != null)

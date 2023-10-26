@@ -19,5 +19,6 @@ namespace DotNETProject.Shared
         public ICollection<FilmGenreDto> FilmGenres { get; set; } = new List<FilmGenreDto>();
         public string TrailerUrl { get; set; } = string.Empty;
         public bool isActiveBanner { get; set; } = false;
+        public DateTime UploadDate { get; set; } = DateTime.Now;
     }
 }

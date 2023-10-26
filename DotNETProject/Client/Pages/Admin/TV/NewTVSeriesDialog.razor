@@ -1,4 +1,5 @@
-﻿@page "/edit-tv"
+﻿@page "/create-tv"
+@using DotNETProject.Client.Pages.Admin.TV.Episode;
 @using DotNETProject.Shared;
 @using Firebase.Storage;
 @using MudBlazor
@@ -11,31 +12,19 @@
 
         <MudGrid>
 
-            <MudItem xs=4>
-                <MudImage Fluid="true" Src="@currentTVSeriesDto.LogoUrl" Alt="@currentTVSeriesDto.Name" Elevation="25" Class="rounded-lg" />
-            </MudItem>
+            <MudItem xs=12>
 
-            <MudItem xs=8>
-                <MudImage Fluid="true" Src="@currentTVSeriesDto.BackgroundUrl" Alt="@currentTVSeriesDto.Name" Elevation="25" Class="rounded-lg" />
-            </MudItem>
+                <MudTextField @bind-Value="tVSeriesDto.Name" Label="Name" />
 
-            <MudItem xs=4>
-                <MudImage Fluid="true" Src="@currentTVSeriesDto.PosterUrl" Alt="currentTVSeriesDto.Name" Elevation="25" Class="rounded-lg" />
-            </MudItem>
+                <MudTextField @bind-Value="tVSeriesDto.TrailerUrl" Label="Trailer Url" />
 
-            <MudItem xs=8>
+                <MudTextField @bind-Value="tVSeriesDto.ReleaseYear" Label="Release Year" />
 
-                <MudTextField @bind-Value="currentTVSeriesDto.Name" Label="Name" />
+                <MudTextField @bind-Value="tVSeriesDto.Description" Label="Description" Lines="5" />
 
-                <MudTextField @bind-Value="currentTVSeriesDto.TrailerUrl" Label="Trailer Url" />
+                <MudTextField @bind-Value="tVSeriesDto.IMDBScore" Label="IMDB" Format="F1" />
 
-                <MudTextField @bind-Value="currentTVSeriesDto.ReleaseYear" Label="Release Year" />
-
-                <MudTextField @bind-Value="currentTVSeriesDto.Description" Label="Description" Lines="5" />
-
-                <MudTextField @bind-Value="currentTVSeriesDto.IMDBScore" Label="IMDB" Format="F1" />
-
-                <MudTextField @bind-Value="currentTVSeriesDto.View" Label="View" />
+                <MudTextField @bind-Value="tVSeriesDto.View" Label="View" />
 
             </MudItem>
 
@@ -330,9 +319,7 @@
 
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
-
-    [Parameter] public TVSeriesDto currentTVSeriesDto { get; set; }
-
+    private TVSeriesDto tVSeriesDto = new TVSeriesDto();
     public DateTime? realseDate;
     public IBrowserFile poster;
     public IBrowserFile background;
@@ -380,26 +367,6 @@
         casts = await httpClient.GetFromJsonAsync<List<CastDto>>($"api/Casts");
         directors = await httpClient.GetFromJsonAsync<List<DirectorDto>>($"api/Directors");
         genres = await httpClient.GetFromJsonAsync<List<GenreDto>>($"api/Genres");
-
-        foreach (var item in currentTVSeriesDto.FilmCasts)
-        {
-            filmCastDtos.Add(item);
-        }
-
-        foreach (var item in currentTVSeriesDto.FilmDirectors)
-        {
-            filmDirectorDtos.Add(item);
-        }
-
-        foreach (var item in currentTVSeriesDto.episodes)
-        {
-            episodes.Add(item);
-        }
-
-        foreach (var item in currentTVSeriesDto.FilmGenres)
-        {
-            filmGenreDtos.Add(item);
-        }
     }
 
     private void UpdateCast()
@@ -469,7 +436,7 @@
     private async Task NewEpisode(DialogOptions options)
     {
         DialogParameters paras = new DialogParameters();
-        paras.Add("TVName", currentTVSeriesDto.Name);
+        paras.Add("TVName", tVSeriesDto.Name);
         var dialog = Dialog.Show<NewEpisodeDialog>("New Episode", paras, options);
         var result = await dialog.Result;
 
@@ -486,36 +453,23 @@
     {
         try
         {
-            string folderName = (currentTVSeriesDto.Name).ToLower().Replace(' ', '-');
+            string folderName = (tVSeriesDto.Name).ToLower().Replace(' ', '-');
 
-            string posterUrl = currentTVSeriesDto.PosterUrl;
-            string backgroundUrl = currentTVSeriesDto.BackgroundUrl;
-            string logoUrl = currentTVSeriesDto.LogoUrl;
-
-            if (poster != null)
-            {
-                posterUrl = await HandleFirebaseUpload(poster, "Films/TVSeries/" + folderName + "/Image");
-            }
-            if (background != null)
-            {
-                backgroundUrl = await HandleFirebaseUpload(background, "Films/TVSeries/" + folderName + "/Image");
-            }
-            if (logo != null)
-            {
-                logoUrl = await HandleFirebaseUpload(logo, "Films/TVSeries/" + folderName + "/Image");
-            }
+            string posterUrl = await HandleFirebaseUpload(poster, "Films/TVSeries/" + folderName + "/Image");
+            string backgroundUrl = await HandleFirebaseUpload(background, "Films/TVSeries/" + folderName + "/Image");
+            string logoUrl = await HandleFirebaseUpload(logo, "Films/TVSeries/" + folderName + "/Image");
 
             if (!string.IsNullOrEmpty(posterUrl) && !string.IsNullOrEmpty(backgroundUrl) && !string.IsNullOrEmpty(logoUrl))
             {
-                currentTVSeriesDto.PosterUrl = posterUrl;
-                currentTVSeriesDto.BackgroundUrl = backgroundUrl;
-                currentTVSeriesDto.LogoUrl = logoUrl;
-                currentTVSeriesDto.FilmCasts = filmCastDtos;
-                currentTVSeriesDto.FilmDirectors = filmDirectorDtos;
-                currentTVSeriesDto.episodes = episodes;
-                currentTVSeriesDto.FilmGenres = filmGenreDtos;
+                tVSeriesDto.PosterUrl = posterUrl;
+                tVSeriesDto.BackgroundUrl = backgroundUrl;
+                tVSeriesDto.LogoUrl = logoUrl;
+                tVSeriesDto.FilmCasts = filmCastDtos;
+                tVSeriesDto.FilmDirectors = filmDirectorDtos;
+                tVSeriesDto.episodes = episodes;
+                tVSeriesDto.FilmGenres = filmGenreDtos;
 
-                var response = await httpClient.PutAsJsonAsync($"api/TVSeries/{currentTVSeriesDto.Id}", currentTVSeriesDto);
+                var response = await httpClient.PostAsJsonAsync("api/TVSeries", tVSeriesDto);
 
                 if (response.IsSuccessStatusCode)
                 {

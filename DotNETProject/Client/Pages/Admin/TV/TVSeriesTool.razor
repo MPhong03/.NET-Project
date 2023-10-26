@@ -1,4 +1,5 @@
 ﻿@page "/admin/TVSeries-management"
+@using DotNETProject.Client.Pages.Admin.TV.Episode;
 @using DotNETProject.Shared;
 @using MudBlazor
 @inject HttpClient httpClient
@@ -25,11 +26,12 @@
                 <MudTh>Background</MudTh>
                 <MudTh>Logo</MudTh>
                 <MudTh>Name</MudTh>
-                <MudTh>ReleaseYear</MudTh>
+                <MudTh>Release Year</MudTh>
+                <MudTh>Upload Date</MudTh>
                 <MudTh>Description</MudTh>
-                <MudTh>IMDBScore</MudTh>
+                <MudTh>IMDB Score</MudTh>
                 <MudTh>View</MudTh>
-                <MudTh>TrailerUrl</MudTh>
+                <MudTh>Trailer Url</MudTh>
                 <MudTh>Casts</MudTh>
                 <MudTh>Directors</MudTh>
                 <MudTh>Genres</MudTh>
@@ -50,7 +52,8 @@
                     <MudImage Src="@context.LogoUrl" Width="75" Height="75" Alt="@context.Name" Elevation="25" Class="rounded-lg" />
                 </MudTd>
                 <MudTd DataLabel="Name">@context.Name</MudTd>
-                <MudTd DataLabel="ReleaseYear">@context.ReleaseYear</MudTd>
+                <MudTd DataLabel="Release Year">@context.ReleaseYear</MudTd>
+                <MudTd DataLabel="Upload Date">@context.UploadDate</MudTd>
                 <MudTd DataLabel="Description">
                     @if (context.Description.Length < 20)
                     {
@@ -65,9 +68,9 @@
                         </MudTd>
                     }
                 </MudTd>
-                <MudTd DataLabel="IMDBScore">@context.IMDBScore</MudTd>
+                <MudTd DataLabel="IMDB Score">@context.IMDBScore</MudTd>
                 <MudTd DataLabel="View">@context.View</MudTd>
-                <MudTd DataLabel="TrailerUrl">@context.TrailerUrl</MudTd>
+                <MudTd DataLabel="Trailer Url">@context.TrailerUrl</MudTd>
 
                 <MudTd DataLabel="Casts">
                     <MudButton Variant="Variant.Filled" Color="Color.Primary" OnClick="() => OpenCastNested(context.Id)">Show</MudButton>

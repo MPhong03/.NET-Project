@@ -22,5 +22,6 @@ namespace DotNETProject.Server.Models
         public ICollection<FilmGenre> FilmGenres { get; set; } = new List<FilmGenre>();
         public string TrailerUrl { get; set; } = string.Empty;
         public bool isActiveBanner { get; set; } = false;
+        public DateTime UploadDate { get; set; } = DateTime.Now;
     }
 }
