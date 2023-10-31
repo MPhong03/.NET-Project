@@ -1,0 +1,168 @@
+﻿@page "/admin/nation-management"
+@using DotNETProject.Shared;
+@using MudBlazor
+@inject HttpClient httpClient
+@inject IDialogService Dialog
+@inject IJSRuntime JSRuntime
+
+@layout AdminLayout
+
+<MudGrid>
+    <!-- Content -->
+    <MudItem xs="12">
+        <MudButton Class="m-3 ml-0" Color="Color.Primary" OnClick="@((e) => OpenDialog(maxWidth))">NEW NATION</MudButton>
+        <MudButton Class="m-3 ml-0" Color="Color.Error" OnClick="DeleteSelectedNation">DELETE SELECTED</MudButton>
+        <!-- Table of actor/ actress -->
+        <MudTable MultiSelection="true" Items="@nation" T="NationDto" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<NationDto,bool>(FilterFunc1)" @bind-SelectedItems="selectedItems">
+            <ToolBarContent>
+                <MudText Typo="Typo.h6">NATIONS</MudText>
+                <MudSpacer />
+                <MudTextField @bind-Value="searchString1" Placeholder="Search" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            </ToolBarContent>
+            <HeaderContent>
+                <MudTh>ID</MudTh>
+                <MudTh>Name</MudTh>
+                <MudTh></MudTh>
+                <MudTh></MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="ID">@context.Id</MudTd>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd>
+                    <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => DeleteNation(context.Id))">Delete</MudButton>
+                </MudTd>
+                <MudTd>
+                    <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="@(() => EditNation(context.Id, context, maxWidth))">Edit</MudButton>
+                </MudTd>
+            </RowTemplate>
+
+            <PagerContent>
+                <MudTablePager />
+            </PagerContent>
+
+            <FooterContent>
+                <MudTd colspan="10">Select All</MudTd>
+            </FooterContent>
+
+        </MudTable>
+    </MudItem>
+</MudGrid>
+@code {
+    private bool dense = false;
+    private bool hover = true;
+    private bool striped = false;
+    private bool bordered = false;
+    private string searchString1 = "";
+
+    private HashSet<NationDto> selectedItems = new HashSet<NationDto>();
+
+    DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
+
+    Dictionary<int, bool> showNationDialogStates = new Dictionary<int, bool>();
+
+    private IEnumerable<NationDto> nation = new List<NationDto>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        nation = await httpClient.GetFromJsonAsync<List<NationDto>>($"api/Nations");
+
+        foreach (var nationDto in nation)
+        {
+            showNationDialogStates[nationDto.Id] = false;
+        }
+    }
+
+    void OpenNationNested(int movieId)
+    {
+        showNationDialogStates[movieId] = true;
+    }
+
+    void CloseNationNested(int movieId)
+    {
+        showNationDialogStates[movieId] = false;
+    }
+
+    private bool FilterFunc1(NationDto element) => FilterFunc(element, searchString1);
+
+    private bool FilterFunc(NationDto element, string searchString)
+    {
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+        if (element.Name.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+            return true;
+        if ($"{element.Name}".Contains(searchString))
+            return true;
+        return false;
+    }
+
+    private void OpenDialog(DialogOptions options)
+    {
+        Dialog.Show<NewNationDialog>("New Nation", options);
+    }
+
+    private void EditNation(int nationId, NationDto currentNation, DialogOptions options)
+    {
+        DialogParameters paras = new DialogParameters();
+        string message = "Hello world!";
+        bool state = true;
+
+        paras.Add("Id", nationId);
+        paras.Add("currentNation", currentNation);
+
+        Dialog.Show<EditNationDialog>("Edit Nation", paras, options);
+
+    }
+
+    private async void DeleteNation(int nationId)
+    {
+        bool? result = await Dialog.ShowMessageBox("Confirm Delete", "Are you sure you want to delete this nation?", yesText: "Yes", noText: "No");
+        if (result == true)
+        {
+            HttpResponseMessage response = await httpClient.DeleteAsync($"api/Nations/{nationId}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                nation = nation.Where(c => c.Id != nationId).ToList();
+                await JSRuntime.InvokeVoidAsync("refreshPage");
+            }
+            else
+            {
+                await Dialog.ShowMessageBox("Error", "Failed to delete the nation. Please try again.");
+            }
+        }
+    }
+
+    private async void DeleteSelectedNation()
+    {
+        bool? result = await Dialog.ShowMessageBox("Confirm Delete", "R u sure bout that? Data can't be change after remove!", yesText: "Yes", noText: "No");
+
+        if (result == true)
+        {
+            foreach (var item in selectedItems)
+            {
+                try
+                {
+                    HttpResponseMessage response = await httpClient.DeleteAsync($"api/Nations/{item.Id}");
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        selectedItems.Remove(item);
+                    }
+                    else
+                    {
+                        await Dialog.ShowMessageBox("Error", "Failed to delete the nation. Please try again.");
+                    }
+                }
+                catch (HttpRequestException)
+                {
+                    await Dialog.ShowMessageBox("Network Error", "Failed to connect to the server. Please check your internet connection.");
+                }
+                catch (Exception ex)
+                {
+                    await Dialog.ShowMessageBox("Error", $"An unexpected error occurred: {ex.Message}");
+                }
+            }
+            await JSRuntime.InvokeVoidAsync("refreshPage");
+        }
+    }
+}

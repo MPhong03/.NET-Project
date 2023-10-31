@@ -20,5 +20,7 @@ namespace DotNETProject.Shared
         public string TrailerUrl { get; set; } = string.Empty;
         public bool isActiveBanner { get; set; } = false;
         public DateTime UploadDate { get; set; } = DateTime.Now;
+        public NationDto Nation { get; set; } = new NationDto();
+
     }
 }

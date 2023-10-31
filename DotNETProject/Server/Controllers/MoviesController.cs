@@ -39,6 +39,7 @@ namespace DotNETProject.Server.Controllers
                 .ThenInclude(filmDirector => filmDirector.Director)
                 .Include(movie => movie.FilmGenres)
                 .ThenInclude(filmGenre => filmGenre.Genre)
+                .Include(movie => movie.Nation)
                 .ToListAsync();
 
             var movieDtos = new List<MovieDto>();
@@ -60,7 +61,12 @@ namespace DotNETProject.Server.Controllers
                     LogoUrl = movieEntity.LogoUrl,
                     TrailerUrl = movieEntity.TrailerUrl,
                     isActiveBanner = movieEntity.isActiveBanner,
-                    UploadDate = movieEntity.UploadDate
+                    UploadDate = movieEntity.UploadDate,
+                    Nation = new NationDto()
+                    {
+                        Id = movieEntity.Nation.Id,
+                        Name = movieEntity.Nation.Name,
+                    }
                 };
 
                 foreach (var filmCast in movieEntity.FilmCasts)
@@ -130,6 +136,7 @@ namespace DotNETProject.Server.Controllers
                 .ThenInclude(filmDirector => filmDirector.Director)
                 .Include(m => m.FilmGenres)
                 .ThenInclude(filmGenre => filmGenre.Genre)
+                .Include(m => m.Nation)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (movie == null)
@@ -152,8 +159,12 @@ namespace DotNETProject.Server.Controllers
                 LogoUrl = movie.LogoUrl,
                 TrailerUrl = movie.TrailerUrl,
                 isActiveBanner = movie.isActiveBanner,
-                UploadDate = movie.UploadDate
-
+                UploadDate = movie.UploadDate,
+                Nation = new NationDto()
+                {
+                    Id = movie.Nation.Id,
+                    Name = movie.Nation.Name,
+                }
             };
 
             foreach (var filmCast in movie.FilmCasts)
@@ -218,6 +229,7 @@ namespace DotNETProject.Server.Controllers
                 .Include(m => m.FilmCasts)
                 .Include(m => m.FilmDirectors)
                 .Include(m => m.FilmGenres)
+                .Include(m => m.Nation)
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (movie == null)
@@ -228,6 +240,8 @@ namespace DotNETProject.Server.Controllers
             movie.FilmCasts.Clear();
             movie.FilmDirectors.Clear();
             movie.FilmGenres.Clear();
+
+            var nation = await _context.Nations.FindAsync(movie.Nation.Id);
 
             movie.Time = movieDto.Time;
             movie.Link = movieDto.Link;
@@ -242,6 +256,7 @@ namespace DotNETProject.Server.Controllers
             movie.TrailerUrl = movieDto.TrailerUrl;
             movie.isActiveBanner = movieDto.isActiveBanner;
             movie.UploadDate = movieDto.UploadDate;
+            movie.Nation = nation;
 
             if (movieDto.FilmCasts != null)
             {
@@ -342,7 +357,8 @@ namespace DotNETProject.Server.Controllers
                 LogoUrl = movieDto.LogoUrl,
                 TrailerUrl = movieDto.TrailerUrl,
                 isActiveBanner = movieDto.isActiveBanner,
-                UploadDate = movieDto.UploadDate
+                UploadDate = movieDto.UploadDate,
+                Nation = await _context.Nations.FindAsync(movieDto.Nation.Id)
             };
 
             if (movieDto.FilmCasts != null)

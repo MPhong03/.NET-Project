@@ -26,6 +26,13 @@
 
                 <MudTextField @bind-Value="tVSeriesDto.View" Label="View" />
 
+                <MudSelect @bind-Value="tVSeriesDto.Nation" Label="Nation" Data="nations" T="NationDto">
+                    @foreach (var nation in nations)
+                    {
+                        <MudSelectItem T="NationDto" Value="@nation">@nation.Name</MudSelectItem>
+                    }
+                </MudSelect>
+
             </MudItem>
 
             <MudItem xs="12">
@@ -350,6 +357,7 @@
     private ICollection<EpisodeDto> episodes = new List<EpisodeDto>();
     private IEnumerable<GenreDto> genres = new List<GenreDto>();
     private ICollection<FilmGenreDto> filmGenreDtos = new List<FilmGenreDto>();
+    private IEnumerable<NationDto> nations = new List<NationDto>();
 
     private DirectorDto selectedDirector;
     private CastDto selectedCast;
@@ -367,6 +375,7 @@
         casts = await httpClient.GetFromJsonAsync<List<CastDto>>($"api/Casts");
         directors = await httpClient.GetFromJsonAsync<List<DirectorDto>>($"api/Directors");
         genres = await httpClient.GetFromJsonAsync<List<GenreDto>>($"api/Genres");
+        nations = await httpClient.GetFromJsonAsync<List<NationDto>>($"api/Nations");
     }
 
     private void UpdateCast()

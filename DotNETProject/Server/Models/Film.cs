@@ -23,5 +23,6 @@ namespace DotNETProject.Server.Models
         public string TrailerUrl { get; set; } = string.Empty;
         public bool isActiveBanner { get; set; } = false;
         public DateTime UploadDate { get; set; } = DateTime.Now;
+        public Nation Nation { get; set; } = new Nation();
     }
 }

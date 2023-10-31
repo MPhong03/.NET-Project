@@ -4,6 +4,7 @@ using DotNETProject.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DotNETProject.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231031024328_UpdateNation")]
+    partial class UpdateNation
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -157,8 +160,9 @@ namespace DotNETProject.Server.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("NationId")
-                        .HasColumnType("int");
+                    b.Property<string>("Nation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PosterUrl")
                         .IsRequired()
@@ -182,8 +186,6 @@ namespace DotNETProject.Server.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("NationId");
 
                     b.ToTable("films");
 
@@ -278,23 +280,6 @@ namespace DotNETProject.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("genres");
-                });
-
-            modelBuilder.Entity("DotNETProject.Server.Models.Nation", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("nations");
                 });
 
             modelBuilder.Entity("DotNETProject.Server.Models.Role", b =>
@@ -394,17 +379,6 @@ namespace DotNETProject.Server.Migrations
                         .IsRequired();
 
                     b.Navigation("Series");
-                });
-
-            modelBuilder.Entity("DotNETProject.Server.Models.Film", b =>
-                {
-                    b.HasOne("DotNETProject.Server.Models.Nation", "Nation")
-                        .WithMany()
-                        .HasForeignKey("NationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Nation");
                 });
 
             modelBuilder.Entity("DotNETProject.Server.Models.FilmCast", b =>

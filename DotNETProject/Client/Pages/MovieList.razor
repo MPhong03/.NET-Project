@@ -53,9 +53,18 @@
             <div class="row">
                 @if(DisplayedItems.Any())
                 {
+                    var path = "";
+                    @if(Type == "movie")
+                    {
+                        path = "movie";
+                    }
+                    else
+                    {
+                        path = "tvseries";
+                    }
                     foreach (var item in DisplayedItems)
                     {
-                        <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6"><a href="/movie/@item.Id"><img src="@item.PosterUrl"><p>@item.Name</p></a></div>
+                        <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6"><a href="/@path/@item.Id"><img src="@item.PosterUrl"><p>@item.Name</p></a></div>
                     }  
                 }
                 else
@@ -197,12 +206,13 @@
                 {
                     filteredShows = filteredShows.Where(show => show.ReleaseYear == selectedReleaseYear);
                 }
-
+                Console.WriteLine("1. BUG HERE!");
                 totalItems = filteredShows.Count();
                 return filteredShows.Skip((currentPage - 1) * pageSize).Take(pageSize);
             }
             else
             {
+                Console.WriteLine("2. BUG HERE!");
                 return Enumerable.Empty<FilmDto>();
             }
         }
@@ -222,6 +232,12 @@
         }
         genres = await httpClient.GetFromJsonAsync<List<GenreDto>>("api/Genres");
         distinctReleaseYears = movies.Select(movie => movie.ReleaseYear).Distinct().ToList();
+
+        // foreach(var item in shows)
+        // {
+        //     Console.WriteLine(item.Name);
+        // }
+        
     }
 
     private void FilterByGenre(ChangeEventArgs e)

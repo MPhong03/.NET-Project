@@ -1,0 +1,64 @@
+﻿@page "/create-nation"
+@using DotNETProject.Shared;
+@using Firebase.Storage;
+@using MudBlazor
+@inject IDialogService Dialog
+@inject HttpClient httpClient
+@inject IJSRuntime JSRuntime
+
+<MudDialog>
+    <DialogContent>
+        <MudTextField @bind-Value="nationDto.Name" Label="Name" />
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+<MudDialog @bind-IsVisible="nestedVisible">
+    <DialogContent>
+        <MudText Class="nested">@message</MudText>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    private NationDto nationDto = new NationDto();
+    public String Male = "Male";
+    public String Female = "Female";
+    public IBrowserFile image;
+
+    private string message;
+    private bool nestedVisible;
+    private void OpenNested() => nestedVisible = true;
+    private void CloseNested() => nestedVisible = false;
+
+    async Task Submit()
+    {
+        try
+        {
+
+            var response = await httpClient.PostAsJsonAsync("api/Nations", nationDto);
+
+            if (response.IsSuccessStatusCode)
+            {
+                MudDialog.Close(DialogResult.Ok(true));
+                await JSRuntime.InvokeVoidAsync("refreshPage");
+            }
+            else
+            {
+                var errorResponse = await response.Content.ReadAsStringAsync();
+                message = "An error occurred while saving to the database: " + errorResponse;
+                OpenNested();
+            }
+
+        }
+        catch (Exception ex)
+        {
+            message = "An error occurred: " + ex.Message;
+            OpenNested();
+        }
+    }
+    void Cancel() => MudDialog.Cancel();
+}
