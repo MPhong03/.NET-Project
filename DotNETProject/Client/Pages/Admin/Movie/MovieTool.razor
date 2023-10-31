@@ -7,6 +7,8 @@
 
 @layout AdminLayout
 
+<PageTitle>QUẢN LÝ PHIM LẺ</PageTitle>
+
 <MudGrid>
     <!-- Content -->
     <MudItem xs="12">
@@ -83,10 +85,18 @@
                         <DialogContent>
                             @if (context.FilmCasts.Count != 0)
                             {
-                                @foreach (var cast in context.FilmCasts)
-                                {
-                                    <MudText>@(cast.Cast.Name + " - " + cast.Role)</MudText>
-                                }
+                                <MudTable Items="@context.FilmCasts" Hover="true" Breakpoint="Breakpoint.Sm">
+                                    <HeaderContent>
+                                        <MudTh>Name</MudTh>
+                                        <MudTh>Role</MudTh>
+
+                                    </HeaderContent>
+                                    <RowTemplate Context="item">
+                                        <MudTd DataLabel="Name">@item.Cast.Name</MudTd>
+                                        <MudTd DataLabel="Role">@item.Role</MudTd>
+
+                                    </RowTemplate>
+                                </MudTable>
                             }
                             else
                             {
@@ -154,14 +164,7 @@
                      <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="@(() => EditMovie(context, maxWidth))">Edit</MudButton>
                 </MudTd>
                 <MudTd>
-                    @if(context.isActiveBanner == false)
-                    {
-                        <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="@(() => ActiveMovie(context))">ON</MudButton>
-                    }
-                    else
-                    {
-                        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => ActiveMovie(context))">OFF</MudButton>
-                    }
+                    <MudSwitch Color="Color.Success" @bind-Checked="context.isActiveBanner" @onclick="@(() => ActiveMovie(context))"></MudSwitch>
                 </MudTd>
             </RowTemplate>
             <PagerContent>

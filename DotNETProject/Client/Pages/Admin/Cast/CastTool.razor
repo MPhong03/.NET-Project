@@ -7,6 +7,8 @@
 
 @layout AdminLayout
 
+<PageTitle>QUẢN LÝ DIỄN VIÊN</PageTitle>
+
 <MudGrid>
     <!-- Content -->
     <MudItem xs="12">
@@ -59,14 +61,18 @@
                         <DialogContent>
                             @if (context.FilmCasts.Count != 0)
                             {
-                                @foreach (var cast in context.FilmCasts)
-                                {
-                                    <MudText>
-                                        <MudItem xs="12">
-                                            @cast.Film.Name - @cast.Role
-                                        </MudItem>
-                                    </MudText>
-                                }
+                                <MudTable Items="@context.FilmCasts" Hover="true" Breakpoint="Breakpoint.Sm">
+                                    <HeaderContent>
+                                        <MudTh>Name</MudTh>
+                                        <MudTh>Role</MudTh>
+
+                                    </HeaderContent>
+                                    <RowTemplate Context="item">
+                                        <MudTd DataLabel="Name">@item.Film.Name</MudTd>
+                                        <MudTd DataLabel="Role">@item.Role</MudTd>
+
+                                    </RowTemplate>
+                                </MudTable>
                             }
                             else
                             {

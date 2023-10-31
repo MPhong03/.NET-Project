@@ -206,7 +206,7 @@ namespace DotNETProject.Server.Controllers
                 {
                     Director = new DirectorDto()
                     {
-                        Id = filmDirector.Film.Id,
+                        Id = filmDirector.Director.Id,
                         Name = filmDirector.Director.Name
                     }
                 };

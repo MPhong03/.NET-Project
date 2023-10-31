@@ -1,0 +1,115 @@
+﻿@page "/search"
+@using DotNETProject.Shared
+@inject HttpClient httpClient
+
+<PageTitle>Tìm kiếm</PageTitle>
+<div class="container">
+    <div class="content-container">
+        <!-- FILTER -->
+        <div class="container me-3 mb-3">
+            <div class="row">
+                <!-- Tìm kiếm -->
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Nhập vào tên phim..." aria-label="SearchBar" aria-describedby="basic-addon2" @oninput="SearchByKeyword">
+                    
+                </div>
+            </div>
+        </div>
+        <!-- MOVIE LIST -->
+        <div class="container list">
+            <div class="row">
+                @if (DisplayedItems.Any())
+                {
+                    @foreach (var item in DisplayedItems)
+                    {
+                        var path = filmTypes[item.Id] == "MOVIE" ? "movie" : "tv";
+
+                        <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6">
+                            <a href="/@path/@item.Id">
+                                <img src="@item.PosterUrl" alt="@item.Name">
+                                <p>@item.Name</p>
+                            </a>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-12 text-light h5 text-center">Không tìm thấy phim bạn muốn xem :(</div>
+                }
+            </div>
+        </div>
+        <!-- PAGINATION -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                    <a class="page-link" @onclick="() => GoToPage(currentPage - 1)" tabindex="-1" aria-disabled="@(currentPage == 1 ? "true" : "false")">Previous</a>
+                </li>
+                @for (var pagenum = 1; pagenum <= TotalPages; pagenum++)
+                {
+                    <li class="page-item @(currentPage == pagenum ? "active" : "")">
+                        <a class="page-link" @onclick="() => GoToPage(pagenum)">@pagenum</a>
+                    </li>
+                }
+                <li class="page-item @(currentPage == TotalPages ? "disabled" : "")">
+                    <a class="page-link" @onclick="() => GoToPage(currentPage + 1)">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+@code {
+    private IEnumerable<FilmDto> films = new List<FilmDto>();
+    private Dictionary<int, string> filmTypes = new Dictionary<int, string>();
+
+    private string keyword; 
+
+    private string TITLE;
+
+    private int pageSize = 18;
+    private int currentPage = 1;
+    private int totalItems;
+
+    private int TotalPages => (int)Math.Ceiling((double)totalItems / pageSize);
+
+    private IEnumerable<FilmDto> DisplayedItems => Paginate(films);
+
+    private IEnumerable<FilmDto> Paginate(IEnumerable<FilmDto> films)
+    {
+        var filteredFilms = films;
+
+        if (!string.IsNullOrEmpty(keyword))
+        {
+            filteredFilms = filteredFilms.Where(film => (film.Name.ToLower()).Contains(keyword.ToLower()));
+        }
+
+        totalItems = filteredFilms.Count();
+        return filteredFilms.Skip((currentPage - 1) * pageSize).Take(pageSize);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        films = await httpClient.GetFromJsonAsync<List<FilmDto>>("api/Films");
+
+        foreach (var item in films)
+        {
+            string flag = await httpClient.GetStringAsync($"api/Films/{item.Id}");
+            filmTypes.Add(item.Id, flag);
+        }
+    }
+
+    private void SearchByKeyword(ChangeEventArgs e)
+    {
+        keyword = e.Value.ToString();
+        currentPage = 1;
+    }
+
+    private void GoToPage(int page)
+    {
+        if (page >= 1 && page <= TotalPages)
+        {
+            currentPage = page;
+        }
+    }
+
+}

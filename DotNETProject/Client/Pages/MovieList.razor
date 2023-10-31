@@ -1,124 +1,70 @@
 ﻿@page "/list/{Type}"
-@using DotNETProject.Shared;
+@using DotNETProject.Shared
 @inject HttpClient httpClient
 
-<PageTitle>Phim Hot</PageTitle>
+<PageTitle>@TITLE</PageTitle>
+
 <div class="container">
     <div class="content-container">
         <!-- FILTER -->
-        
         <div class="container me-3 mb-3">
             <div class="row">
-
                 <!-- Thể loại -->
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <select class="form-select" aria-label="By Genre" @onchange="FilterByGenre">
                         <option selected value="0">Thể loại</option>
-                        @foreach(var item in genres)
+                        @foreach (var item in genres)
                         {
                             <option value="@item.Id">@item.Name</option>
                         }
-
                     </select>
                 </div>
-
                 <!-- Nam phat hanh -->
-                <div class="col-md-3">
+                <div class="col-md-4">
                     <select class="form-select" aria-label="By Release Year" @onchange="FilterByReleaseYear">
-                        <option selected>Năm phát hành</option>
-                        @foreach (var item in DisplayedItems)
+                        <option selected value="none">Năm phát hành</option>
+                        @foreach (var item in distinctReleaseYears)
                         {
-                            <option value="@item.ReleaseYear">@item.ReleaseYear</option>
+                            <option value="@item">@item</option>
                         }
-
                     </select>
                 </div>
-
                 <!-- Quốc gia -->
-                <div class="col-md-3">
-                    <select class="form-select" aria-label="By Nation">
-                        <option selected>Updating...</option>
-                        
-
+                <div class="col-md-4">
+                    <select class="form-select" aria-label="By Nation" @onchange="FilterByNation">
+                        <option selected value="none">Quốc gia</option>
+                        @foreach (var item in nations)
+                        {
+                            <option value="@item.Name">@item.Name</option>
+                        }
                     </select>
                 </div>
-
 
             </div>
         </div>
-
         <!-- MOVIE LIST -->
         <div class="container list">
-
             <div class="row">
-                @if(DisplayedItems.Any())
+                @if (DisplayedItems.Any())
                 {
-                    var path = "";
-                    @if(Type == "movie")
+                    var path = Type == "movie" ? "movie" : "tv";
+                    @foreach (var item in DisplayedItems)
                     {
-                        path = "movie";
+                        <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6">
+                            <a href="/@path/@item.Id">
+                                <img src="@item.PosterUrl" alt="@item.Name">
+                                <p>@item.Name</p>
+                            </a>
+                        </div>
                     }
-                    else
-                    {
-                        path = "tvseries";
-                    }
-                    foreach (var item in DisplayedItems)
-                    {
-                        <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6"><a href="/@path/@item.Id"><img src="@item.PosterUrl"><p>@item.Name</p></a></div>
-                    }  
                 }
                 else
                 {
                     <div class="col-12 text-light h5 text-center">Không tìm thấy phim bạn muốn xem :(</div>
                 }
-
             </div>
-
-            @* <div class="row">
-                <div class="col-md-4">
-                    <div class="row">
-                        <div class="col-6"><a href="/moviedetail"><img src="img/1.jpg"><p>Blue Beetle</p></a></div>
-                        <div class="col-6"><a href="/moviedetail"><img src="img/2.jpg"><p>Mortal Kombat</p></a></div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="row">
-                        <div class="col-6"><a href="/moviedetail"><img src="img/3.jpg"><p>Joker</p></a></div>
-                        <div class="col-6"><a href="/moviedetail"><img src="img/4.jpg"><p>1917</p></a></div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="row">
-                        <div class="col-6"><a href="/moviedetail"><img src="img/5.jpg"><p>Smile</p></a></div>
-                        <div class="col-6"><a href="/moviedetail"><img src="img/6.jpg"><p>Elvis</p></a></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="row">
-                        <div class="col-6"><a href="/moviedetail"><img src="img/7.jpg"><p>Oppenheimer</p></a></div>
-                        <div class="col-6"><a href="/moviedetail"><img src="img/8.jpg"><p>Doctor Strange In The Multiverse Of Madness</p></a></div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="row">
-                        <div class="col-6"><a href="/moviedetail"><img src="img/9.jpg"><p>Rurouni Kenshin: Kyoto Inferno</p></a></div>
-                        <div class="col-6"><a href="/moviedetail"><img src="img/10.jpg"><p>Blade Runner 2049</p></a></div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="row">
-                        <div class="col-6"><a href="/moviedetail"><img src="img/11.jpg"><p>Aladdin</p></a></div>
-                        <div class="col-6"><a href="/moviedetail"><img src="img/12.jpg"><p>Godzilla vs Kong</p></a></div>
-                    </div>
-                </div>
-            </div> *@
         </div>
-
         <!-- PAGINATION -->
-
         <nav aria-label="Page navigation">
             <ul class="pagination justify-content-center">
                 <li class="page-item @(currentPage == 1 ? "disabled" : "")">
@@ -135,24 +81,6 @@
                 </li>
             </ul>
         </nav>
-
-
-        @* <nav aria-label="Page navigation">
-            <ul class="pagination" id="pagination">
-                <li class="page-item">
-                    <div class="pagination">
-                        <a href="#">&laquo;</a>
-                        <a class="active" href="#">1</a>
-                        <a href="#">2</a>
-                        <a href="#">3</a>
-                        <a href="#">4</a>
-                        <a href="#">5</a>
-                        <a href="#">6</a>
-                        <a href="#">&raquo;</a>
-                    </div>
-                </li>
-            </ul>
-        </nav> *@
     </div>
 </div>
 
@@ -161,10 +89,14 @@
     private IEnumerable<MovieDto> movies = new List<MovieDto>();
     private IEnumerable<TVSeriesDto> shows = new List<TVSeriesDto>();
     private IEnumerable<GenreDto> genres = new List<GenreDto>();
+    private IEnumerable<NationDto> nations = new List<NationDto>();
 
     private List<int> filteredGenre = new List<int>();
-    private string selectedReleaseYear = DateTime.Now.Year.ToString();
+    private string selectedReleaseYear = null;
+    private string selectedNation = null;
     private List<string> distinctReleaseYears;
+
+    private string TITLE;
 
     private int pageSize = 18;
     private int currentPage = 1;
@@ -172,95 +104,84 @@
 
     private int TotalPages => (int)Math.Ceiling((double)totalItems / pageSize);
 
-    private IEnumerable<FilmDto> DisplayedItems
+    private IEnumerable<FilmDto> DisplayedItems =>
+        Type == "movie" ? FilterAndPaginate(movies) : FilterAndPaginate(shows);
+
+    private IEnumerable<FilmDto> FilterAndPaginate(IEnumerable<FilmDto> films)
     {
-        get
+        var filteredFilms = films;
+
+        if (filteredGenre.Count > 0)
         {
-            if (Type == "movie")
-            {
-                var filteredMovies = movies;
-
-                if (filteredGenre.Count > 0)
-                {
-                    filteredMovies = filteredMovies.Where(movie => movie.FilmGenres.Any(f => filteredGenre.Contains(f.Genre.Id)));
-                }
-
-                if (selectedReleaseYear != null)
-                {
-                    filteredMovies = filteredMovies.Where(movie => movie.ReleaseYear == selectedReleaseYear);
-                }
-
-                totalItems = filteredMovies.Count();
-                return filteredMovies.Skip((currentPage - 1) * pageSize).Take(pageSize);
-            }
-            else if (Type == "tvseries")
-            {
-                var filteredShows = shows;
-
-                if (filteredGenre.Count > 0)
-                {
-                    filteredShows = filteredShows.Where(show => show.FilmGenres.Any(f => filteredGenre.Contains(f.Genre.Id)));
-                }
-
-                if (selectedReleaseYear != null)
-                {
-                    filteredShows = filteredShows.Where(show => show.ReleaseYear == selectedReleaseYear);
-                }
-                Console.WriteLine("1. BUG HERE!");
-                totalItems = filteredShows.Count();
-                return filteredShows.Skip((currentPage - 1) * pageSize).Take(pageSize);
-            }
-            else
-            {
-                Console.WriteLine("2. BUG HERE!");
-                return Enumerable.Empty<FilmDto>();
-            }
+            filteredFilms = filteredFilms.Where(film => film.FilmGenres.Any(f => filteredGenre.Contains(f.Genre.Id)));
         }
+        if (!string.IsNullOrEmpty(selectedReleaseYear))
+        {
+            filteredFilms = filteredFilms.Where(film => film.ReleaseYear == selectedReleaseYear);
+        }
+        if (!string.IsNullOrEmpty(selectedNation))
+        {
+            filteredFilms = filteredFilms.Where(film => film.Nation.Name == selectedNation);
+        }
+        totalItems = filteredFilms.Count();
+        return filteredFilms.Skip((currentPage - 1) * pageSize).Take(pageSize);
     }
 
     protected override async Task OnParametersSetAsync()
     {
         if (Type == "movie")
         {
+            TITLE = "Phim lẻ";
             movies = await httpClient.GetFromJsonAsync<List<MovieDto>>("api/Movies");
-            currentPage = 1;
         }
         else if (Type == "tvseries")
         {
+            TITLE = "Phim bộ";
             shows = await httpClient.GetFromJsonAsync<List<TVSeriesDto>>("api/TVSeries");
-            currentPage = 1;
         }
         genres = await httpClient.GetFromJsonAsync<List<GenreDto>>("api/Genres");
-        distinctReleaseYears = movies.Select(movie => movie.ReleaseYear).Distinct().ToList();
-
-        // foreach(var item in shows)
-        // {
-        //     Console.WriteLine(item.Name);
-        // }
-        
+        distinctReleaseYears = await httpClient.GetFromJsonAsync<List<string>>("api/Films/years");
+        nations = await httpClient.GetFromJsonAsync<List<NationDto>>("api/Nations");
     }
 
     private void FilterByGenre(ChangeEventArgs e)
     {
         int genreId = int.Parse(e.Value.ToString());
-
-        filteredGenre.Clear();
-
         if (genreId == 0)
         {
             filteredGenre.Clear();
         }
-        else if (!filteredGenre.Contains(genreId))
+        else
         {
+            filteredGenre.Clear();
             filteredGenre.Add(genreId);
         }
-        Console.WriteLine("G:" + filteredGenre);
         currentPage = 1;
     }
 
     private void FilterByReleaseYear(ChangeEventArgs e)
     {
-        selectedReleaseYear = e.Value.ToString();
+        if (e.Value.ToString() == "none")
+        {
+            selectedReleaseYear = null;
+        } else
+        {
+            selectedReleaseYear = e.Value.ToString();
+        }
+        
+        currentPage = 1;
+    }
+
+    private void FilterByNation(ChangeEventArgs e)
+    {
+        if (e.Value.ToString() == "none")
+        {
+            selectedNation = null;
+        }
+        else
+        {
+            selectedNation = e.Value.ToString();
+        }
         currentPage = 1;
     }
 
@@ -271,4 +192,5 @@
             currentPage = page;
         }
     }
+
 }

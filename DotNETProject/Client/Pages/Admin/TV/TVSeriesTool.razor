@@ -8,6 +8,8 @@
 
 @layout AdminLayout
 
+<PageTitle>QUẢN LÝ PHIM BỘ</PageTitle>
+
 <MudGrid>
     <!-- Content -->
     <MudItem xs="12">
@@ -81,10 +83,18 @@
                         <DialogContent>
                             @if (context.FilmCasts.Count != 0)
                             {
-                                @foreach (var cast in context.FilmCasts)
-                                {
-                                    <MudText>@(cast.Cast.Name + " - " + cast.Role)</MudText>
-                                }
+                                <MudTable Items="@context.FilmCasts" Hover="true" Breakpoint="Breakpoint.Sm">
+                                    <HeaderContent>
+                                        <MudTh>Name</MudTh>
+                                        <MudTh>Role</MudTh>
+
+                                    </HeaderContent>
+                                    <RowTemplate Context="item">
+                                        <MudTd DataLabel="Name">@item.Cast.Name</MudTd>
+                                        <MudTd DataLabel="Role">@item.Role</MudTd>
+
+                                    </RowTemplate>
+                                </MudTable>
                             }
                             else
                             {
@@ -154,14 +164,7 @@
                     <MudButton Variant="Variant.Filled" Color="Color.Secondary" OnClick="@(() => EditTVSeries(context, maxWidth))">Edit</MudButton>
                 </MudTd>
                 <MudTd>
-                    @if (context.isActiveBanner == false)
-                    {
-                        <MudButton Variant="Variant.Filled" Color="Color.Success" OnClick="@(() => ActiveTV(context))">ON</MudButton>
-                    }
-                    else
-                    {
-                        <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => ActiveTV(context))">OFF</MudButton>
-                    }
+                    <MudSwitch Color="Color.Success" @bind-Checked="context.isActiveBanner" @onclick="@(() => ActiveTV(context))"></MudSwitch>
                 </MudTd>
             </RowTemplate>
             <PagerContent>

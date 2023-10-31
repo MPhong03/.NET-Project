@@ -49,6 +49,28 @@ namespace DotNETProject.Server.Controllers
             return flag;
         }
 
+        [HttpGet("years")]
+        public async Task<ActionResult<List<string>>> GetFilmYears()
+        {
+            if (_context.Films == null)
+            {
+                return NotFound();
+            }
+            var film = await _context.Films.ToListAsync();
+
+            var years = film.Select(item => item.ReleaseYear)
+                            .Distinct()
+                            .OrderByDescending(year => year)
+                            .ToList();
+
+            if (film == null)
+            {
+                return NotFound();
+            }
+
+            return years;
+        }
+
         // GET: api/Films
         [HttpGet]
         public async Task<ActionResult<IEnumerable<FilmDto>>> GetFilms()

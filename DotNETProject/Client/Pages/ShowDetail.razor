@@ -2,7 +2,7 @@
 @using DotNETProject.Shared;
 @inject HttpClient httpClient
 
-<PageTitle>Chi Tiết Phim</PageTitle>
+<PageTitle>@show.Name</PageTitle>
 <!-- Banner Start -->
 <div class="container">
     <img id="banner" src="@show.BackgroundUrl" class="d-block w-100" alt="...">
@@ -22,6 +22,13 @@
                         <div class="d-flex align-items-center text-white text-detail">
                             <span class="trending-year">@show.ReleaseYear</span>
                         </div>
+                        <ul class="p-0 text-light list-inline d-flex align-items-center movie-content">
+                            <span>Đạo diễn: </span>
+                            @foreach (var genre in show.FilmDirectors)
+                            {
+                                <li class="text-white"><a href="/director/@genre.Director.Id">@genre.Director.Name</a></li>
+                            }
+                        </ul>
                         <p class="trending-dec w-100 mb-0">
                             @show.Description
                             @* Jaime Reyes-mới tốt nghiệp trở về quê nhà để tìm kiếm tương lai mới nhưng mọi
