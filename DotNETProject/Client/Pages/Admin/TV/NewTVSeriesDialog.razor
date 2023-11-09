@@ -1,5 +1,6 @@
 ﻿@page "/create-tv"
 @using DotNETProject.Client.Pages.Admin.TV.Episode;
+@using DotNETProject.Client.Service;
 @using DotNETProject.Shared;
 @using Firebase.Storage;
 @using MudBlazor
@@ -327,6 +328,7 @@
 @code {
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
     private TVSeriesDto tVSeriesDto = new TVSeriesDto();
+    private FirebaseService fbService = new FirebaseService();
     public DateTime? realseDate;
     public IBrowserFile poster;
     public IBrowserFile background;
@@ -464,9 +466,9 @@
         {
             string folderName = (tVSeriesDto.Name).ToLower().Replace(' ', '-');
 
-            string posterUrl = await HandleFirebaseUpload(poster, "Films/TVSeries/" + folderName + "/Image");
-            string backgroundUrl = await HandleFirebaseUpload(background, "Films/TVSeries/" + folderName + "/Image");
-            string logoUrl = await HandleFirebaseUpload(logo, "Films/TVSeries/" + folderName + "/Image");
+            string posterUrl = await fbService.HandleFirebaseUpload(poster, "Films/TVSeries/" + folderName + "/Image");
+            string backgroundUrl = await fbService.HandleFirebaseUpload(background, "Films/TVSeries/" + folderName + "/Image");
+            string logoUrl = await fbService.HandleFirebaseUpload(logo, "Films/TVSeries/" + folderName + "/Image");
 
             if (!string.IsNullOrEmpty(posterUrl) && !string.IsNullOrEmpty(backgroundUrl) && !string.IsNullOrEmpty(logoUrl))
             {
@@ -504,63 +506,6 @@
             OpenNested();
         }
     }
-
-    async Task<string> HandleFirebaseUpload(IBrowserFile file, string folderPath)
-    {
-        try
-        {
-
-            var storage = new FirebaseStorage("dotnetproject-339c8.appspot.com");
-
-            folderPath = folderPath.Trim('/');
-
-            var folderRef = storage.Child(folderPath);
-            var folderExists = await FolderExistsAsync(folderRef);
-            if (!folderExists)
-            {
-                await CreateFolderAsync(folderRef);
-            }
-
-            string imageFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.Name)}";
-
-            var imageUrl = await storage.Child(folderPath)
-                .Child(imageFileName)
-                .PutAsync(file.OpenReadStream(maxAllowedSize: MAXALLOWEDSIZE));
-
-            return imageUrl;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception: {ex.Message}");
-            return null;
-        }
-    }
-
-    private async Task<bool> FolderExistsAsync(FirebaseStorageReference folderRef)
-    {
-        try
-        {
-            await folderRef.GetDownloadUrlAsync();
-            return true;
-        }
-        catch (FirebaseStorageException)
-        {
-            return false;
-        }
-    }
-
-    private async Task CreateFolderAsync(FirebaseStorageReference folderRef)
-    {
-        try
-        {
-            await folderRef.Child(".placeholder").PutAsync(new MemoryStream());
-        }
-        catch (FirebaseStorageException ex)
-        {
-            Console.WriteLine($"Error creating folder: {ex.Message}");
-        }
-    }
-
 
     void Cancel() => MudDialog.Cancel();
 }

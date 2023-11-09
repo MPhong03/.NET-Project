@@ -1,4 +1,5 @@
 ﻿@page "/admin/editcastdialog"
+@using DotNETProject.Client.Service;
 @using DotNETProject.Shared;
 @using MudBlazor
 @using Firebase.Storage;
@@ -84,6 +85,8 @@
     private void OpenNested() => nestedVisible = true;
     private void CloseNested() => nestedVisible = false;
 
+    private FirebaseService fbService = new FirebaseService();
+
     async Task Submit()
     {
         try
@@ -91,7 +94,7 @@
             string imageUrl;
             if(image != null)
             {
-                imageUrl = await HandleFirebaseImageUpload(image);
+                imageUrl = await fbService.HandleFirebaseUpload(image, "Casts/Avatars");
             } else
             {
                 imageUrl = currentCast.AvatarUrl;
@@ -124,36 +127,6 @@
         {
             message = "An error occurred: " + ex.Message;
             OpenNested();
-        }
-    }
-
-    async Task<string> HandleFirebaseImageUpload(IBrowserFile file)
-    {
-        try
-        {
-
-            var storage = new FirebaseStorage("dotnetproject-339c8.appspot.com");
-
-            string folderPath = "Casts/Avatars";
-            string imageFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.Name)}";
-
-            var existingImage = await storage.Child(folderPath).Child(imageFileName).GetDownloadUrlAsync();
-
-            if (!string.IsNullOrEmpty(existingImage))
-            {
-                return existingImage;
-            }
-
-            var imageUrl = await storage.Child(folderPath)
-                .Child(imageFileName)
-                .PutAsync(file.OpenReadStream());
-
-            return imageUrl;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception: {ex.Message}");
-            return null;
         }
     }
 

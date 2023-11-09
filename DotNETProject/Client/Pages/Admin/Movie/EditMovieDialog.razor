@@ -1,4 +1,5 @@
 ﻿@page "/admin/editmoviedialog"
+@using DotNETProject.Client.Service;
 @using DotNETProject.Shared;
 @using MudBlazor
 @using Firebase.Storage;
@@ -338,6 +339,8 @@
 
     [Parameter] public MovieDto currentMovie { get; set; }
 
+    private FirebaseService fbService = new FirebaseService();
+
     public IBrowserFile poster;
     public IBrowserFile background;
     public IBrowserFile logo;
@@ -477,19 +480,19 @@
 
             if(poster != null)
             {
-                posterUrl = await HandleFirebaseUpload(poster, "Films/Movies/" + folderName + "/Image");
+                posterUrl = await fbService.HandleFirebaseUpload(poster, "Films/Movies/" + folderName + "/Image");
             }
             if(background != null)
             {
-                backgroundUrl = await HandleFirebaseUpload(background, "Films/Movies/" + folderName + "/Image");
+                backgroundUrl = await fbService.HandleFirebaseUpload(background, "Films/Movies/" + folderName + "/Image");
             }
             if(logo != null)
             {
-                logoUrl = await HandleFirebaseUpload(logo, "Films/Movies/" + folderName + "/Image");
+                logoUrl = await fbService.HandleFirebaseUpload(logo, "Films/Movies/" + folderName + "/Image");
             }
             if(video != null)
             {
-                videoUrl = await HandleFirebaseUpload(video, "Films/Movies/" + folderName + "/Video");
+                videoUrl = await fbService.HandleFirebaseUpload(video, "Films/Movies/" + folderName + "/Video");
             }
    
             if (!string.IsNullOrEmpty(posterUrl) && !string.IsNullOrEmpty(backgroundUrl) && !string.IsNullOrEmpty(logoUrl) && !string.IsNullOrEmpty(videoUrl))
@@ -526,62 +529,6 @@
         {
             message = "An error occurred: " + ex.Message;
             OpenNested();
-        }
-    }
-
-    async Task<string> HandleFirebaseUpload(IBrowserFile file, string folderPath)
-    {
-        try
-        {
-
-            var storage = new FirebaseStorage("dotnetproject-339c8.appspot.com");
-
-            folderPath = folderPath.Trim('/');
-
-            var folderRef = storage.Child(folderPath);
-            var folderExists = await FolderExistsAsync(folderRef);
-            if (!folderExists)
-            {
-                await CreateFolderAsync(folderRef);
-            }
-
-            string imageFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.Name)}";
-
-            var imageUrl = await storage.Child(folderPath)
-                .Child(imageFileName)
-                .PutAsync(file.OpenReadStream(maxAllowedSize: MAXALLOWEDSIZE));
-
-            return imageUrl;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception: {ex.Message}");
-            return null;
-        }
-    }
-
-    private async Task<bool> FolderExistsAsync(FirebaseStorageReference folderRef)
-    {
-        try
-        {
-            await folderRef.GetDownloadUrlAsync();
-            return true;
-        }
-        catch (FirebaseStorageException)
-        {
-            return false;
-        }
-    }
-
-    private async Task CreateFolderAsync(FirebaseStorageReference folderRef)
-    {
-        try
-        {
-            await folderRef.Child(".placeholder").PutAsync(new MemoryStream());
-        }
-        catch (FirebaseStorageException ex)
-        {
-            Console.WriteLine($"Error creating folder: {ex.Message}");
         }
     }
 

@@ -19,10 +19,8 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddTransient<EmailService>();
 
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("AdminOnly", policy => policy.RequireRole("ROLE_ADMIN"));
-});
+builder.Services.AddAuthentication();
+
 
 // Database connection
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("dotnetweb")));
@@ -59,6 +57,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthorization();
 
 app.MapRazorPages();
 app.MapControllers();

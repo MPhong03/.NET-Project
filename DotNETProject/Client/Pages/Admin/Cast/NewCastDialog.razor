@@ -1,4 +1,5 @@
 ﻿@page "/create-cast"
+@using DotNETProject.Client.Service;
 @using DotNETProject.Shared;
 @using Firebase.Storage;
 @using MudBlazor
@@ -67,11 +68,13 @@
     private void OpenNested() => nestedVisible = true;
     private void CloseNested() => nestedVisible = false;
 
+    private FirebaseService fbService = new FirebaseService();
+
     async Task Submit()
     {
         try
         {
-            string imageUrl = await HandleFirebaseImageUpload(image);
+            string imageUrl = await fbService.HandleFirebaseUpload(image, "Casts/Avatars");
 
             if (!string.IsNullOrEmpty(imageUrl))
             {
@@ -100,29 +103,6 @@
         {
             message = "An error occurred: " + ex.Message;
             OpenNested();
-        }
-    }
-
-    async Task<string> HandleFirebaseImageUpload(IBrowserFile file)
-    {
-        try
-        {
-
-            var storage = new FirebaseStorage("dotnetproject-339c8.appspot.com");
-
-            string folderPath = "Casts/Avatars";
-            string imageFileName = $"{Guid.NewGuid()}{Path.GetExtension(file.Name)}";
-
-            var imageUrl = await storage.Child(folderPath)
-                .Child(imageFileName)
-                .PutAsync(file.OpenReadStream());
-
-            return imageUrl;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Exception: {ex.Message}");
-            return null;
         }
     }
 

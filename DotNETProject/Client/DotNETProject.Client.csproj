@@ -22,4 +22,8 @@
     <ProjectReference Include="..\Shared\DotNETProject.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\Admin\User\" />
+  </ItemGroup>
+
 </Project>

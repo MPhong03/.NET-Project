@@ -24,5 +24,6 @@ namespace DotNETProject.Server.Models
         public DateTime createdDate { get; set; }
         public int RoleId { get; set; }
         public Role Role { get; set; } = new Role();
+        public ICollection<Film> Films { get; set; }
     }
 }
