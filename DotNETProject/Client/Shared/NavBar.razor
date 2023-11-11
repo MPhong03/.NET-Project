@@ -16,7 +16,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                             <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
                         </svg>
-                        Phim Hot
+                        
                     </a>
                 </li>
                 <li class="nav-item">
@@ -62,7 +62,7 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="#">Thông tin</a></li>
-                            <li><a class="dropdown-item" href="#">Bộ sưu tập</a></li>
+                            <li><a class="dropdown-item" href="/my-collection">Bộ sưu tập</a></li>
                             <li><a class="dropdown-item" href="#">Lịch sử</a></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item text-danger" href="/logout">Đăng xuất</a></li>
@@ -83,7 +83,7 @@
     public Dictionary<int, string> Type = new Dictionary<int, string>()
     {
         {1, "movie"},
-        {2, "tvseries"}
+        {2, "tv"}
     };
 
     protected override async Task OnInitializedAsync()

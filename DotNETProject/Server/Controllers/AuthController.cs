@@ -48,10 +48,17 @@ namespace DotNETProject.Server.Controllers
             dto.RoleName = user.Role.Name;
             foreach (var item in user.Films)
             {
+                var type = (item.GetType().Equals(typeof(Movie))) ? "movie" : "tv";
                 dto.SavedFilms.Add(new FilmDto
                 {
                     Id = item.Id,
-                    Name = item.Name
+                    BackgroundUrl = item.BackgroundUrl,
+                    Description = item.Description,
+                    LogoUrl = item.LogoUrl,
+                    PosterUrl = item.PosterUrl,
+                    Name = item.Name,
+                    isActiveBanner = item.isActiveBanner,
+                    Type = type
                 });
             }
 

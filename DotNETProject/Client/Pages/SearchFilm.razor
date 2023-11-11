@@ -22,10 +22,10 @@
                 {
                     @foreach (var item in DisplayedItems)
                     {
-                        var path = filmTypes[item.Id] == "MOVIE" ? "movie" : "tv";
+                        @* var path = filmTypes[item.Id] == "MOVIE" ? "movie" : "tv"; *@
 
                         <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6">
-                            <a href="/@path/@item.Id">
+                            <a href="/@item.Type/@item.Id">
                                 <img src="@item.PosterUrl" alt="@item.Name">
                                 <p>@item.Name</p>
                             </a>
@@ -60,7 +60,7 @@
 
 @code {
     private IEnumerable<FilmDto> films = new List<FilmDto>();
-    private Dictionary<int, string> filmTypes = new Dictionary<int, string>();
+    // private Dictionary<int, string> filmTypes = new Dictionary<int, string>();
 
     private string keyword; 
 
@@ -91,11 +91,11 @@
     {
         films = await httpClient.GetFromJsonAsync<List<FilmDto>>("api/Films");
 
-        foreach (var item in films)
-        {
-            string flag = await httpClient.GetStringAsync($"api/Films/{item.Id}");
-            filmTypes.Add(item.Id, flag);
-        }
+        // foreach (var item in films)
+        // {
+        //     string flag = await httpClient.GetStringAsync($"api/Films/{item.Id}");
+        //     filmTypes.Add(item.Id, flag);
+        // }
     }
 
     private void SearchByKeyword(ChangeEventArgs e)

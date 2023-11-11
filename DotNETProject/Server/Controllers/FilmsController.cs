@@ -85,6 +85,7 @@ namespace DotNETProject.Server.Controllers
 
             foreach (var item in list)
             {
+                var type = (item.GetType().Equals(typeof(Movie))) ? "movie" : "tv";
                 var film = new FilmDto
                 {
                     Id = item.Id,
@@ -93,7 +94,8 @@ namespace DotNETProject.Server.Controllers
                     LogoUrl = item.LogoUrl,
                     PosterUrl = item.PosterUrl,
                     Name = item.Name,
-                    isActiveBanner = item.isActiveBanner
+                    isActiveBanner = item.isActiveBanner,
+                    Type = type
                 };
 
                 listDto.Add(film);

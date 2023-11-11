@@ -113,7 +113,7 @@
 
     private MovieDto movie = new MovieDto();
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
 
         movie = await httpClient.GetFromJsonAsync<MovieDto>($"api/Movies/{Int32.Parse(Id)}");
@@ -131,10 +131,11 @@
         if (response != null)
         {
             isSaved = response;
+            base.StateHasChanged();
         }
     }
 
-    private async void SaveFilm()
+    private async Task SaveFilm()
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
         var email = authState.User.Identity.Name;

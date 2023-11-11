@@ -21,6 +21,6 @@ namespace DotNETProject.Shared
         public bool isActiveBanner { get; set; } = false;
         public DateTime UploadDate { get; set; } = DateTime.Now;
         public NationDto Nation { get; set; } = new NationDto();
-
+        public string Type { get; set; } = string.Empty;
     }
 }

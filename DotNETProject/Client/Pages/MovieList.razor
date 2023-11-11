@@ -47,11 +47,10 @@
             <div class="row">
                 @if (DisplayedItems.Any())
                 {
-                    var path = Type == "movie" ? "movie" : "tv";
                     @foreach (var item in DisplayedItems)
                     {
                         <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6">
-                            <a href="/@path/@item.Id">
+                            <a href="/@item.Type/@item.Id">
                                 <img src="@item.PosterUrl" alt="@item.Name">
                                 <p>@item.Name</p>
                             </a>
@@ -86,8 +85,9 @@
 
 @code {
     [Parameter] public string Type { get; set; }
-    private IEnumerable<MovieDto> movies = new List<MovieDto>();
-    private IEnumerable<TVSeriesDto> shows = new List<TVSeriesDto>();
+    private IEnumerable<FilmDto> films = new List<FilmDto>();
+    // private IEnumerable<MovieDto> movies = new List<MovieDto>();
+    // private IEnumerable<TVSeriesDto> shows = new List<TVSeriesDto>();
     private IEnumerable<GenreDto> genres = new List<GenreDto>();
     private IEnumerable<NationDto> nations = new List<NationDto>();
 
@@ -104,8 +104,7 @@
 
     private int TotalPages => (int)Math.Ceiling((double)totalItems / pageSize);
 
-    private IEnumerable<FilmDto> DisplayedItems =>
-        Type == "movie" ? FilterAndPaginate(movies) : FilterAndPaginate(shows);
+    private IEnumerable<FilmDto> DisplayedItems => FilterAndPaginate(films);
 
     private IEnumerable<FilmDto> FilterAndPaginate(IEnumerable<FilmDto> films)
     {
@@ -123,21 +122,40 @@
         {
             filteredFilms = filteredFilms.Where(film => film.Nation.Name == selectedNation);
         }
+        if (Type != null)
+        {
+            filteredFilms = filteredFilms.Where(film => film.Type == Type);
+        }
         totalItems = filteredFilms.Count();
         return filteredFilms.Skip((currentPage - 1) * pageSize).Take(pageSize);
     }
 
     protected override async Task OnParametersSetAsync()
     {
+        // if (Type == "movie")
+        // {
+        //     TITLE = "Phim lẻ";
+        //     movies = await httpClient.GetFromJsonAsync<List<MovieDto>>("api/Movies");
+        // }
+        // else if (Type == "tvseries")
+        // {
+        //     TITLE = "Phim bộ";
+        //     shows = await httpClient.GetFromJsonAsync<List<TVSeriesDto>>("api/TVSeries");
+        // }
+
+        films = await httpClient.GetFromJsonAsync<List<FilmDto>>("api/Films");
+
         if (Type == "movie")
         {
             TITLE = "Phim lẻ";
-            movies = await httpClient.GetFromJsonAsync<List<MovieDto>>("api/Movies");
         }
-        else if (Type == "tvseries")
+        else if (Type == "tv")
         {
             TITLE = "Phim bộ";
-            shows = await httpClient.GetFromJsonAsync<List<TVSeriesDto>>("api/TVSeries");
+        }
+        else
+        {
+            TITLE = "Tất cả";
         }
         genres = await httpClient.GetFromJsonAsync<List<GenreDto>>("api/Genres");
         distinctReleaseYears = await httpClient.GetFromJsonAsync<List<string>>("api/Films/years");
