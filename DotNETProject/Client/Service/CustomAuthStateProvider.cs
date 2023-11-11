@@ -50,5 +50,10 @@ namespace DotNETProject.Client.Service
         {
             return user.FindFirst(ClaimTypes.Role)?.Value;
         }
+
+        public string GetUserEmail(ClaimsPrincipal user)
+        {
+            return user.FindFirst(ClaimTypes.Email)?.Value;
+        }
     }
 }

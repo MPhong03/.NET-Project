@@ -27,6 +27,83 @@ namespace DotNETProject.Server.Controllers
             _configuration = configuration;
             _emailService = emailService;
         }
+        [HttpGet("detail")]
+        public async Task<ActionResult<UserDetailDto>> GetUser(string email)
+        {
+            var user = await _context.Users
+                .Include(user => user.Role)
+                .Include(user => user.Films)
+                .FirstOrDefaultAsync(user => user.Email == email);
+
+            if (user == null)
+            {
+                return NotFound($"User with Id = {email} doesn't exist!");
+            }
+
+            var dto = new UserDetailDto();
+            dto.Id = user.Id;
+            dto.Email = user.Email;
+            dto.Username = user.UserName;
+            dto.createdDate = user.createdDate;
+            dto.RoleName = user.Role.Name;
+            foreach (var item in user.Films)
+            {
+                dto.SavedFilms.Add(new FilmDto
+                {
+                    Id = item.Id,
+                    Name = item.Name
+                });
+            }
+
+            return Ok(dto);
+        }
+
+        [HttpPost("save")]
+        public async Task<ActionResult<string>> SaveFilmById(SaveFilmDto request)
+        {
+            var film = await _context.Films.FirstOrDefaultAsync(x => x.Id == request.Id);
+            if (film == null)
+            {
+                return NotFound($"Film with Id = {request.Id} not found");
+            }
+            var user = await _context.Users.FirstOrDefaultAsync(user => user.Email == request.Email);
+            if (user == null)
+            {
+                return NotFound($"User not found");
+            }
+            var message = "";
+            if (user.Films.Contains(film))
+            {
+                user.Films.Remove(film);
+                message = "DA XOA KHOI BO SUU TAP";
+            }
+            else
+            {
+                user.Films.Add(film);
+                message = "DA LUU VAO BO SUU TAP";
+            }
+
+            await _context.SaveChangesAsync();
+
+            return Ok(message);
+        }
+
+        [HttpGet("checkSaved/{id}")]
+        public async Task<ActionResult<bool>> CheckSaved(int id, string email)
+        {
+            var user = await _context.Users
+                .Include(user => user.Films)
+                .FirstOrDefaultAsync(user => user.Email == email);
+
+            if (user == null)
+            {
+                return NotFound("User not found!");
+            }
+
+            var chk = user.Films.Any(film => film.Id == id);
+
+            return Ok(chk);
+        }
 
         [HttpPost("register")]
         public async Task<ActionResult<User>> Register(UserDto request)
