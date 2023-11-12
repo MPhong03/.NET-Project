@@ -10,48 +10,22 @@
     <div class="content-container">
         <div id="carouselCaptions" class="carousel slide" data-bs-ride="carousel">
             <div class="carousel-indicators">
-                @if (banners.Count > 0)
+                @if (films.Count > 0)
                 {
                     var isFirstItem = true;
-                    for (var i = 0; i < banners.Count; i++)
+                    for (var i = 0; i < films.Count; i++)
                     {
                         <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="@i" class="@(isFirstItem ? "active" : "")" aria-current="true" aria-label="Slide @i"></button>
                         isFirstItem = false;
                     }
                 }
-                @* <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button> *@
             </div>
             <div class="carousel-inner">
-                @* <div class="carousel-item active">
-                    <img src="img/f-1.jpg" style="height: 80vh;" class="d-block w-100" alt="...">
-                    <div class="carousel-caption d-none d-md-block">
-                        <img src="img/f-t-1.png" class="featured-title" alt="...">
-                        <p class="text-light">
-                            Sau khi gặp lại Gwen Stacy, chàng Spider-Man thân thiện đến từ Brooklyn phải du hành qua đa vũ trụ và 
-                            gặp một nhóm Người Nhện chịu trách nhiệm bảo vệ các vũ trụ song song.
-                        </p>
-                        <button class="featured-button">XEM NGAY</button>
-                    </div>
-                </div>
-                
-                <div class="carousel-item">
-                    <img src="img/f-2.jpg" style="height: 80vh;"  class="d-block w-100" alt="...">
-                    <div class="carousel-caption d-none d-md-block">
-                        <img src="img/f-t-2.png" class="featured-title" alt="...">
-                        <p class="text-light">
-                            Bộ phim được chuyển thể từ tiểu thuyết cùng tên của nhà văn Stephen King. Đây là câu chuyện về một nhóm 
-                            bạn trẻ cùng nhau chống lại một linh hồn tà ác - nguyên nhân của nhiều vụ mất tích bí ẩn nơi quê nhà 
-                            của họ.
-                        </p>
-                        <button class="featured-button">XEM NGAY</button>
-                    </div>
-                </div> *@
-                @if (banners.Count > 0)
+
+                @if (films.Count > 0)
                 {
                     var isFirstItem = true;
-                    foreach (var banner in banners)
+                    foreach (var banner in films.Where(film => film.isActiveBanner == true))
                     {
 
                         <div class="carousel-item @(isFirstItem ? "active" : "")">
@@ -62,22 +36,14 @@
                                     @banner.Description
                                 </p>
 
-                                @if (filmTypes[banner.Id] == "MOVIE")
-                                {
-                                    <a href="/movie/@banner.Id" class="btn featured-button">XEM NGAY</a>
-                                }
-                                else
-                                {
-                                    <a href="/tv/@banner.Id" class="btn featured-button">XEM NGAY</a>
-                                }
+                                <a href="/@banner.Type/@banner.Id" class="btn featured-button">XEM NGAY</a>
 
                             </div>
                         </div>
 
                         isFirstItem = false;
                     }
-                }
-                
+                }    
                 
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselCaptions" data-bs-slide="prev">
@@ -97,131 +63,32 @@
         <h3>Phim Lẻ Đề Cử</h3>
 
         <div class="row">
-            @foreach (var item in movies)
+            @foreach (var item in films.Where(film => film.Type == "movie"))
             {
-                <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6"><a href="/movie/@item.Id"><img src="@item.PosterUrl"><p>@item.Name</p></a></div>
+                <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6"><a href="/@item.Type/@item.Id"><img src="@item.PosterUrl"><p>@item.Name</p></a></div>
             }
         </div>
-
-        @* <div class="row">
-            <div class="col-md-4">
-                <div class="row">
-                    <div class="col-6"><a href="/moviedetail"><img src="img/1.jpg"><p>Blue Beetle</p></a></div>
-                    <div class="col-6"><a href="/moviedetail"><img src="img/2.jpg"><p>Mortal Kombat</p></a></div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="row">
-                    <div class="col-6"><a href="/moviedetail"><img src="img/3.jpg"><p>Joker</p></a></div>
-                    <div class="col-6"><a href="/moviedetail"><img src="img/4.jpg"><p>1917</p></a></div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="row">
-                    <div class="col-6"><a href="/moviedetail"><img src="img/5.jpg"><p>Smile</p></a></div>
-                    <div class="col-6"><a href="/moviedetail"><img src="img/6.jpg"><p>Elvis</p></a></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <div class="row">
-                    <div class="col-6"><a href="/moviedetail"><img src="img/7.jpg"><p>Oppenheimer</p></a></div>
-                    <div class="col-6"><a href="/moviedetail"><img src="img/8.jpg"><p>Doctor Strange In The Multiverse Of Madness</p></a></div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="row">
-                    <div class="col-6"><a href="/moviedetail"><img src="img/9.jpg"><p>Rurouni Kenshin: Kyoto Inferno</p></a></div>
-                    <div class="col-6"><a href="/moviedetail"><img src="img/10.jpg"><p>Blade Runner 2049</p></a></div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="row">
-                    <div class="col-6"><a href="/moviedetail"><img src="img/11.jpg"><p>Aladdin</p></a></div>
-                    <div class="col-6"><a href="/moviedetail"><img src="img/12.jpg"><p>Godzilla vs Kong</p></a></div>
-                </div>
-            </div>
-        </div> *@
 
         <h3>Phim Bộ Đề Cử</h3>
 
         <div class="row">
-            @foreach (var item in tvseries)
+            @foreach (var item in films.Where(film => film.Type == "tv"))
             {
-                <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6"><a href="/tv/@item.Id"><img src="@item.PosterUrl"><p>@item.Name</p></a></div>
+                <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6"><a href="/@item.Type/@item.Id"><img src="@item.PosterUrl"><p>@item.Name</p></a></div>
             }
         </div>
 
-        @* <div class="row">
-            <div class="col-md-4">
-                <div class="row">
-                    <div class="col-6"><a href="/moviedetail"><img src="img/1.jpg"><p>Blue Beetle</p></a></div>
-                    <div class="col-6"><a href="/moviedetail"><img src="img/1.jpg"><p>Blue Beetle</p></a></div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="row">
-                    <div class="col-6"><a href="/moviedetail"><img src="img/1.jpg"><p>Blue Beetle</p></a></div>
-                    <div class="col-6"><a href="/moviedetail"><img src="img/1.jpg"><p>Blue Beetle</p></a></div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="row">
-                    <div class="col-6"><a href="/moviedetail"><img src="img/1.jpg"><p>Blue Beetle</p></a></div>
-                    <div class="col-6"><a href="/moviedetail"><img src="img/1.jpg"><p>Blue Beetle</p></a></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-4">
-                <div class="row">
-                    <div class="col-6"><a href="/moviedetail"><img src="img/1.jpg"><p>Blue Beetle</p></a></div>
-                    <div class="col-6"><a href="/moviedetail"><img src="img/1.jpg"><p>Blue Beetle</p></a></div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="row">
-                    <div class="col-6"><a href="/moviedetail"><img src="img/1.jpg"><p>Blue Beetle</p></a></div>
-                    <div class="col-6"><a href="/moviedetail"><img src="img/1.jpg"><p>Blue Beetle</p></a></div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="row">
-                    <div class="col-6"><a href="/moviedetail"><img src="img/1.jpg"><p>Blue Beetle</p></a></div>
-                    <div class="col-6"><a href="/moviedetail"><img src="img/1.jpg"><p>Blue Beetle</p></a></div>
-                </div>
-            </div>
-        </div> *@
     </div>
 </div>
 
 @code {
-    private ICollection<MovieDto> movies = new List<MovieDto>();
-    private ICollection<TVSeriesDto> tvseries = new List<TVSeriesDto>();
-    private ICollection<FilmDto> banners = new List<FilmDto>();
+    private ICollection<FilmDto> films = new List<FilmDto>();
     private Dictionary<int, string> filmTypes = new Dictionary<int, string>();
 
     protected override async Task OnInitializedAsync()
     {
-        movies = await httpClient.GetFromJsonAsync<List<MovieDto>>("api/Movies");
-        tvseries = await httpClient.GetFromJsonAsync<List<TVSeriesDto>>("api/TVSeries");
-        var films = await httpClient.GetFromJsonAsync<List<FilmDto>>("api/Films");
 
-        foreach (var item in films)
-        {
-            if(item.isActiveBanner == true)
-            {
-                banners.Add(item);
-            }
-        }
+        films = await httpClient.GetFromJsonAsync<List<FilmDto>>("api/Films");
 
-        foreach (var item in banners)
-        {
-            string flag = await httpClient.GetStringAsync($"api/Films/{item.Id}");
-            filmTypes.Add(item.Id, flag);
-        }
     }
 }

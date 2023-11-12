@@ -28,21 +28,16 @@
 
             <div class="container">
                 <div class="row">
-                    @foreach (var item in director.FilmDirectors)
+                    @if (director.FilmDirectors.Count > 0)
                     {
-                        string filmType = filmTypes[item.Film.Id];
-                        if (filmType == "MOVIE")
+                        @foreach (var item in director.FilmDirectors)
                         {
-                            <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6"><a href="/movie/@item.Film.Id"><img class="w-100" src="@item.Film.PosterUrl"><p class="film-name">@item.Film.Name</p></a></div>
+                            <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6"><a href="/@item.Film.Type/@item.Film.Id"><img class="w-100" src="@item.Film.PosterUrl"><p class="film-name">@item.Film.Name</p></a></div>
                         }
-                        else if (filmType == "TV")
-                        {
-                            <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6"><a href="/tv/@item.Film.Id"><img class="w-100" src="@item.Film.PosterUrl"><p class="film-naem">@item.Film.Name</p></a></div>
-                        }
-                        else
-                        {
-                            <p>Diễn viên chưa tham gia bất kỳ bộ phim nào!</p>
-                        }
+                    }
+                    else
+                    {
+                        <p>Đạo diễn chưa chỉ đạo bất kỳ bộ phim nào!</p>
                     }
 
                 </div>
@@ -58,18 +53,11 @@
     [Parameter]
     public string Id { get; set; }
     private DirectorDto director = new DirectorDto();
-    private Dictionary<int, string> filmTypes = new Dictionary<int, string>();
 
     protected override async Task OnInitializedAsync()
     {
-        int getId = Int32.Parse(Id);
-        director = await httpClient.GetFromJsonAsync<DirectorDto>($"api/Directors/{getId}");
+        director = await httpClient.GetFromJsonAsync<DirectorDto>($"api/Directors/{Int32.Parse(Id)}");
 
-        foreach (var item in director.FilmDirectors)
-        {
-            string flag = await httpClient.GetStringAsync($"api/Films/{item.Film.Id}");
-            filmTypes.Add(item.Film.Id, flag);
-        }
     }
 
 }

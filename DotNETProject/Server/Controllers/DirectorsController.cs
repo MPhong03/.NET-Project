@@ -106,7 +106,8 @@ namespace DotNETProject.Server.Controllers
                     {
                         Name = filmDirector.Film.Name,
                         Id = filmDirector.Film.Id,
-                        PosterUrl = filmDirector.Film.PosterUrl
+                        PosterUrl = filmDirector.Film.PosterUrl,
+                        Type = (filmDirector.Film.GetType() == typeof(Movie)) ? "movie" : "tv"
                     },
                 };
                 directorDto.FilmDirectors.Add(filmDirectorDto);
