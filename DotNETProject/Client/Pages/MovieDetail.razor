@@ -17,7 +17,7 @@
                 <div class="col-lg-12">
                     <div class="trending-info g-border">
                         <div class="d-flex justify-content-between">
-                            <h1 class="trending-text big-title text-uppercase mt-0">@movie.Name</h1>
+                            <h1 class="trending-text big-title text-uppercase mt-0">@movie.Name (@movie.ReleaseYear)</h1>
 
                             <a type="button" class="text-danger" @onclick="SaveFilm">
 
@@ -44,33 +44,39 @@
                                 }
                             </a>
                         </div>
-                        <ul class="p-0 list-inline d-flex align-items-center movie-content">
-                            @* <li class="text-white">Hành Động</li>
-                            <li class="text-white">Phiêu Lưu</li>
-                            <li class="text-white">Viễn Tưởng</li> *@
-                            @foreach (var genre in movie.FilmGenres)
-                            {
-                                <li class="text-white">@genre.Genre.Name</li>
-                            }
-                        </ul>
-                        <div class="d-flex align-items-center text-white text-detail">
-                            <span class="trending-year">@movie.ReleaseYear</span>
-                            <span class="ml-3">@movie.Time</span>
+                        <div class="container p-0">
+                            <!-- Movie genres -->
+                            <div class="d-flex align-items-center movie-content">
+                                <span class="text-white font-weight-bold">THỂ LOẠI:</span>
+                                @foreach (var genre in movie.FilmGenres)
+                                {
+                                    <span class="text-white ml-2">@genre.Genre.Name</span>
+                                }
+                            </div>
+                            <!-- Release year and duration -->
+                            <div class="d-flex align-items-center text-white text-detail">
+                                <span>THỜI LƯỢNG: @movie.Time</span>
+                            </div>
+                            <!-- Movie directors -->
+                            <div class="d-flex align-items-center movie-content">
+                                <span class="text-white font-weight-bold">ĐẠO DIỄN:</span>
+                                @foreach (var director in movie.FilmDirectors)
+                                {
+                                    <span class="text-white ml-2"><a href="/director/@director.Director.Id">@director.Director.Name</a></span>
+                                }
+                            </div>
+                            <!-- Movie description -->
+                            <p class="trending-dec w-100 text-white">
+                                @movie.Description
+                            </p>
+
+                            <div class="embed-responsive embed-responsive-16by9 mb-3" style="height: 600px;">
+                                <iframe class="embed-responsive-item" src="@ConvertToEmbedUrl(movie.TrailerUrl)" style="width: 100%; height: 100%;" allowfullscreen></iframe>
+                            </div>
+
+                            
                         </div>
-                        <ul class="p-0 text-light list-inline d-flex align-items-center movie-content">
-                            <span>Đạo diễn:</span>
-                            @foreach (var genre in movie.FilmDirectors)
-                            {
-                                <li class="text-white"><a href="/director/@genre.Director.Id"> @genre.Director.Name</a></li>
-                            }
-                        </ul>
-                        <p class="trending-dec w-100 mb-0">
-                            @movie.Description
-                            @* Jaime Reyes-mới tốt nghiệp trở về quê nhà để tìm kiếm tương lai mới nhưng mọi
-                            thứ quá khó khăn cho cậu. Cuộc đời Jaime bỗng rẽ hướng với món cổ vật cậu nhặt
-                            được-Scarab chọn cậu làm vật chủ và trở thành siêu anh hùng BLUE BEETLE với
-                            bộ áo giáp tối tân nhất. *@
-                        </p><br>
+
                         <h4 class="text-white">Diễn Viên</h4><br>
                         <div class="container list">
 
@@ -84,32 +90,14 @@
                                         </a>
                                     </div>
 
-                                    Console.WriteLine($"Name: {@item.Cast.Name}");
-                                    Console.WriteLine($"Url: {@item.Cast.AvatarUrl}");
+                                  
                                 }
                             </div>
 
-                            @* <div class="row">
-                            <div class="col-md-4">
-                            <div class="row">
-                            <div class="col-6"><a href=""><img id="cast" src="img/cast/cast-1-1.jpg"><p>Xolo Maridueña</p></a></div>
-                            <div class="col-6"><a href=""><img id="cast" src="img/cast/cast-1-1.jpg"><p>Xolo </p></a></div>
-                            </div>
-                            </div>
-                            <div class="col-md-4">
-                            <div class="row">
-                            <div class="col-6"><a href=""><img id="cast" src="img/cast/cast-1-1.jpg"><p>Xolo Maridueña</p></a></div>
-                            <div class="col-6"><a href=""><img id="cast" src="img/cast/cast-1-1.jpg"><p>Xolo Maridueña</p></a></div>
-                            </div>
-                            </div>
-                            <div class="col-md-4">
-                            <div class="row">
-                            <div class="col-6"><a href=""><img id="cast" src="img/cast/cast-1-1.jpg"><p>Xolo Maridueña</p></a></div>
-                            <div class="col-6"><a href=""><img id="cast" src="img/cast/cast-1-1.jpg"><p>Xolo Maridueña</p></a></div>
-                            </div>
-                            </div>
-                            </div> *@
+                           
                         </div>
+
+                       
                     </div>
                 </div>
             </div>
@@ -136,6 +124,8 @@
         {
             await UpdateSavedState();   
         }
+
+        Console.WriteLine("URL: " + movie.TrailerUrl);
 
     }
 
@@ -210,5 +200,22 @@
             checkLoggin = true;
         }
 
+    }
+
+    string ConvertToEmbedUrl(string normalUrl)
+    {
+        var videoIdIndex = normalUrl.IndexOf("?v=");
+        if (videoIdIndex != -1)
+        {
+            var videoIdStartIndex = videoIdIndex + 3;
+            var videoId = normalUrl.Substring(videoIdStartIndex);
+
+            var embedUrl = $"https://www.youtube.com/embed/{videoId}";
+            return embedUrl;
+        }
+        else
+        {
+            return "Invalid YouTube URL";
+        }
     }
 }

@@ -1,6 +1,9 @@
 ﻿@page "/admin/genre-management"
 @using DotNETProject.Shared;
 @using MudBlazor
+@using DotNETProject.Client.Service;
+@using System.Net.Http.Headers;
+@inject CustomAuthStateProvider auth
 @inject HttpClient httpClient
 @inject IDialogService Dialog
 @inject IJSRuntime JSRuntime
@@ -55,6 +58,8 @@
     private bool bordered = false;
     private string searchString1 = "";
 
+    private bool dataChanged = false;
+
     private HashSet<GenreDto> selectedItems = new HashSet<GenreDto>();
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
@@ -64,11 +69,22 @@
 
     protected override async Task OnInitializedAsync()
     {
+        var token = await auth.GetTokenFromLocalStorage();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         genre = await httpClient.GetFromJsonAsync<List<GenreDto>>($"api/Genres");
 
         foreach (var genreDto in genre)
         {
             showGenreDialogStates[genreDto.Id] = false;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender && dataChanged)
+        {
+            dataChanged = false;
+            await RefreshData();
         }
     }
 
@@ -103,14 +119,15 @@
 
         if (!result.Cancelled)
         {
-            if (result.Data is GenreDto genreDto)
+            if (result.Data.Equals(true))
             {
-                genre.Append(genreDto);
+                await RefreshData();
             }
+
         }
     }
 
-    private void EditGenre(int genreId, GenreDto currentGenre, DialogOptions options)
+    private async void EditGenre(int genreId, GenreDto currentGenre, DialogOptions options)
     {
         DialogParameters paras = new DialogParameters();
         string message = "Hello world!";
@@ -119,7 +136,17 @@
         paras.Add("Id", genreId);
         paras.Add("currentGenre", currentGenre);
 
-        Dialog.Show<EditGenreDialog>("Edit Genre", paras, options);
+        var dialog = Dialog.Show<EditGenreDialog>("Edit Genre", paras, options);
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            if (result.Data.Equals(true))
+            {
+                await RefreshData();
+            }
+
+        }
 
     }
 
@@ -128,12 +155,14 @@
         bool? result = await Dialog.ShowMessageBox("Confirm Delete", "Are you sure you want to delete this genre?", yesText: "Yes", noText: "No");
         if (result == true)
         {
+            var token = await auth.GetTokenFromLocalStorage();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage response = await httpClient.DeleteAsync($"api/genres/{genreId}");
 
             if (response.IsSuccessStatusCode)
             {
                 genre = genre.Where(c => c.Id != genreId).ToList();
-                await JSRuntime.InvokeVoidAsync("refreshPage");
+                dataChanged = true;
             }
             else
             {
@@ -152,6 +181,8 @@
             {
                 try
                 {
+                    var token = await auth.GetTokenFromLocalStorage();
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                     HttpResponseMessage response = await httpClient.DeleteAsync($"api/Genres/{item.Id}");
 
                     if (response.IsSuccessStatusCode)
@@ -172,7 +203,22 @@
                     await Dialog.ShowMessageBox("Error", $"An unexpected error occurred: {ex.Message}");
                 }
             }
-            await JSRuntime.InvokeVoidAsync("refreshPage");
+            dataChanged = true;
         }
+    }
+    private async Task RefreshData()
+    {
+        var token = await auth.GetTokenFromLocalStorage();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        genre = await httpClient.GetFromJsonAsync<List<GenreDto>>($"api/Genres");
+
+        showGenreDialogStates.Clear();
+
+        foreach (var genreDto in genre)
+        {
+            showGenreDialogStates[genreDto.Id] = false;
+        }
+
+        StateHasChanged();
     }
 }

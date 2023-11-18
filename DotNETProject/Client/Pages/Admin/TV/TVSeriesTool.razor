@@ -2,6 +2,9 @@
 @using DotNETProject.Client.Pages.Admin.TV.Episode;
 @using DotNETProject.Shared;
 @using MudBlazor
+@using DotNETProject.Client.Service;
+@using System.Net.Http.Headers;
+@inject CustomAuthStateProvider auth
 @inject HttpClient httpClient
 @inject IDialogService Dialog
 @inject IJSRuntime JSRuntime
@@ -155,7 +158,7 @@
                     </MudDialog>
                 </MudTd>
                 <MudTd>
-                    <MudButton Variant="Variant.Filled" Color="Color.Warning" OnClick="() => OpenEpisodesNested(context.episodes, context.Name, fullScreen)">Show</MudButton>
+                    <MudButton Variant="Variant.Filled" Color="Color.Warning" OnClick="() => OpenEpisodesNested(context, fullScreen)">Show</MudButton>
                 </MudTd>
                 <MudTd>
                     <MudButton Variant="Variant.Filled" Color="Color.Error" OnClick="@(() => DeleteTVSeries(context.Id))">Delete</MudButton>
@@ -187,6 +190,8 @@
     private string searchString1 = "";
     private string message = "";
 
+    private bool dataChanged = false;
+
     private HashSet<TVSeriesDto> selectedItems = new HashSet<TVSeriesDto>();
 
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
@@ -204,6 +209,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        var token = await auth.GetTokenFromLocalStorage();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         TVSeries = await httpClient.GetFromJsonAsync<List<TVSeriesDto>>($"api/TVSeries");
 
         foreach (var TVSeriesDto in TVSeries)
@@ -211,6 +218,15 @@
             showCastDialogStates[TVSeriesDto.Id] = false;
             showDirectorDialogStates[TVSeriesDto.Id] = false;
             showGenreDialogStates[TVSeriesDto.Id] = false;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender && dataChanged)
+        {
+            dataChanged = false;
+            await RefreshData();
         }
     }
 
@@ -234,13 +250,22 @@
         showDirectorDialogStates[TVSeriesId] = false;
     }
 
-    void OpenEpisodesNested(ICollection<EpisodeDto> episodes, string TVName, DialogOptions options)
+    async void OpenEpisodesNested(TVSeriesDto dto, DialogOptions options)
     {
         DialogParameters paras = new DialogParameters();
-        paras.Add("episodes", episodes);
-        paras.Add("TVName", TVName);
+        paras.Add("Id", dto.Id);
 
-        Dialog.Show<EpisodeTool>("EPISODES", paras, options);
+        var dialog = Dialog.Show<EpisodeTool>("EPISODES", paras, options);
+
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            if (result.Data.Equals(true))
+            {
+                await RefreshData();
+            }
+
+        }
     }
 
     void OpenGenreNested(int movieId)
@@ -266,12 +291,22 @@
         return false;
     }
 
-    private void EditTVSeries(TVSeriesDto TVSeriesDto, DialogOptions options)
+    private async void EditTVSeries(TVSeriesDto TVSeriesDto, DialogOptions options)
     {
         DialogParameters paras = new DialogParameters();
         paras.Add("currentTVSeriesDto", TVSeriesDto);
 
-        Dialog.Show<EditTVSeriesDialog>("Edit TVSeries", paras, options);
+        var dialog = Dialog.Show<EditTVSeriesDialog>("Edit TVSeries", paras, options);
+
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            if (result.Data.Equals(true))
+            {
+                await RefreshData();
+            }
+
+        }
     }
 
     private async Task ActiveTV(TVSeriesDto tVSeriesDto)
@@ -286,7 +321,8 @@
             {
                 tVSeriesDto.isActiveBanner = false;
             }
-
+            var token = await auth.GetTokenFromLocalStorage();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await httpClient.PutAsJsonAsync($"api/TVSeries/{tVSeriesDto.Id}", tVSeriesDto);
 
             if (!response.IsSuccessStatusCode)
@@ -295,7 +331,7 @@
                 message = "An error occurred while saving to the database: " + errorResponse;
                 OpenNested();
             }
-            
+
         }
         catch (Exception ex)
         {
@@ -315,12 +351,14 @@
         bool? result = await Dialog.ShowMessageBox("Confirm Delete", "Are you sure you want to delete this TVSeries?", yesText: "Yes", noText: "No");
         if (result == true)
         {
+            var token = await auth.GetTokenFromLocalStorage();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage response = await httpClient.DeleteAsync($"api/TVSeriess/{TVSeriesId}");
 
             if (response.IsSuccessStatusCode)
             {
                 TVSeries = TVSeries.Where(c => c.Id != TVSeriesId).ToList();
-                await JSRuntime.InvokeVoidAsync("refreshPage");
+                dataChanged = true;
             }
             else
             {
@@ -339,6 +377,8 @@
             {
                 try
                 {
+                    var token = await auth.GetTokenFromLocalStorage();
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                     HttpResponseMessage response = await httpClient.DeleteAsync($"api/TVSeriess/{item.Id}");
 
                     if (response.IsSuccessStatusCode)
@@ -359,7 +399,27 @@
                     await Dialog.ShowMessageBox("Error", $"An unexpected error occurred: {ex.Message}");
                 }
             }
-            await JSRuntime.InvokeVoidAsync("refreshPage");
+            dataChanged = true;
         }
+    }
+
+    private async Task RefreshData()
+    {
+        var token = await auth.GetTokenFromLocalStorage();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        TVSeries = await httpClient.GetFromJsonAsync<List<TVSeriesDto>>($"api/TVSeries");
+
+        showCastDialogStates.Clear();
+        showDirectorDialogStates.Clear();
+        showGenreDialogStates.Clear();
+
+        foreach (var TVSeriesDto in TVSeries)
+        {
+            showCastDialogStates[TVSeriesDto.Id] = false;
+            showDirectorDialogStates[TVSeriesDto.Id] = false;
+            showGenreDialogStates[TVSeriesDto.Id] = false;
+        }
+
+        StateHasChanged();
     }
 }

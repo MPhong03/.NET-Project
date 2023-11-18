@@ -9,6 +9,7 @@ using DotNETProject.Server.Data;
 using DotNETProject.Server.Models;
 using DotNETProject.Shared;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DotNETProject.Server.Controllers
 {
@@ -217,6 +218,7 @@ namespace DotNETProject.Server.Controllers
 
         // PUT: api/Movies/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "ROLE_ADMIN")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMovie(int id, MovieDto movieDto)
         {
@@ -330,6 +332,7 @@ namespace DotNETProject.Server.Controllers
 
         // POST: api/Movies
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "ROLE_ADMIN")]
         [HttpPost]
         public async Task<ActionResult<Movie>> PostMovie(MovieDto movieDto)
         {
@@ -430,6 +433,7 @@ namespace DotNETProject.Server.Controllers
 
 
         // DELETE: api/Movies/5
+        [Authorize(Roles = "ROLE_ADMIN")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMovie(int id)
         {

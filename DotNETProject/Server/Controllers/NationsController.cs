@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DotNETProject.Server.Data;
 using DotNETProject.Server.Models;
 using DotNETProject.Shared;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DotNETProject.Server.Controllers
 {
@@ -62,6 +63,7 @@ namespace DotNETProject.Server.Controllers
 
         // PUT: api/Nations/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "ROLE_ADMIN")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutNation(int id, NationDto nationDto)
         {
@@ -97,6 +99,7 @@ namespace DotNETProject.Server.Controllers
 
         // POST: api/Nations
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "ROLE_ADMIN")]
         [HttpPost]
         public async Task<ActionResult<Nation>> PostNation(NationDto nationDto)
         {
@@ -117,6 +120,7 @@ namespace DotNETProject.Server.Controllers
         }
 
         // DELETE: api/Nations/5
+        [Authorize(Roles = "ROLE_ADMIN")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteNation(int id)
         {

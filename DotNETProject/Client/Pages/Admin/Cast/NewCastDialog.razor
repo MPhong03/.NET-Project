@@ -3,6 +3,9 @@
 @using DotNETProject.Shared;
 @using Firebase.Storage;
 @using MudBlazor
+@using DotNETProject.Client.Service;
+@using System.Net.Http.Headers;
+@inject CustomAuthStateProvider auth
 @inject IDialogService Dialog
 @inject HttpClient httpClient
 @inject IJSRuntime JSRuntime
@@ -48,6 +51,7 @@
         <MudButton OnClick="Cancel">Cancel</MudButton>
         <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
     </DialogActions>
+
 </MudDialog>
 
 <MudDialog @bind-IsVisible="nestedVisible">
@@ -74,17 +78,20 @@
     {
         try
         {
+
             string imageUrl = await fbService.HandleFirebaseUpload(image, "Casts/Avatars");
 
             if (!string.IsNullOrEmpty(imageUrl))
             {
                 castDto.AvatarUrl = imageUrl;
+                var token = await auth.GetTokenFromLocalStorage();
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 var response = await httpClient.PostAsJsonAsync("api/Casts", castDto);
 
                 if (response.IsSuccessStatusCode)
                 {
                     MudDialog.Close(DialogResult.Ok(true));
-                    await JSRuntime.InvokeVoidAsync("refreshPage");
+                    // await JSRuntime.InvokeVoidAsync("refreshPage");
                 }
                 else
                 {
@@ -98,6 +105,7 @@
                 message = "An error occurred while uploading to Firebase.";
                 OpenNested();
             }
+
         }
         catch (Exception ex)
         {

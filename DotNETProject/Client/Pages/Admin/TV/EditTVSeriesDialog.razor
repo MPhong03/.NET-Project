@@ -4,6 +4,9 @@
 @using DotNETProject.Shared;
 @using Firebase.Storage;
 @using MudBlazor
+@using DotNETProject.Client.Service;
+@using System.Net.Http.Headers;
+@inject CustomAuthStateProvider auth
 @inject IDialogService Dialog
 @inject HttpClient httpClient
 @inject IJSRuntime JSRuntime
@@ -389,6 +392,8 @@
 
     protected override async Task OnInitializedAsync()
     {
+        var token = await auth.GetTokenFromLocalStorage();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         casts = await httpClient.GetFromJsonAsync<List<CastDto>>($"api/Casts");
         directors = await httpClient.GetFromJsonAsync<List<DirectorDto>>($"api/Directors");
         genres = await httpClient.GetFromJsonAsync<List<GenreDto>>($"api/Genres");
@@ -528,12 +533,13 @@
                 currentTVSeriesDto.episodes = episodes;
                 currentTVSeriesDto.FilmGenres = filmGenreDtos;
 
+                var token = await auth.GetTokenFromLocalStorage();
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 var response = await httpClient.PutAsJsonAsync($"api/TVSeries/{currentTVSeriesDto.Id}", currentTVSeriesDto);
 
                 if (response.IsSuccessStatusCode)
                 {
                     MudDialog.Close(DialogResult.Ok(true));
-                    await JSRuntime.InvokeVoidAsync("refreshPage");
                 }
                 else
                 {

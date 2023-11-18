@@ -30,7 +30,7 @@
 
                         <div class="form-check mb-3 d-flex justify-content-between">
                             <div>
-                                <input class="form-check-input" type="checkbox" value="" id="rememberPasswordCheck">
+                                <input class="form-check-input" type="checkbox" @bind-value="@RememberPassword" id="rememberPasswordCheck" />
                                 <label class="form-check-label" for="rememberPasswordCheck">
                                     Remember password
                                 </label>
@@ -73,11 +73,18 @@
 @code {
     private UserDto userDto = new UserDto();
     private string errorMessage = "";
+    private bool RememberPassword { get; set; }
+
+    private void CheckboxChanged(ChangeEventArgs e)
+    {
+        RememberPassword = (bool)e.Value;
+    }
 
     private async Task LoginUser()
     {
         try
         {
+            userDto.Remember = RememberPassword;
             var content = new StringContent(JsonConvert.SerializeObject(userDto), System.Text.Encoding.UTF8, "application/json");
             var response = await HttpClient.PostAsync("/api/auth/login", content);
 

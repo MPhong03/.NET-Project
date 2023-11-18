@@ -3,6 +3,9 @@
 @using DotNETProject.Shared;
 @using MudBlazor
 @using Firebase.Storage;
+@using DotNETProject.Client.Service;
+@using System.Net.Http.Headers;
+@inject CustomAuthStateProvider auth
 @inject HttpClient httpClient
 @inject IJSRuntime JSRuntime
 
@@ -53,6 +56,7 @@
             </MudItem>
 
         </MudGrid>
+
     </DialogContent>
 
     <DialogActions>
@@ -91,6 +95,7 @@
     {
         try
         {
+
             string imageUrl;
             if(image != null)
             {
@@ -103,12 +108,14 @@
             if (!string.IsNullOrEmpty(imageUrl))
             {
                 currentCast.AvatarUrl = imageUrl;
+                var token = await auth.GetTokenFromLocalStorage();
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 var response = await httpClient.PutAsJsonAsync($"api/Casts/{currentCast.Id}", currentCast);
 
                 if (response.IsSuccessStatusCode)
                 {
                     MudDialog.Close(DialogResult.Ok(true));
-                    await JSRuntime.InvokeVoidAsync("refreshPage");
+                    // await JSRuntime.InvokeVoidAsync("refreshPage");
                 }
                 else
                 {
@@ -122,6 +129,7 @@
                 message = "An error occurred while uploading to Firebase.";
                 OpenNested();
             }
+
         }
         catch (Exception ex)
         {

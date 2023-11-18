@@ -1,6 +1,9 @@
 ﻿@page "/admin/Episode-management"
 @using DotNETProject.Shared;
 @using MudBlazor
+@using DotNETProject.Client.Service;
+@using System.Net.Http.Headers;
+@inject CustomAuthStateProvider auth
 @inject HttpClient httpClient
 @inject IDialogService Dialog
 @inject IJSRuntime JSRuntime
@@ -16,7 +19,7 @@
             <MudItem xs="12">
                 <MudButton Class="m-3 ml-0" Color="Color.Error" OnClick="DeleteSelectedEpisode">DELETE SELECTED</MudButton>
                 <!-- Table of actor/ actress -->
-                <MudTable MultiSelection="true" Items="@episodes" T="EpisodeDto" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<EpisodeDto,bool>(FilterFunc1)" @bind-SelectedItems="selectedItems">
+                <MudTable MultiSelection="true" Items="@tvshow.episodes" T="EpisodeDto" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<EpisodeDto,bool>(FilterFunc1)" @bind-SelectedItems="selectedItems">
                     <ToolBarContent>
                         <MudText Typo="Typo.h6">EPISODES</MudText>
                         <MudSpacer />
@@ -72,11 +75,15 @@
     private bool bordered = false;
     private string searchString1 = "";
 
+    private bool dataChanged = false;
+
     [CascadingParameter] MudDialogInstance MudDialog { get; set; }
 
-    [Parameter] public IEnumerable<EpisodeDto> episodes { get; set; }
+    // public IEnumerable<EpisodeDto> episodes;
 
-    [Parameter] public string TVName { get; set; }
+    public TVSeriesDto tvshow = new TVSeriesDto();
+
+    [Parameter] public int Id { get; set; }
 
     private HashSet<EpisodeDto> selectedItems = new HashSet<EpisodeDto>();
 
@@ -86,10 +93,22 @@
 
     protected override async Task OnInitializedAsync()
     {
-
-        foreach (var episodeDto in episodes)
+        var token = await auth.GetTokenFromLocalStorage();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        tvshow = await httpClient.GetFromJsonAsync<TVSeriesDto>($"api/TVSeries/{Id}");
+        
+        foreach (var episodeDto in tvshow.episodes)
         {
             showEpisodeDialogStates[episodeDto.Id] = false;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender && dataChanged)
+        {
+            dataChanged = false;
+            await RefreshData();
         }
     }
 
@@ -114,23 +133,45 @@
         return false;
     }
 
-    private void OpenDialog(DialogOptions options)
+    private async void OpenDialog(DialogOptions options)
     {
         DialogParameters paras = new DialogParameters();
 
-        paras.Add("TVName", TVName);
+        paras.Add("TVName", tvshow.Name);
 
-        Dialog.Show<NewEpisodeDialog>($"New Episode for {TVName}", options);
+        var dialog = Dialog.Show<NewEpisodeDialog>($"New Episode for {tvshow.Name}", options);
+        
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            if (result.Data is EpisodeDto episode)
+            {
+                await RefreshData();
+            }
+
+        }
     }
 
-    private void EditEpisode(int EpisodeId, EpisodeDto currentEpisode, DialogOptions options)
+    private async void EditEpisode(int EpisodeId, EpisodeDto currentEpisode, DialogOptions options)
     {
         DialogParameters paras = new DialogParameters();
 
         paras.Add("currentEpisode", currentEpisode);
-        paras.Add("TVName", TVName);
+        paras.Add("TVName", tvshow.Name);
+        
+        var dialog = Dialog.Show<EditEpisodeDialog>("Edit Episode", paras, options);
 
-        Dialog.Show<EditEpisodeDialog>("Edit Episode", paras, options);
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            if (result.Data.Equals(true))
+            {
+                await RefreshData();
+            }
+
+        }
 
     }
 
@@ -139,12 +180,14 @@
         bool? result = await Dialog.ShowMessageBox("Confirm Delete", "Are you sure you want to delete this Episode?", yesText: "Yes", noText: "No");
         if (result == true)
         {
+            var token = await auth.GetTokenFromLocalStorage();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage response = await httpClient.DeleteAsync($"api/Episodes/{episodeId}");
 
             if (response.IsSuccessStatusCode)
             {
-                episodes = episodes.Where(c => c.Id != episodeId).ToList();
-                await JSRuntime.InvokeVoidAsync("refreshPage");
+                tvshow.episodes = tvshow.episodes.Where(c => c.Id != episodeId).ToList();
+                dataChanged = true;
             }
             else
             {
@@ -163,6 +206,8 @@
             {
                 try
                 {
+                    var token = await auth.GetTokenFromLocalStorage();
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                     HttpResponseMessage response = await httpClient.DeleteAsync($"api/Episodes/{item.Id}");
 
                     if (response.IsSuccessStatusCode)
@@ -183,8 +228,24 @@
                     await Dialog.ShowMessageBox("Error", $"An unexpected error occurred: {ex.Message}");
                 }
             }
-            await JSRuntime.InvokeVoidAsync("refreshPage");
+            dataChanged = true;
         }
+    }
+
+    private async Task RefreshData()
+    {
+        var token = await auth.GetTokenFromLocalStorage();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        tvshow = await httpClient.GetFromJsonAsync<TVSeriesDto>($"api/TVSeries/{Id}");
+
+        showEpisodeDialogStates.Clear();
+
+        foreach (var episodeDto in tvshow.episodes)
+        {
+            showEpisodeDialogStates[episodeDto.Id] = false;
+        }
+
+        StateHasChanged();
     }
 
     void Cancel() => MudDialog.Cancel();

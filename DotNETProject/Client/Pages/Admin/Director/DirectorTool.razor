@@ -4,6 +4,9 @@
 @inject HttpClient httpClient
 @inject IDialogService Dialog
 @inject IJSRuntime JSRuntime
+@using DotNETProject.Client.Service;
+@using System.Net.Http.Headers;
+@inject CustomAuthStateProvider auth
 
 @layout AdminLayout
 
@@ -104,6 +107,8 @@
     private bool bordered = false;
     private string searchString1 = "";
 
+    private bool dataChanged = false;
+
     private HashSet<DirectorDto> selectedItems = new HashSet<DirectorDto>();
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
 
@@ -113,11 +118,22 @@
 
     protected override async Task OnInitializedAsync()
     {
+        var token = await auth.GetTokenFromLocalStorage();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         director = await httpClient.GetFromJsonAsync<List<DirectorDto>>($"api/directors");
 
         foreach (var directorDto in director)
         {
             showDirectorDialogStates[directorDto.Id] = false;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender && dataChanged)
+        {
+            dataChanged = false;
+            await RefreshData();
         }
     }
 
@@ -144,12 +160,21 @@
         return false;
     }
 
-    private void OpenDialog(DialogOptions options)
+    private async void OpenDialog(DialogOptions options)
     {
-        Dialog.Show<NewDirectorDialog>("New Director", options);
+        var dialog = Dialog.Show<NewDirectorDialog>("New Director", options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            if (result.Data.Equals(true))
+            {
+                await RefreshData();
+            }
+
+        }
     }
 
-    private void EditDirector(int directorId, DirectorDto currentDirector, DialogOptions options)
+    private async void EditDirector(int directorId, DirectorDto currentDirector, DialogOptions options)
     {
         DialogParameters paras = new DialogParameters();
         string message = "Hello world!";
@@ -158,8 +183,16 @@
         paras.Add("Id", directorId);
         paras.Add("currentDirector", currentDirector);
 
-        Dialog.Show<EditDirectorDialog>("Edit Director", paras, options);
+        var dialog = Dialog.Show<EditDirectorDialog>("Edit Director", paras, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            if (result.Data.Equals(true))
+            {
+                await RefreshData();
+            }
 
+        }
     }
 
     private async void DeleteDirector(int directorId)
@@ -167,12 +200,14 @@
         bool? result = await Dialog.ShowMessageBox("Confirm Delete", "Are you sure you want to delete this director?", yesText: "Yes", noText: "No");
         if (result == true)
         {
+            var token = await auth.GetTokenFromLocalStorage();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage response = await httpClient.DeleteAsync($"api/directors/{directorId}");
 
             if (response.IsSuccessStatusCode)
             {
                 director = director.Where(c => c.Id != directorId).ToList();
-                await JSRuntime.InvokeVoidAsync("refreshPage");
+                dataChanged = true;
             }
             else
             {
@@ -191,6 +226,8 @@
             {
                 try
                 {
+                    var token = await auth.GetTokenFromLocalStorage();
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                     HttpResponseMessage response = await httpClient.DeleteAsync($"api/Directors/{item.Id}");
 
                     if (response.IsSuccessStatusCode)
@@ -211,7 +248,22 @@
                     await Dialog.ShowMessageBox("Error", $"An unexpected error occurred: {ex.Message}");
                 }
             }
-            await JSRuntime.InvokeVoidAsync("refreshPage");
+            dataChanged = true;
         }
+    }
+    private async Task RefreshData()
+    {
+        var token = await auth.GetTokenFromLocalStorage();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        director = await httpClient.GetFromJsonAsync<List<DirectorDto>>($"api/Directors");
+
+        showDirectorDialogStates.Clear();
+
+        foreach (var directorDto in director)
+        {
+            showDirectorDialogStates[directorDto.Id] = false;
+        }
+
+        StateHasChanged();
     }
 }

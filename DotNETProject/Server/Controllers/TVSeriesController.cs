@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using DotNETProject.Server.Data;
 using DotNETProject.Server.Models;
 using DotNETProject.Shared;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DotNETProject.Server.Controllers
 {
@@ -245,6 +246,7 @@ namespace DotNETProject.Server.Controllers
 
         // PUT: api/TVSeries/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "ROLE_ADMIN")]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutTVSeries(int id, TVSeriesDto tVSeriesDto)
         {
@@ -373,6 +375,7 @@ namespace DotNETProject.Server.Controllers
 
         // POST: api/TVSeries
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [Authorize(Roles = "ROLE_ADMIN")]
         [HttpPost]
         public async Task<ActionResult<TVSeries>> PostTVSeries(TVSeriesDto tVSeriesDto)
         {
@@ -467,6 +470,7 @@ namespace DotNETProject.Server.Controllers
         }
 
         // DELETE: api/TVSeries/5
+        [Authorize(Roles = "ROLE_ADMIN")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTVSeries(int id)
         {

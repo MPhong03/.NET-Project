@@ -2,6 +2,9 @@
 @using DotNETProject.Shared;
 @using Firebase.Storage;
 @using MudBlazor
+@using DotNETProject.Client.Service;
+@using System.Net.Http.Headers;
+@inject CustomAuthStateProvider auth
 @inject IDialogService Dialog
 @inject HttpClient httpClient
 @inject IJSRuntime JSRuntime
@@ -38,13 +41,13 @@
     {
         try
         {
-
+            var token = await auth.GetTokenFromLocalStorage();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await httpClient.PostAsJsonAsync("api/Nations", nationDto);
 
             if (response.IsSuccessStatusCode)
             {
                 MudDialog.Close(DialogResult.Ok(true));
-                await JSRuntime.InvokeVoidAsync("refreshPage");
             }
             else
             {

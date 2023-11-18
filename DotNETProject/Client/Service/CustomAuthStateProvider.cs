@@ -1,6 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 
 namespace DotNETProject.Client.Service
@@ -46,6 +47,28 @@ namespace DotNETProject.Client.Service
             return new AuthenticationState(user);
         }
 
+        public async Task CheckTokenExpirationAndRedirect()
+        {
+            var token = await _localStorage.GetItemAsync<string>("authToken");
+
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                var tokenClaims = _tokenHandler.ReadJwtToken(token);
+
+                var expClaim = tokenClaims.Claims.FirstOrDefault(claim => claim.Type == JwtRegisteredClaimNames.Exp);
+
+                if (expClaim != null && long.TryParse(expClaim.Value, out long exp))
+                {
+                    var utcNow = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+
+                    if (exp < utcNow)
+                    {
+                        await MarkUserAsLoggedOut();
+                    }
+                }
+            }
+        }
+
         public string GetUserRole(ClaimsPrincipal user)
         {
             return user.FindFirst(ClaimTypes.Role)?.Value;
@@ -55,5 +78,12 @@ namespace DotNETProject.Client.Service
         {
             return user.FindFirst(ClaimTypes.Email)?.Value;
         }
+
+        public async Task<string> GetTokenFromLocalStorage()
+        {
+            var token = await _localStorage.GetItemAsync<string>("authToken");
+            return token;
+        }
+
     }
 }

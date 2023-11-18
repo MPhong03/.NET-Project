@@ -1,6 +1,8 @@
 ﻿@using Blazored.LocalStorage
+@using DotNETProject.Client.Service;
 @inherits LayoutComponentBase
 @inject ILocalStorageService localStorage
+@inject CustomAuthStateProvider auth
 
 <div class="page">
     @*<div class="sidebar">
@@ -38,45 +40,11 @@
 </div>
 
 @code {
-    //private bool isLoggedIn = false;
 
-    //protected override async Task OnInitializedAsync()
-    //{
-    //    try
-    //    {
-    //        isLoggedIn = await CheckIfLoggedIn();
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        isLoggedIn = false;
-    //        Console.WriteLine($"An error occurred: {ex.Message}");
-    //    }
-    //}
-
-    //private async Task<bool> CheckIfLoggedIn()
-    //{
-    //    try
-    //    {
-    //        var token = await localStorage.GetItemAsStringAsync("token");
-    //        var tokenExpiration = await localStorage.GetItemAsStringAsync("tokenExpiration");
-
-    //        DateTime dateTimeNow = DateTime.UtcNow; // Get the current UTC time
-
-    //        long unixTimestamp = ((DateTimeOffset)dateTimeNow).ToUnixTimeSeconds();
-
-    //        if (!string.IsNullOrEmpty(token) || (unixTimestamp < long.Parse(tokenExpiration)))
-    //        {
-    //            return true;
-    //        }
-
-    //        return false;
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        Console.WriteLine($"An error occurred: {ex.Message}");
-    //        return false;
-    //    }
-    //}
+    protected override async Task OnInitializedAsync()
+    {
+        auth.CheckTokenExpirationAndRedirect();
+    }
 
 
 }

@@ -4,6 +4,8 @@
 @using DotNETProject.Shared;
 @using Firebase.Storage;
 @using MudBlazor
+@using DotNETProject.Client.Service;
+@inject CustomAuthStateProvider auth
 @inject IDialogService Dialog
 @inject HttpClient httpClient
 @inject IJSRuntime JSRuntime
@@ -485,7 +487,6 @@
                 if (response.IsSuccessStatusCode)
                 {
                     MudDialog.Close(DialogResult.Ok(true));
-                    await JSRuntime.InvokeVoidAsync("refreshPage");
                 }
                 else
                 {

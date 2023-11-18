@@ -1,6 +1,9 @@
 ﻿@page "/admin/nation-management"
 @using DotNETProject.Shared;
 @using MudBlazor
+@using DotNETProject.Client.Service;
+@using System.Net.Http.Headers;
+@inject CustomAuthStateProvider auth
 @inject HttpClient httpClient
 @inject IDialogService Dialog
 @inject IJSRuntime JSRuntime
@@ -56,6 +59,8 @@
     private bool bordered = false;
     private string searchString1 = "";
 
+    private bool dataChanged = false;
+
     private HashSet<NationDto> selectedItems = new HashSet<NationDto>();
 
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
@@ -66,11 +71,22 @@
 
     protected override async Task OnInitializedAsync()
     {
+        var token = await auth.GetTokenFromLocalStorage();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         nation = await httpClient.GetFromJsonAsync<List<NationDto>>($"api/Nations");
 
         foreach (var nationDto in nation)
         {
             showNationDialogStates[nationDto.Id] = false;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender && dataChanged)
+        {
+            dataChanged = false;
+            await RefreshData();
         }
     }
 
@@ -97,12 +113,22 @@
         return false;
     }
 
-    private void OpenDialog(DialogOptions options)
+    private async void OpenDialog(DialogOptions options)
     {
-        Dialog.Show<NewNationDialog>("New Nation", options);
+        var dialog = Dialog.Show<NewNationDialog>("New Nation", options);
+
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            if (result.Data.Equals(true))
+            {
+                await RefreshData();
+            }
+
+        }
     }
 
-    private void EditNation(int nationId, NationDto currentNation, DialogOptions options)
+    private async void EditNation(int nationId, NationDto currentNation, DialogOptions options)
     {
         DialogParameters paras = new DialogParameters();
         string message = "Hello world!";
@@ -111,7 +137,17 @@
         paras.Add("Id", nationId);
         paras.Add("currentNation", currentNation);
 
-        Dialog.Show<EditNationDialog>("Edit Nation", paras, options);
+        var dialog = Dialog.Show<EditNationDialog>("Edit Nation", paras, options);
+
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            if (result.Data.Equals(true))
+            {
+                await RefreshData();
+            }
+
+        }
 
     }
 
@@ -120,12 +156,14 @@
         bool? result = await Dialog.ShowMessageBox("Confirm Delete", "Are you sure you want to delete this nation?", yesText: "Yes", noText: "No");
         if (result == true)
         {
+            var token = await auth.GetTokenFromLocalStorage();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage response = await httpClient.DeleteAsync($"api/Nations/{nationId}");
 
             if (response.IsSuccessStatusCode)
             {
                 nation = nation.Where(c => c.Id != nationId).ToList();
-                await JSRuntime.InvokeVoidAsync("refreshPage");
+                dataChanged = true;
             }
             else
             {
@@ -144,6 +182,8 @@
             {
                 try
                 {
+                    var token = await auth.GetTokenFromLocalStorage();
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                     HttpResponseMessage response = await httpClient.DeleteAsync($"api/Nations/{item.Id}");
 
                     if (response.IsSuccessStatusCode)
@@ -164,7 +204,22 @@
                     await Dialog.ShowMessageBox("Error", $"An unexpected error occurred: {ex.Message}");
                 }
             }
-            await JSRuntime.InvokeVoidAsync("refreshPage");
+            dataChanged = true;
         }
+    }
+    private async Task RefreshData()
+    {
+        var token = await auth.GetTokenFromLocalStorage();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        nation = await httpClient.GetFromJsonAsync<List<NationDto>>($"api/Nations");
+
+        showNationDialogStates.Clear();
+
+        foreach (var nationDto in nation)
+        {
+            showNationDialogStates[nationDto.Id] = false;
+        }
+
+        StateHasChanged();
     }
 }

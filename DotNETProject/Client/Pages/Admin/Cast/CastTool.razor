@@ -1,6 +1,9 @@
 ﻿@page "/admin/cast-management"
+@using DotNETProject.Client.Service;
 @using DotNETProject.Shared;
 @using MudBlazor
+@using System.Net.Http.Headers;
+@inject CustomAuthStateProvider auth
 @inject HttpClient httpClient
 @inject IDialogService Dialog
 @inject IJSRuntime JSRuntime
@@ -111,6 +114,8 @@
     private bool bordered = false;
     private string searchString1 = "";
 
+    private bool dataChanged = false;
+
     private HashSet<CastDto> selectedItems = new HashSet<CastDto>();
 
     DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
@@ -121,11 +126,22 @@
 
     protected override async Task OnInitializedAsync()
     {
+        var token = await auth.GetTokenFromLocalStorage();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         cast = await httpClient.GetFromJsonAsync<List<CastDto>>($"api/Casts");
 
         foreach (var castDto in cast)
         {
             showCastDialogStates[castDto.Id] = false;
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender && dataChanged)
+        {
+            dataChanged = false;
+            await RefreshData();
         }
     }
 
@@ -152,22 +168,39 @@
         return false;
     }
 
-    private void OpenDialog(DialogOptions options)
+    private async void OpenDialog(DialogOptions options)
     {
-        Dialog.Show<NewCastDialog>("New Actor/Actress", options);
+        var dialog = Dialog.Show<NewCastDialog>("New Actor/Actress", options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            if (result.Data.Equals(true))
+            {
+                await RefreshData();
+            }
+
+        }
     }
 
-    private void EditCast(int castId, CastDto currentCast, DialogOptions options)
+    private async void EditCast(int castId, CastDto currentCast, DialogOptions options)
     {
         DialogParameters paras = new DialogParameters();
         string message = "Hello world!";
         bool state = true;
-        
+
         paras.Add("Id", castId);
         paras.Add("currentCast", currentCast);
 
-        Dialog.Show<EditCastDialog>("Edit Cast", paras, options);
+        var dialog = Dialog.Show<EditCastDialog>("Edit Cast", paras, options);
+        var result = await dialog.Result;
+        if (!result.Cancelled)
+        {
+            if (result.Data.Equals(true))
+            {
+                await RefreshData();
+            }
 
+        }
     }
 
     private async void DeleteCast(int castId)
@@ -175,12 +208,14 @@
         bool? result = await Dialog.ShowMessageBox("Confirm Delete", "Are you sure you want to delete this cast?", yesText: "Yes", noText: "No");
         if (result == true)
         {
+            var token = await auth.GetTokenFromLocalStorage();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             HttpResponseMessage response = await httpClient.DeleteAsync($"api/Casts/{castId}");
 
             if (response.IsSuccessStatusCode)
             {
                 cast = cast.Where(c => c.Id != castId).ToList();
-                await JSRuntime.InvokeVoidAsync("refreshPage");
+                dataChanged = true;
             }
             else
             {
@@ -199,6 +234,8 @@
             {
                 try
                 {
+                    var token = await auth.GetTokenFromLocalStorage();
+                    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                     HttpResponseMessage response = await httpClient.DeleteAsync($"api/Casts/{item.Id}");
 
                     if (response.IsSuccessStatusCode)
@@ -219,7 +256,24 @@
                     await Dialog.ShowMessageBox("Error", $"An unexpected error occurred: {ex.Message}");
                 }
             }
-            await JSRuntime.InvokeVoidAsync("refreshPage");
+            dataChanged = true;
         }
     }
+    private async Task RefreshData()
+    {
+        var token = await auth.GetTokenFromLocalStorage();
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        cast = await httpClient.GetFromJsonAsync<List<CastDto>>($"api/Casts");
+
+        showCastDialogStates.Clear();
+
+        foreach (var castDto in cast)
+        {
+            showCastDialogStates[castDto.Id] = false;
+        }
+
+
+        StateHasChanged();
+    }
+
 }
