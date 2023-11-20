@@ -107,6 +107,42 @@ namespace DotNETProject.Server.Controllers
             return NoContent();
         }
 
+        [HttpPut("view/{id}")]
+        public async Task<IActionResult> PutEpisodeView(int id, EpisodeDto episodeDto)
+        {
+            if (id != episodeDto.Id)
+            {
+                return BadRequest();
+            }
+
+            var episode = await _context.Episodes.FindAsync(id);
+
+            if (episode == null)
+            {
+                return NotFound();
+            }
+
+            episode.View = episodeDto.View;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!EpisodeExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
         // POST: api/Episodes
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Authorize(Roles = "ROLE_ADMIN")]

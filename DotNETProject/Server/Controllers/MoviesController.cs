@@ -330,6 +330,47 @@ namespace DotNETProject.Server.Controllers
             return NoContent();
         }
 
+        [HttpPut("view/{id}")]
+        public async Task<IActionResult> PutMovieView(int id, MovieDto movieDto)
+        {
+            if (id != movieDto.Id)
+            {
+                return BadRequest();
+            }
+
+            var movie = await _context.Movies
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (movie == null)
+            {
+                return NotFound();
+            }
+
+            var nation = await _context.Nations.FindAsync(movie.Nation.Id);
+
+            movie.View = movieDto.View;
+           
+            _context.Entry(movie).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!MovieExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
         // POST: api/Movies
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [Authorize(Roles = "ROLE_ADMIN")]

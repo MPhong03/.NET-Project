@@ -1,17 +1,48 @@
 ﻿@page "/admin/"
+@using Blazored.LocalStorage
+@using DotNETProject.Shared
 @using MudBlazor
+@using System.Collections.Generic
+@inject ILocalStorageService localStorage
+@inject HttpClient httpClient
 @layout AdminLayout
 
 <PageTitle>TRANG QUẢN TRỊ VIÊN</PageTitle>
 
-<MudGrid>
-    <!-- Content -->
-    <MudItem xs="12">
-        <h1>Welcome to the Dashboard!</h1>
-        <!-- Your dashboard content goes here -->
-    </MudItem>
-</MudGrid>
+@if (films != null && films.Any())
+{
+    <MudText Typo="Typo.h6" Class="text-center">TOP @num FILMS HAVE MOST VIEWS</MudText>
+    <MudPaper Class="pa-4 mt-2">
+        <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="selectedIndex" InputLabels="@labels" Width="60%" Height="60%" />
+    </MudPaper>
+}
+else
+{
+    <MudText Typo="Typo.h1">No film data available.</MudText>
+}
 
 @code {
+    private List<FilmDto> films = new List<FilmDto>();
+    private int selectedIndex = -1;
+    private double[] data;
+    private string[] labels;
+    private int num = 0;
 
+    protected override async Task OnInitializedAsync()
+    {
+        films = await httpClient.GetFromJsonAsync<List<FilmDto>>("api/Films");
+
+        num = (films.Count <= 50) ? films.Count : 50;
+
+        data = new double[num];
+        labels = new string[num];
+
+        var i = 0;
+        foreach (var item in films.Take(num))
+        {
+            data[i] = item.View;
+            labels[i] = item.Name;
+            i++;
+        }
+    }
 }

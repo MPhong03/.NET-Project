@@ -50,6 +50,10 @@
             if (episode.Id == Int32.Parse(Episode))
             {
                 selectedEpisodeId = episode.Id;
+
+                episode.View += 1;
+                await httpClient.PutAsJsonAsync<EpisodeDto>($"api/Episodes/view/{episode.Id}", episode);
+
                 await JSRuntime.InvokeVoidAsync("initializeJWPlayer", episode.Link, show.BackgroundUrl);
             }
 
@@ -69,7 +73,7 @@
                 if (episode != null)
                 {
                     episode.View += 1;
-                    await httpClient.PutAsJsonAsync<EpisodeDto>($"api/Episodes/{episode.Id}", episode);
+                    await httpClient.PutAsJsonAsync<EpisodeDto>($"api/Episodes/view/{episode.Id}", episode);
                 }
             }
 

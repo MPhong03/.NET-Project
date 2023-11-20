@@ -34,7 +34,7 @@
         if (movie != null)
         {
             movie.View += 1;
-            await httpClient.PutAsJsonAsync<MovieDto>($"api/Movies/{Int32.Parse(Id)}", movie);
+            await httpClient.PutAsJsonAsync<MovieDto>($"api/Movies/view/{Int32.Parse(Id)}", movie);
         }
     }
 }

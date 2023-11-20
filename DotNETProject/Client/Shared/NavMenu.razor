@@ -3,11 +3,16 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @inject CustomAuthStateProvider AuthStateProvider
 
+<MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="_theme"/>
+
 <MudPaper Width="250px" Class="d-inline-flex py-3" Elevation="0">
     <MudNavMenu Class="mud-width-full">
         <MudText Typo="Typo.h6" Class="px-4">ADMIN DASHBOARD</MudText>
         <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">@Admin</MudText>
         
+        <MudSwitch @bind-Checked="@_isDarkMode" Color="Color.Primary" Class="ma-4" T="bool" Label="Light/Dark Mode" />
+
+
         <MudDivider Class="my-2" />
         
         <MudNavLink Href="/admin" Icon="@Icons.Material.Filled.Dashboard">Dashboard</MudNavLink>
@@ -35,51 +40,30 @@
 
 @code {
     private string Admin;
+    private MudTheme _theme = new();
+    private bool _isDarkMode;
+    private string title;
+    private bool dataChanged = false;
 
     protected override async Task OnInitializedAsync()
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
         Admin = authState.User.Identity.Name;
+        title = (_isDarkMode) ? "Dark" : "Light";
     }
+
+    // protected override async Task OnAfterRenderAsync(bool firstRender)
+    // {
+    //     if (!firstRender && dataChanged)
+    //     {
+    //         dataChanged = false;
+    //         await RefreshData();
+    //     }
+    // }
+
+    // private async Task RefreshData()
+    // {
+    //     title = (_isDarkMode) ? "Dark" : "Light";
+    //     StateHasChanged();
+    // }
 }
-
-@*<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">DASHBOARD</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
-</div>
-
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </div>
-    </nav>
-</div>
-
-@code {
-    private bool collapseNavMenu = true;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
-}
-*@

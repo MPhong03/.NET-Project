@@ -96,8 +96,23 @@ namespace DotNETProject.Server.Controllers
                     PosterUrl = item.PosterUrl,
                     Name = item.Name,
                     isActiveBanner = item.isActiveBanner,
-                    Type = type
+                    Type = type,
+                    View = item.View
                 };
+
+                if (type.Equals("tv"))
+                {
+                    var tvSeries = await _context.TVSeries
+                        .Include(tv => tv.episodes)
+                        .FirstOrDefaultAsync(tv => tv.Id == item.Id);
+
+                    if (tvSeries.episodes.Any())
+                    {
+                        var mostViewedEpisode = tvSeries.episodes.OrderByDescending(e => e.View).First();
+
+                        film.View = mostViewedEpisode.View;
+                    }
+                }
 
                 listDto.Add(film);
             }
