@@ -3,15 +3,10 @@
 @using Microsoft.AspNetCore.Components.Authorization
 @inject CustomAuthStateProvider AuthStateProvider
 
-<MudThemeProvider @bind-IsDarkMode="@_isDarkMode" Theme="_theme"/>
-
 <MudPaper Width="250px" Class="d-inline-flex py-3" Elevation="0">
     <MudNavMenu Class="mud-width-full">
         <MudText Typo="Typo.h6" Class="px-4">ADMIN DASHBOARD</MudText>
         <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">@Admin</MudText>
-        
-        <MudSwitch @bind-Checked="@_isDarkMode" Color="Color.Primary" Class="ma-4" T="bool" Label="Light/Dark Mode" />
-
 
         <MudDivider Class="my-2" />
         
@@ -40,8 +35,6 @@
 
 @code {
     private string Admin;
-    private MudTheme _theme = new();
-    private bool _isDarkMode;
     private string title;
     private bool dataChanged = false;
 
@@ -49,7 +42,6 @@
     {
         var authState = await AuthStateProvider.GetAuthenticationStateAsync();
         Admin = authState.User.Identity.Name;
-        title = (_isDarkMode) ? "Dark" : "Light";
     }
 
     // protected override async Task OnAfterRenderAsync(bool firstRender)

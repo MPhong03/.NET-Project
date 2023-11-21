@@ -5,7 +5,7 @@ namespace DotNETProject.Client.Service
 {
     public class FirebaseService
     {
-        private readonly long MAXALLOWEDSIZE = 2147483648;
+        private readonly long MAXALLOWEDSIZE = 10686075665;
         private readonly string firebaseUrl = "dotnetproject-339c8.appspot.com";
         public FirebaseService()
         {

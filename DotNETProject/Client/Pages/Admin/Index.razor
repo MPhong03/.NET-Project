@@ -15,6 +15,12 @@
     <MudPaper Class="pa-4 mt-2">
         <MudChart ChartType="ChartType.Pie" InputData="@data" @bind-SelectedIndex="selectedIndex" InputLabels="@labels" Width="60%" Height="60%" />
     </MudPaper>
+    @if (selectedIndex != -1)
+    {
+        <MudText Typo="Typo.h6">Selected Film: @films[selectedIndex].Name</MudText>
+        <MudText Typo="Typo.h6">Views: @films[selectedIndex].View</MudText>
+    }
+
 }
 else
 {

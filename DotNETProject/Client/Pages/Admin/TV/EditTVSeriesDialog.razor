@@ -42,7 +42,7 @@
 
                 <MudTextField @bind-Value="currentTVSeriesDto.View" Label="View" />
 
-                <MudSelect @bind-Value="currentTVSeriesDto.Nation" Label="Nation" Data="nations" T="NationDto">
+                <MudSelect @bind-Value="currentTVSeriesDto.Nation" Label="Nation" Data="nations" T="NationDto" AnchorOrigin="Origin.BottomCenter">
                     @foreach (var nation in nations)
                     {
                         <MudSelectItem T="NationDto" Value="@nation">@nation.Name</MudSelectItem>
@@ -167,7 +167,7 @@
                     <DialogContent>
                         <MudText>Choose Cast(s) and Role(s)</MudText>
 
-                        <MudSelect @bind-Value="selectedCast" Label="Select Cast" Data="casts" T="CastDto">
+                        <MudSelect @bind-Value="selectedCast" Label="Select Cast" Data="casts" T="CastDto" AnchorOrigin="Origin.BottomCenter">
                             @foreach (var cast in casts)
                             {
                                 <MudSelectItem T="CastDto" Value="@cast">@cast.Name</MudSelectItem>
@@ -229,7 +229,7 @@
                     <DialogContent>
                         <MudText>Choose Directors</MudText>
 
-                        <MudSelect @bind-Value="selectedDirector" Label="Select Director" Data="directors" T="DirectorDto">
+                        <MudSelect @bind-Value="selectedDirector" Label="Select Director" Data="directors" T="DirectorDto" AnchorOrigin="Origin.BottomCenter">
                             @foreach (var director in directors)
                             {
                                 <MudSelectItem T="DirectorDto" Value="@director">@director.Name</MudSelectItem>
@@ -280,7 +280,7 @@
                     <DialogContent>
                         <MudText>Choose Genres</MudText>
 
-                        <MudSelect @bind-Value="selectedGenre" Label="Select Genre" Data="genres" T="GenreDto">
+                        <MudSelect @bind-Value="selectedGenre" Label="Select Genre" Data="genres" T="GenreDto" AnchorOrigin="Origin.BottomCenter">
                             @foreach (var genre in genres)
                             {
                                 <MudSelectItem T="GenreDto" Value="@genre">@genre.Name</MudSelectItem>

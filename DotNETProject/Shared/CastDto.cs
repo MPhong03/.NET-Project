@@ -13,5 +13,14 @@ namespace DotNETProject.Shared
         public string Nation { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public ICollection<FilmCastDto> FilmCasts { get; set; } = new List<FilmCastDto>();
+
+        public override bool Equals(object o)
+        {
+            var other = o as CastDto;
+            return other?.Name == Name;
+        }
+
+        public override int GetHashCode() => Name?.GetHashCode() ?? 0;
+        public override string ToString() => Name;
     }
 }
