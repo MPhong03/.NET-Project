@@ -11,7 +11,15 @@
 <!-- Banner Start -->
 <div class="container">
     <img id="banner" src="@show.BackgroundUrl" class="d-block w-100" alt="...">
-    <a href="/tv/play/@show.Id/@show.episodes.First().Id"><button>XEM NGAY</button></a>
+    @if (show.episodes == null || !show.episodes.Any())
+    {
+        <a href="#" style="pointer-events: none; cursor: default;"><button style="background-color: #E0E0E0 !important; color: #000000;">XEM NGAY</button></a>
+    }
+    else
+    {
+        <a href="/tv/play/@show.Id/@show.episodes.First().Id"><button>XEM NGAY</button></a>
+    }
+
     <div class="main-content movie">
         <section class="movie-detail container-fluid">
             <div class="row">
@@ -111,10 +119,15 @@
                             </div> *@
                         </div>
 
-                        <h4 class="text-white">Danh sách các tập</h4><br>
+                      
 
-                        <ul class="list-group list-group-flush">
+                        @if (show.episodes.Count > 0)
+                        {
+                            <h4 class="text-white">Danh sách các tập</h4>
 
+                            <br>
+                            <ul class="list-group list-group-flush">
+                            
                             @foreach (var item in show.episodes)
                             {
                                 <a href="/tv/play/@show.Id/@item.Id" type="button" class="list-group-item list-group-item-action">
@@ -122,7 +135,15 @@
                                 </a>
                             }
 
-                        </ul>
+                            </ul>
+                        }
+                        else
+                        {
+                            <h4 class="text-white">Đang cập nhật!</h4>
+
+                            <br>
+                        }
+
                         
 
                     </div>
@@ -144,7 +165,7 @@
     protected override async Task OnInitializedAsync()
     {
 
-        show = await httpClient.GetFromJsonAsync<TVSeriesDto>($"api/TVSeries/{Int32.Parse(Id)}");
+        show = await httpClient.GetFromJsonAsync<TVSeriesDto>($"api/TVSeries/{Id}");
 
         await CheckLoggin();
         if (checkLoggin)

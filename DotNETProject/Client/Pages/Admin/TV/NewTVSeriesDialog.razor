@@ -337,6 +337,8 @@
     public IBrowserFile logo;
     public long MAXALLOWEDSIZE = 2147483648;
 
+    string defaultPath = "https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png?20091205084734";
+
     private string message;
     private bool nestedVisible;
     private void OpenNested() => nestedVisible = true;
@@ -471,6 +473,10 @@
             string posterUrl = await fbService.HandleFirebaseUpload(poster, "Films/TVSeries/" + folderName + "/Image");
             string backgroundUrl = await fbService.HandleFirebaseUpload(background, "Films/TVSeries/" + folderName + "/Image");
             string logoUrl = await fbService.HandleFirebaseUpload(logo, "Films/TVSeries/" + folderName + "/Image");
+
+            if (poster == null) posterUrl = defaultPath;
+            if (background == null) backgroundUrl = defaultPath;
+            if (logo == null) logoUrl = defaultPath;
 
             if (!string.IsNullOrEmpty(posterUrl) && !string.IsNullOrEmpty(backgroundUrl) && !string.IsNullOrEmpty(logoUrl))
             {

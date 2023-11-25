@@ -30,6 +30,25 @@ namespace DotNETProject.Server.Controllers
         }
 
         [Authorize(Roles = "ROLE_ADMIN")]
+        [HttpGet("firebase")]
+        public IActionResult GetFirebaseConfig()
+        {
+            try
+            {
+                var firebaseConfig = new
+                {
+                    FirebaseUrl = Environment.GetEnvironmentVariable("FIREBASE_URL")
+                };
+
+                return Ok(firebaseConfig);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [Authorize(Roles = "ROLE_ADMIN")]
         [HttpPost("changeRole")]
         public async Task<ActionResult<string>> ChangeRole(UserDetailDto dto)
         {

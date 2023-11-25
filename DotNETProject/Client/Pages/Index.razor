@@ -13,7 +13,8 @@
                 @if (films.Count > 0)
                 {
                     var isFirstItem = true;
-                    for (var i = 0; i < films.Count; i++)
+                    var count = films.Where(film => film.isActiveBanner == true).Count();
+                    for (var i = 0; i < count; i++)
                     {
                         <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="@i" class="@(isFirstItem ? "active" : "")" aria-current="true" aria-label="Slide @i"></button>
                         isFirstItem = false;
@@ -60,19 +61,34 @@
     <br><br>
 
     <div class="container list">
-        <h3>Phim Lẻ Đề Cử</h3>
+        <div class="row mb-2">
+            <div class="d-flex justify-content-between">
+                <h3>Phim Lẻ Đề Cử</h3>
+                <a href="/list/movie" class="btn btn-secondary">Xem thêm</a>
+            </div>
+
+            
+        </div>
+        
 
         <div class="row">
-            @foreach (var item in films.Where(film => film.Type == "movie"))
+            @foreach (var item in films.Where(film => film.Type == "movie").Take(6))
             {
                 <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6"><a href="/@item.Type/@item.Id"><img src="@item.PosterUrl"><p>@item.Name</p></a></div>
             }
         </div>
 
-        <h3>Phim Bộ Đề Cử</h3>
+        <div class="row mb-2">
+            <div class="d-flex justify-content-between">
+                <h3>Phim Bộ Đề Cử</h3>
+                <a href="/list/tv" class="btn btn-secondary">Xem thêm</a>
+            </div>
+
+
+        </div>
 
         <div class="row">
-            @foreach (var item in films.Where(film => film.Type == "tv"))
+            @foreach (var item in films.Where(film => film.Type == "tv").Take(6))
             {
                 <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6"><a href="/@item.Type/@item.Id"><img src="@item.PosterUrl"><p>@item.Name</p></a></div>
             }
