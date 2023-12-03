@@ -94,7 +94,7 @@
     private List<int> filteredGenre = new List<int>();
     private string selectedReleaseYear = null;
     private string selectedNation = null;
-    private List<string> distinctReleaseYears;
+    private List<string> distinctReleaseYears = new List<string>();
 
     private string TITLE;
 
@@ -109,23 +109,29 @@
     private IEnumerable<FilmDto> FilterAndPaginate(IEnumerable<FilmDto> films)
     {
         var filteredFilms = films;
-
+        Console.WriteLine("CHK1: " + filteredFilms.Any());
         if (filteredGenre.Count > 0)
         {
             filteredFilms = filteredFilms.Where(film => film.FilmGenres.Any(f => filteredGenre.Contains(f.Genre.Id)));
+            // Console.WriteLine("CHK2G: " + filteredGenre.Any());
+            Console.WriteLine("CHK2: " + filteredFilms.Any());
         }
         if (!string.IsNullOrEmpty(selectedReleaseYear))
         {
             filteredFilms = filteredFilms.Where(film => film.ReleaseYear == selectedReleaseYear);
+            Console.WriteLine("CHK3: " + filteredFilms.Any());
         }
         if (!string.IsNullOrEmpty(selectedNation))
         {
             filteredFilms = filteredFilms.Where(film => film.Nation.Name == selectedNation);
+            Console.WriteLine("CHK4: " + filteredFilms.Any());
         }
         if (Type != null)
         {
             filteredFilms = filteredFilms.Where(film => film.Type == Type);
+            Console.WriteLine("CHK5: " + filteredFilms.Any());
         }
+        
         totalItems = filteredFilms.Count();
         return filteredFilms.Skip((currentPage - 1) * pageSize).Take(pageSize);
     }
@@ -174,6 +180,7 @@
             filteredGenre.Clear();
             filteredGenre.Add(genreId);
         }
+        Console.WriteLine("GENRE: " + genreId);
         currentPage = 1;
     }
 
@@ -186,7 +193,7 @@
         {
             selectedReleaseYear = e.Value.ToString();
         }
-        
+        Console.WriteLine("YEAR: " + selectedReleaseYear);
         currentPage = 1;
     }
 
@@ -200,6 +207,7 @@
         {
             selectedNation = e.Value.ToString();
         }
+        Console.WriteLine("NATION: " + selectedNation);
         currentPage = 1;
     }
 

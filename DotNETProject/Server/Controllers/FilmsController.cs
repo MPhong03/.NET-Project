@@ -81,7 +81,11 @@ namespace DotNETProject.Server.Controllers
                 return NotFound();
             }
 
-            var list = await _context.Films.ToListAsync();
+            var list = await _context.Films
+                .Include(f => f.FilmGenres)
+                .ThenInclude(filmGenre => filmGenre.Genre)
+                .Include(f => f.Nation)
+                .ToListAsync();
             var listDto = new List<FilmDto>();
 
             foreach (var item in list)
@@ -97,6 +101,7 @@ namespace DotNETProject.Server.Controllers
                     Name = item.Name,
                     isActiveBanner = item.isActiveBanner,
                     Type = type,
+                    ReleaseYear = item.ReleaseYear,
                     View = item.View
                 };
 
@@ -113,6 +118,23 @@ namespace DotNETProject.Server.Controllers
                         film.View = mostViewedEpisode.View;
                     }
                 }
+
+                film.Nation.Name = item.Nation.Name;
+
+                foreach (var filmGenre in item.FilmGenres)
+                {
+                    var filmGenreDto = new FilmGenreDto()
+                    {
+                        Id = filmGenre.Id,
+                        Genre = new GenreDto()
+                        {
+                            Name = filmGenre.Genre.Name,
+                            Id = filmGenre.Genre.Id
+                        }
+                    };
+                    film.FilmGenres.Add(filmGenreDto);
+                }
+
 
                 listDto.Add(film);
             }
