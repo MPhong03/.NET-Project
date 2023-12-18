@@ -1,0 +1,63 @@
+﻿@page "/director/{Id}"
+@using DotNETProject.Shared;
+@inject HttpClient httpClient
+
+<PageTitle>@director.Name</PageTitle>
+
+<div class="container" height="100%">
+    <div class="row">
+        <div class="col-md-3">
+            <img id="cast-img" src="@director.AvatarUrl" class="img-fluid rounded-3" alt="Director Avatar">
+        </div>
+        <div class="col-md-9 pl-5">
+            <h2 class="text-white lg"><strong>@director.Name</strong></h2><br>
+            <h4 class="text-white">Tiểu Sử</h4>
+            <p>@director.Description</p>
+            <h4 class="text-white">Ngày Sinh</h4>
+            <p>@director.BirthDate</p>
+            <h4 class="text-white">Giới Tính</h4>
+            <p>@director.Gender</p>
+            <h4 class="text-white">Quốc Gia</h4>
+            <p>@director.Nation</p>
+        </div>
+    </div>
+
+    <div class="row mt-3">
+        <div class="col-md-12">
+            <h3 class="text-light">Các phim có sự chỉ đạo của @director.Name</h3>
+
+            <div class="container">
+                <div class="row">
+                    @if (director.FilmDirectors.Count > 0)
+                    {
+                        @foreach (var item in director.FilmDirectors)
+                        {
+                            <div class="col-lg-2 col-md-3 col-sm-6 col-xs-6"><a href="/@item.Film.Type/@item.Film.Id"><img class="w-100" src="@item.Film.PosterUrl"><p class="film-name">@item.Film.Name</p></a></div>
+                        }
+                    }
+                    else
+                    {
+                        <p>Đạo diễn chưa chỉ đạo bất kỳ bộ phim nào!</p>
+                    }
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+    private DirectorDto director = new DirectorDto();
+
+    protected override async Task OnInitializedAsync()
+    {
+        director = await httpClient.GetFromJsonAsync<DirectorDto>($"api/Directors/{Int32.Parse(Id)}");
+
+    }
+
+}

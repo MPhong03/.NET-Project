@@ -1,0 +1,53 @@
+﻿<Router AppAssembly="@typeof(App).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <PageTitle>Not found</PageTitle>
+        <LayoutView Layout="@typeof(MainLayout)">
+            @*<p role="alert">Sorry, there's nothing at this address.</p>*@
+            <a href="http://www.thedresscounter.com" target="_blank">
+                <header class="top-header">
+                </header>
+
+                <!--dust particel-->
+                <div>
+                    <div class="starsec"></div>
+                    <div class="starthird"></div>
+                    <div class="starfourth"></div>
+                    <div class="starfifth"></div>
+                </div>
+                <!--Dust particle end--->
+
+
+                <div class="lamp__wrap">
+                    <div class="lamp">
+                        <div class="cable"></div>
+                        <div class="cover"></div>
+                        <div class="in-cover">
+                            <div class="bulb"></div>
+                        </div>
+                        <div class="light"></div>
+                    </div>
+                </div>
+                <!-- END Lamp -->
+                <section class="error">
+                    <!-- Content -->
+                    <div class="error__content">
+                        <div class="error__message message">
+                            <h1 class="message__title">Page Not Found</h1>
+                            
+                        </div>
+                        <div class="error__nav e-nav">
+                            <NavLink href="/" target="_blanck" class="e-nav__link"></NavLink>
+                        </div>
+                    </div>
+                    <!-- END Content -->
+
+                </section>
+
+            </a>
+        </LayoutView>
+    </NotFound>
+</Router>

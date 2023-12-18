@@ -1,0 +1,50 @@
+﻿@using Blazored.LocalStorage
+@using DotNETProject.Client.Service;
+@inherits LayoutComponentBase
+@inject ILocalStorageService localStorage
+@inject CustomAuthStateProvider auth
+
+<div class="page">
+    @*<div class="sidebar">
+        <NavMenu />
+    </div>*@
+
+    <main>
+        @*<div class="top-row px-4">
+            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+            <a href="/register" target="_blank">Register</a>
+            <a href="/login" target="_blank">Login</a>
+        </div>*@
+
+        @*<div class="top-row px-4">
+            @if (!isLoggedIn)
+            {
+                <NavLink href="/register">Register</NavLink>
+                <NavLink href="/login">Login</NavLink>
+            }
+            else
+            {
+                <NavLink href="/swagger">API</NavLink>
+                <NavLink href="/logout">Logout</NavLink>
+            }
+        </div>*@
+
+        <NavBar />
+
+        <article class="content p-4 bg-black">
+            @Body
+        </article>
+
+        <Footer />
+    </main>
+</div>
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        auth.CheckTokenExpirationAndRedirect();
+    }
+
+
+}

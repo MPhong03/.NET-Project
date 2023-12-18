@@ -1,0 +1,40 @@
+﻿@inherits LayoutComponentBase
+@using MudBlazor
+@using Microsoft.AspNetCore.Components.Authorization
+
+<CascadingAuthenticationState>
+    <AuthorizeView Roles="ROLE_ADMIN">
+        <Authorized>
+            <MudDialogProvider />
+            <MudSnackbarProvider />
+            <MudThemeProvider />
+
+            <MudLayout>
+                <MudAppBar>
+                    <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
+                    DOTNETPROJECT
+                </MudAppBar>
+                <MudDrawer @bind-Open="@_drawerOpen">
+                    <NavMenu />
+                </MudDrawer>
+                <MudMainContent>
+                    <MudContainer MaxWidth="MaxWidth.Medium">
+                        @Body
+                    </MudContainer>
+                </MudMainContent>
+            </MudLayout>
+        </Authorized>
+        <NotAuthorized>
+            <MudAlert Severity="Severity.Error" Square="true" Class="align-center">ACCESS DENIED! YOU DON'T HAVE ANY PERMISSION</MudAlert>
+        </NotAuthorized>
+    </AuthorizeView>
+</CascadingAuthenticationState>
+
+@code {
+    bool _drawerOpen = true;
+
+    void DrawerToggle()
+    {
+        _drawerOpen = !_drawerOpen;
+    }
+}

@@ -1,0 +1,98 @@
+﻿#banner {
+    position: relative;
+    height: 50vh;
+    width: 100%;
+    object-fit:cover;
+}
+
+#banner img {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+
+.list img {
+    width: 100%;
+    height: 27vh;
+    border-radius: 50%;
+}
+
+.list p {
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: larger;
+}
+
+.list a {
+    text-decoration: none !important;
+}
+
+button {
+    background-color: #4dbf00;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    font-weight: bold;
+    width:100%;
+    margin-top:10px;
+}
+
+button a {
+    color: white;
+    text-decoration: none !important;
+}
+
+.movie-detail {
+    margin-top: 20px;
+}
+
+h1 {
+    color: white;
+    font-size: 60px;
+    line-height: 100px;
+    margin: 15px 0;
+    margin-top:5px;
+}
+
+.movie-content li { 
+    position: relative; 
+    padding-right: 20px; 
+}
+
+.m.movie-content li:last-child { 
+    padding-right: 0px; 
+}
+
+.movie-content li:before { 
+    content: ""; 
+    height: 3px; 
+    width: 3px; 
+    background: #dddddd; 
+    position: absolute; 
+    top: 10px; 
+    right: 8px; 
+    border-radius: 50%; 
+}
+
+.movie-detail .movie-content li:before { 
+    width: 5px; 
+    height: 5px; 
+}
+
+.movie-content li:last-child:before { 
+    display: none; 
+}
+
+.trending-year{
+    margin-right:10px;
+}
+
+.trending-dec {
+    color: white;
+    font-size: 15px;
+    margin-top:15px
+}
+

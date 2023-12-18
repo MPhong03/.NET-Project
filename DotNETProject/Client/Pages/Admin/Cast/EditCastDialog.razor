@@ -1,0 +1,142 @@
+﻿@page "/admin/editcastdialog"
+@using DotNETProject.Client.Service;
+@using DotNETProject.Shared;
+@using MudBlazor
+@using Firebase.Storage;
+@using DotNETProject.Client.Service;
+@using System.Net.Http.Headers;
+@inject CustomAuthStateProvider auth
+@inject HttpClient httpClient
+@inject IJSRuntime JSRuntime
+
+<MudDialog>
+
+    <DialogContent>
+        <MudGrid>
+
+            <MudItem xs="4">
+                <MudImage Src="@currentCast.AvatarUrl" Alt="@currentCast.Name" Elevation="25" Class="rounded-lg" />
+
+            </MudItem>
+
+            <MudItem xs="8">
+                <MudTextField @bind-Value="currentCast.Name" Label="Name" />
+
+                <MudSelect Label="Gender" @bind-Value="currentCast.Gender">
+                    <MudSelectItem Value="Male" Text="Male" />
+                    <MudSelectItem Value="Female" Text="Female" />
+                </MudSelect>
+
+                <MudTextField @bind-Value="currentCast.Nation" Label="Nation" />
+
+                <MudDatePicker PickerVariant="PickerVariant.Dialog" Label="BirthDate" Editable="true" DateFormat="dd.MM.yyyy" @bind-Date="currentCast.BirthDate" Placeholder="Select Date" />
+
+                <MudTextField @bind-Value="currentCast.Description" Label="Description" Lines="5" />
+
+                <MudFileUpload @bind-Files="image" Label="Avatar Image" T="IBrowserFile" Accept=".png, .jpg">
+                    <ButtonTemplate>
+                        <MudButton HtmlTag="label"
+                                   Variant="Variant.Filled"
+                                   Color="Color.Primary"
+                                   StartIcon="@Icons.Material.Filled.CloudUpload"
+                                   for="@context">
+                            Upload Avatar
+                        </MudButton>
+                    </ButtonTemplate>
+                </MudFileUpload>
+
+                <!-- The image preview -->
+                @if (image != null)
+                {
+                    <MudText Icon="@Icons.Material.Filled.AttachFile">
+                        @image.Name <code>@image.Size bytes</code>
+                    </MudText>
+                }
+
+            </MudItem>
+
+        </MudGrid>
+
+    </DialogContent>
+
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+
+</MudDialog>
+
+<MudDialog @bind-IsVisible="nestedVisible">
+    <DialogContent>
+        <MudText Class="nested">@message</MudText>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [CascadingParameter] private MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public int Id { get; set; }
+
+    [Parameter] public CastDto currentCast { get; set; }
+
+    public String Male = "Male";
+    public String Female = "Female";
+    public DateTime? birth;
+    public IBrowserFile image;
+
+    private string message;
+    private bool nestedVisible;
+    private void OpenNested() => nestedVisible = true;
+    private void CloseNested() => nestedVisible = false;
+
+    private FirebaseService fbService = new FirebaseService();
+
+    async Task Submit()
+    {
+        try
+        {
+
+            string imageUrl;
+            if(image != null)
+            {
+                imageUrl = await fbService.HandleFirebaseUpload(image, "Casts/Avatars");
+            } else
+            {
+                imageUrl = currentCast.AvatarUrl;
+            }
+
+            if (!string.IsNullOrEmpty(imageUrl))
+            {
+                currentCast.AvatarUrl = imageUrl;
+                var token = await auth.GetTokenFromLocalStorage();
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                var response = await httpClient.PutAsJsonAsync($"api/Casts/{currentCast.Id}", currentCast);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MudDialog.Close(DialogResult.Ok(true));
+                    // await JSRuntime.InvokeVoidAsync("refreshPage");
+                }
+                else
+                {
+                    var errorResponse = await response.Content.ReadAsStringAsync();
+                    message = "An error occurred while saving to the database: " + errorResponse;
+                    OpenNested();
+                }
+            }
+            else
+            {
+                message = "An error occurred while uploading to Firebase.";
+                OpenNested();
+            }
+
+        }
+        catch (Exception ex)
+        {
+            message = "An error occurred: " + ex.Message;
+            OpenNested();
+        }
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}

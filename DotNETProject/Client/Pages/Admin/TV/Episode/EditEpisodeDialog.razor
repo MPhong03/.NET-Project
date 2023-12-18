@@ -1,0 +1,120 @@
+﻿@page "/edit-episode"
+@using DotNETProject.Client.Service;
+@using DotNETProject.Shared;
+@using Firebase.Storage;
+@using MudBlazor
+@using DotNETProject.Client.Service;
+@using System.Net.Http.Headers;
+@inject CustomAuthStateProvider auth
+@inject IDialogService Dialog
+@inject HttpClient httpClient
+@inject IJSRuntime JSRuntime
+
+<MudDialog>
+    <DialogContent>
+        <MudText Typo="Typo.h5">New Episode for @TVName</MudText>
+
+        <MudNumericField @bind-Value="currentEpisode.EpisodeNumber" Variant="Variant.Text" Label="Number" />
+        <MudTextField @bind-Value="currentEpisode.EpisodeName" Label="Name" />
+        <MudTextField @bind-Value="currentEpisode.Time" Label="Time" />
+        <MudTextField @bind-Value="currentEpisode.View" Label="View" />
+
+        <MudFileUpload @bind-Files="video" Label="Video" T="IBrowserFile" Accept=".MKV .MOV .MP4">
+            <ButtonTemplate>
+                <MudButton HtmlTag="label"
+                           Variant="Variant.Filled"
+                           Color="Color.Primary"
+                           StartIcon="@Icons.Material.Filled.CloudUpload"
+                           for="@context">
+                    Upload Video
+                </MudButton>
+            </ButtonTemplate>
+        </MudFileUpload>
+
+        <!-- The video preview -->
+        @if (video != null)
+        {
+            <MudText Icon="@Icons.Material.Filled.AttachFile">
+                @video.Name <code>@video.Size bytes</code>
+            </MudText>
+        }
+
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+<MudDialog @bind-IsVisible="nestedVisible">
+    <DialogContent>
+        <MudText Class="nested">@message</MudText>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    [Parameter] public string TVName { get; set; }
+
+    [Parameter] public EpisodeDto currentEpisode { get; set;  }
+
+    private FirebaseService fbService = new FirebaseService();
+
+    public IBrowserFile image;
+    public IBrowserFile video;
+
+    private string message;
+    private bool nestedVisible;
+    private void OpenNested() => nestedVisible = true;
+    private void CloseNested() => nestedVisible = false;
+
+    async Task Submit()
+    {
+        try
+        {
+            string folderName = (TVName).ToLower().Replace(' ', '-');
+            string childFolderName = (currentEpisode.EpisodeName).ToLower().Replace(' ', '-');
+
+            string videoUrl = currentEpisode.Link;
+
+            if(video != null)
+            {
+                videoUrl = await fbService.HandleFirebaseUpload(video, $"Films/TVSeries/{folderName}/{childFolderName}/Video");
+            }
+
+            if (!string.IsNullOrEmpty(videoUrl))
+            {
+                currentEpisode.Link = videoUrl;
+                var token = await auth.GetTokenFromLocalStorage();
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                var response = await httpClient.PutAsJsonAsync($"api/Episodes/{currentEpisode.Id}", currentEpisode);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MudDialog.Close(DialogResult.Ok(true));
+                }
+                else
+                {
+                    var errorResponse = await response.Content.ReadAsStringAsync();
+                    message = "An error occurred while saving to the database: " + errorResponse;
+                    OpenNested();
+                }
+
+                MudDialog.Close(DialogResult.Ok(currentEpisode));
+            }
+            else
+            {
+                message = "An error occurred while uploading to Firebase.";
+                OpenNested();
+            }
+        }
+        catch (Exception ex)
+        {
+            message = "An error occurred: " + ex.Message;
+            OpenNested();
+        }
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}

@@ -1,0 +1,518 @@
+﻿@page "/create-tv"
+@using DotNETProject.Client.Pages.Admin.TV.Episode;
+@using DotNETProject.Client.Service;
+@using DotNETProject.Shared;
+@using Firebase.Storage;
+@using MudBlazor
+@using DotNETProject.Client.Service;
+@inject CustomAuthStateProvider auth
+@inject IDialogService Dialog
+@inject HttpClient httpClient
+@inject IJSRuntime JSRuntime
+
+<MudDialog>
+    <DialogContent>
+
+        <MudGrid>
+
+            <MudItem xs=12>
+
+                <MudTextField @bind-Value="tVSeriesDto.Name" Label="Name" />
+
+                <MudTextField @bind-Value="tVSeriesDto.TrailerUrl" Label="Trailer Url" />
+
+                <MudTextField @bind-Value="tVSeriesDto.ReleaseYear" Label="Release Year" />
+
+                <MudTextField @bind-Value="tVSeriesDto.Description" Label="Description" Lines="5" />
+
+                <MudTextField @bind-Value="tVSeriesDto.IMDBScore" Label="IMDB" Format="F1" />
+
+                <MudTextField @bind-Value="tVSeriesDto.View" Label="View" />
+
+                <MudSelect @bind-Value="tVSeriesDto.Nation" Label="Nation" Data="nations" T="NationDto" AnchorOrigin="Origin.BottomCenter">
+                    @foreach (var nation in nations)
+                    {
+                        <MudSelectItem T="NationDto" Value="@nation">@nation.Name</MudSelectItem>
+                    }
+                </MudSelect>
+
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudGrid>
+
+                    <MudItem xs="4">
+                        <MudFileUpload @bind-Files="poster" Label="Poster" T="IBrowserFile" Accept=".png, .jpg">
+                            <ButtonTemplate>
+                                <MudButton HtmlTag="label"
+                                           Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           StartIcon="@Icons.Material.Filled.CloudUpload"
+                                           for="@context">
+                                    Upload Poster
+                                </MudButton>
+                            </ButtonTemplate>
+                        </MudFileUpload>
+                    </MudItem>
+
+                    <MudItem xs="4">
+                        <MudFileUpload @bind-Files="background" Label="Background Image" T="IBrowserFile" Accept=".png, .jpg">
+                            <ButtonTemplate>
+                                <MudButton HtmlTag="label"
+                                           Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           StartIcon="@Icons.Material.Filled.CloudUpload"
+                                           for="@context">
+                                    Upload Background
+                                </MudButton>
+                            </ButtonTemplate>
+                        </MudFileUpload>
+                    </MudItem>
+
+                    <MudItem xs="4">
+                        <MudFileUpload @bind-Files="logo" Label="Logo Image" T="IBrowserFile" Accept=".png, .jpg">
+                            <ButtonTemplate>
+                                <MudButton HtmlTag="label"
+                                           Variant="Variant.Filled"
+                                           Color="Color.Primary"
+                                           StartIcon="@Icons.Material.Filled.CloudUpload"
+                                           for="@context">
+                                    Upload Logo
+                                </MudButton>
+                            </ButtonTemplate>
+                        </MudFileUpload>
+                    </MudItem>
+
+                </MudGrid>
+
+                <!-- The video preview -->
+                @if (poster != null)
+                {
+                    <MudText Icon="@Icons.Material.Filled.AttachFile">
+                        @poster.Name <code>@poster.Size bytes</code>
+                    </MudText>
+                }
+
+                <!-- The background preview -->
+                @if (background != null)
+                {
+                    <MudText Icon="@Icons.Material.Filled.AttachFile">
+                        @background.Name <code>@background.Size bytes</code>
+                    </MudText>
+                }
+
+                <!-- The logo preview -->
+                @if (logo != null)
+                {
+                    <MudText Icon="@Icons.Material.Filled.AttachFile">
+                        @logo.Name <code>@logo.Size bytes</code>
+                    </MudText>
+                }
+            </MudItem>
+
+            <MudItem xs="12">
+                @* INPUT CASTS DIALOG *@
+                <MudButton OnClick="OpenNestedForCast">Select Casts</MudButton>
+                <MudButton Color="Color.Error" OnClick="DeleteCasts">Delete Selected</MudButton>
+
+                @* @if (filmCastDtos.Count != 0)
+                {
+                @foreach (var item in filmCastDtos)
+                {
+                <MudText>
+                > @item.Cast.Name - @item.Role ;
+                </MudText>
+                }
+
+                } *@
+
+                <MudTable T="FilmCastDto" Items="@filmCastDtos" MultiSelection="true" Hover="true" @bind-SelectedItems="selectedCasts">
+                    <HeaderContent>
+                        <MudTh>Id</MudTh>
+                        <MudTh>Name</MudTh>
+                        <MudTh>Role</MudTh>
+                        <MudTh></MudTh>
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Id">@context.Cast.Id</MudTd>
+                        <MudTd DataLabel="Name">@context.Cast.Name</MudTd>
+                        <MudTd DataLabel="Role">@context.Role</MudTd>
+
+                        <MudTd>
+                            <MudButton StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="() => DeleteCast(context)"></MudButton>
+                        </MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager PageSizeOptions="new int[]{50, 100}" />
+                    </PagerContent>
+                    <FooterContent>
+                        <MudTd colspan="5">Select All</MudTd>
+                    </FooterContent>
+                </MudTable>
+
+                <MudDialog @bind-IsVisible="nestedVisibleForCast">
+                    <DialogContent>
+                        <MudText>Choose Cast(s) and Role(s)</MudText>
+
+                        <MudSelect @bind-Value="selectedCast" Label="Select Cast" Data="casts" T="CastDto" AnchorOrigin="Origin.BottomCenter">
+                            @foreach (var cast in casts)
+                            {
+                                <MudSelectItem T="CastDto" Value="@cast">@cast.Name</MudSelectItem>
+                            }
+                        </MudSelect>
+
+                        <!-- Text field for Role -->
+                        <MudTextField @bind-Value="selectedRole" Label="Role" />
+
+                    </DialogContent>
+                    <DialogActions>
+                        <MudButton OnClick="CloseNestedForCast">Cancel</MudButton>
+                        <MudButton Color="Color.Primary" OnClick="UpdateCast">Ok</MudButton>
+                    </DialogActions>
+                </MudDialog>
+            </MudItem>
+
+            <MudItem xs="12">
+                @* INPUT DIRECTORS DIALOG *@
+
+                <MudButton OnClick="OpenNestedForDirector">Select Director</MudButton>
+                <MudButton Color="Color.Error" OnClick="DeleteDirectors">Delete Selected</MudButton>
+
+                @* @if (filmDirectorDtos.Count != 0)
+                {
+                @foreach (var item in filmDirectorDtos)
+                {
+                <MudText>
+                > @item.Director.Name
+                </MudText>
+                }
+
+                } *@
+
+                <MudTable T="FilmDirectorDto" Items="@filmDirectorDtos" MultiSelection="true" Hover="true" @bind-SelectedItems="selectedDirectors">
+                    <HeaderContent>
+                        <MudTh>Id</MudTh>
+                        <MudTh>Name</MudTh>
+                        <MudTh></MudTh>
+
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Id">@context.Director.Id</MudTd>
+                        <MudTd DataLabel="Name">@context.Director.Name</MudTd>
+                        <MudTd>
+                            <MudButton StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="() => DeleteDirector(context)"></MudButton>
+                        </MudTd>
+
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager PageSizeOptions="new int[]{50, 100}" />
+                    </PagerContent>
+                    <FooterContent>
+                        <MudTd colspan="5">Select All</MudTd>
+                    </FooterContent>
+                </MudTable>
+
+                <MudDialog @bind-IsVisible="nestedVisibleForDirector">
+                    <DialogContent>
+                        <MudText>Choose Directors</MudText>
+
+                        <MudSelect @bind-Value="selectedDirector" Label="Select Director" Data="directors" T="DirectorDto" AnchorOrigin="Origin.BottomCenter">
+                            @foreach (var director in directors)
+                            {
+                                <MudSelectItem T="DirectorDto" Value="@director">@director.Name</MudSelectItem>
+                            }
+                        </MudSelect>
+
+
+                    </DialogContent>
+
+                    <DialogActions>
+                        <MudButton OnClick="CloseNestedForDirector">Cancel</MudButton>
+                        <MudButton Color="Color.Primary" OnClick="UpdateDirector">Ok</MudButton>
+                    </DialogActions>
+
+                </MudDialog>
+            </MudItem>
+
+            <MudItem xs="12">
+                @* INPUT GENRES DIALOG *@
+
+                <MudButton OnClick="OpenNestedForGenre">Select Genre</MudButton>
+                <MudButton Color="Color.Error" OnClick="DeleteGenres">Delete Selected</MudButton>
+
+                <MudTable T="FilmGenreDto" Items="@filmGenreDtos" MultiSelection="true" Hover="true" @bind-SelectedItems="selectedGenres">
+                    <HeaderContent>
+                        <MudTh>Id</MudTh>
+                        <MudTh>Name</MudTh>
+                        <MudTh>Action</MudTh>
+
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Id">@context.Genre.Id</MudTd>
+                        <MudTd DataLabel="Name">@context.Genre.Name</MudTd>
+                        <MudTd>
+                            <MudButton StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="() => DeleteGenre(context)"></MudButton>
+                        </MudTd>
+
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager PageSizeOptions="new int[]{50, 100}" />
+                    </PagerContent>
+                    <FooterContent>
+                        <MudTd colspan="5">Select All</MudTd>
+                    </FooterContent>
+                </MudTable>
+
+                <MudDialog @bind-IsVisible="nestedVisibleForGenre">
+                    <DialogContent>
+                        <MudText>Choose Genres</MudText>
+
+                        <MudSelect @bind-Value="selectedGenre" Label="Select Genre" Data="genres" T="GenreDto" AnchorOrigin="Origin.BottomCenter">
+                            @foreach (var genre in genres)
+                            {
+                                <MudSelectItem T="GenreDto" Value="@genre">@genre.Name</MudSelectItem>
+                            }
+                        </MudSelect>
+
+
+                    </DialogContent>
+
+                    <DialogActions>
+                        <MudButton OnClick="CloseNestedForGenre">Cancel</MudButton>
+                        <MudButton Color="Color.Primary" OnClick="UpdateGenre">Ok</MudButton>
+                    </DialogActions>
+
+                </MudDialog>
+            </MudItem>
+
+            <MudItem xs="12">
+                <MudButton OnClick="() => NewEpisode(maxWidth)">NEW EPISODE</MudButton>
+                <MudTable T="EpisodeDto" Items="@episodes" MultiSelection="true" Hover="true">
+                    <HeaderContent>
+                        <MudTh>Episode</MudTh>
+                        <MudTh>Name</MudTh>
+                        <MudTh>Time</MudTh>
+                        <MudTh>Link</MudTh>
+                        <MudTh>View</MudTh>
+
+                    </HeaderContent>
+                    <RowTemplate>
+                        <MudTd DataLabel="Episode">@context.EpisodeNumber</MudTd>
+                        <MudTd DataLabel="Name">@context.EpisodeName</MudTd>
+                        <MudTd DataLabel="Time">@context.Time</MudTd>
+                        <MudTd DataLabel="Link">@context.Link</MudTd>
+                        <MudTd DataLabel="View">@context.View</MudTd>
+                    </RowTemplate>
+                    <PagerContent>
+                        <MudTablePager PageSizeOptions="new int[]{50, 100}" />
+                    </PagerContent>
+                    <FooterContent>
+                        <MudTd colspan="5">Select All</MudTd>
+                    </FooterContent>
+                </MudTable>
+            </MudItem>
+
+        </MudGrid>
+
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="Cancel">Cancel</MudButton>
+        <MudButton Color="Color.Primary" OnClick="Submit">Ok</MudButton>
+    </DialogActions>
+</MudDialog>
+
+<MudDialog @bind-IsVisible="nestedVisible">
+    <DialogContent>
+        <MudText Class="nested">@message</MudText>
+    </DialogContent>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+    private TVSeriesDto tVSeriesDto = new TVSeriesDto();
+    private FirebaseService fbService = new FirebaseService();
+    public DateTime? realseDate;
+    public IBrowserFile poster;
+    public IBrowserFile background;
+    public IBrowserFile logo;
+    public long MAXALLOWEDSIZE = 2147483648;
+
+    string defaultPath = "https://upload.wikimedia.org/wikipedia/commons/5/59/Empty.png?20091205084734";
+
+    private string message;
+    private bool nestedVisible;
+    private void OpenNested() => nestedVisible = true;
+    private void CloseNested() => nestedVisible = false;
+
+    private bool nestedVisibleForCast;
+    private void OpenNestedForCast() => nestedVisibleForCast = true;
+    private void CloseNestedForCast() => nestedVisibleForCast = false;
+
+    private bool nestedVisibleForDirector;
+    private void OpenNestedForDirector() => nestedVisibleForDirector = true;
+    private void CloseNestedForDirector() => nestedVisibleForDirector = false;
+
+    private bool nestedVisibleForGenre;
+    private void OpenNestedForGenre() => nestedVisibleForGenre = true;
+    private void CloseNestedForGenre() => nestedVisibleForGenre = false;
+
+    private IEnumerable<CastDto> casts = new List<CastDto>();
+    private ICollection<FilmCastDto> filmCastDtos = new List<FilmCastDto>();
+    private IEnumerable<DirectorDto> directors = new List<DirectorDto>();
+    private ICollection<FilmDirectorDto> filmDirectorDtos = new List<FilmDirectorDto>();
+    private ICollection<EpisodeDto> episodes = new List<EpisodeDto>();
+    private IEnumerable<GenreDto> genres = new List<GenreDto>();
+    private ICollection<FilmGenreDto> filmGenreDtos = new List<FilmGenreDto>();
+    private IEnumerable<NationDto> nations = new List<NationDto>();
+
+    private DirectorDto selectedDirector;
+    private CastDto selectedCast;
+    private GenreDto selectedGenre;
+    private string selectedRole;
+
+    private HashSet<FilmGenreDto> selectedGenres = new HashSet<FilmGenreDto>();
+    private HashSet<FilmCastDto> selectedCasts = new HashSet<FilmCastDto>();
+    private HashSet<FilmDirectorDto> selectedDirectors = new HashSet<FilmDirectorDto>();
+
+    DialogOptions maxWidth = new DialogOptions() { MaxWidth = MaxWidth.Medium, FullWidth = true };
+
+    protected override async Task OnInitializedAsync()
+    {
+        casts = await httpClient.GetFromJsonAsync<List<CastDto>>($"api/Casts");
+        directors = await httpClient.GetFromJsonAsync<List<DirectorDto>>($"api/Directors");
+        genres = await httpClient.GetFromJsonAsync<List<GenreDto>>($"api/Genres");
+        nations = await httpClient.GetFromJsonAsync<List<NationDto>>($"api/Nations");
+    }
+
+    private void UpdateCast()
+    {
+        FilmCastDto filmCastDto = new FilmCastDto();
+        filmCastDto.Cast = selectedCast;
+        filmCastDto.Role = selectedRole;
+
+        filmCastDtos.Add(filmCastDto);
+    }
+
+    private void DeleteCasts()
+    {
+        foreach (var item in selectedCasts)
+        {
+            filmCastDtos.Remove(item);
+        }
+    }
+
+    private void DeleteCast(FilmCastDto item)
+    {
+        filmCastDtos.Remove(item);
+    }
+
+    private void UpdateDirector()
+    {
+        FilmDirectorDto filmDirectorDto = new FilmDirectorDto();
+        filmDirectorDto.Director = selectedDirector;
+
+        filmDirectorDtos.Add(filmDirectorDto);
+    }
+
+    private void DeleteDirectors()
+    {
+        foreach (var item in selectedDirectors)
+        {
+            filmDirectorDtos.Remove(item);
+        }
+    }
+
+    private void DeleteDirector(FilmDirectorDto item)
+    {
+        filmDirectorDtos.Remove(item);
+    }
+
+    private void UpdateGenre()
+    {
+        FilmGenreDto filmGenreDto = new FilmGenreDto();
+        filmGenreDto.Genre = selectedGenre;
+
+        filmGenreDtos.Add(filmGenreDto);
+    }
+
+    private void DeleteGenres()
+    {
+        foreach (var item in selectedGenres)
+        {
+            filmGenreDtos.Remove(item);
+        }
+    }
+
+    private void DeleteGenre(FilmGenreDto item)
+    {
+        filmGenreDtos.Remove(item);
+    }
+
+    private async Task NewEpisode(DialogOptions options)
+    {
+        DialogParameters paras = new DialogParameters();
+        paras.Add("TVName", tVSeriesDto.Name);
+        var dialog = Dialog.Show<NewEpisodeDialog>("New Episode", paras, options);
+        var result = await dialog.Result;
+
+        if (!result.Cancelled)
+        {
+            if (result.Data is EpisodeDto episode)
+            {
+                episodes.Add(episode);
+            }
+        }
+    }
+
+    async Task Submit()
+    {
+        try
+        {
+            string folderName = (tVSeriesDto.Name).ToLower().Replace(' ', '-');
+
+            string posterUrl = await fbService.HandleFirebaseUpload(poster, "Films/TVSeries/" + folderName + "/Image");
+            string backgroundUrl = await fbService.HandleFirebaseUpload(background, "Films/TVSeries/" + folderName + "/Image");
+            string logoUrl = await fbService.HandleFirebaseUpload(logo, "Films/TVSeries/" + folderName + "/Image");
+
+            if (poster == null) posterUrl = defaultPath;
+            if (background == null) backgroundUrl = defaultPath;
+            if (logo == null) logoUrl = defaultPath;
+
+            if (!string.IsNullOrEmpty(posterUrl) && !string.IsNullOrEmpty(backgroundUrl) && !string.IsNullOrEmpty(logoUrl))
+            {
+                tVSeriesDto.PosterUrl = posterUrl;
+                tVSeriesDto.BackgroundUrl = backgroundUrl;
+                tVSeriesDto.LogoUrl = logoUrl;
+                tVSeriesDto.FilmCasts = filmCastDtos;
+                tVSeriesDto.FilmDirectors = filmDirectorDtos;
+                tVSeriesDto.episodes = episodes;
+                tVSeriesDto.FilmGenres = filmGenreDtos;
+
+                var response = await httpClient.PostAsJsonAsync("api/TVSeries", tVSeriesDto);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    MudDialog.Close(DialogResult.Ok(true));
+                }
+                else
+                {
+                    var errorResponse = await response.Content.ReadAsStringAsync();
+                    message = "An error occurred while saving to the database: " + errorResponse;
+                    OpenNested();
+                }
+            }
+            else
+            {
+                message = "An error occurred while uploading to Firebase.";
+                OpenNested();
+            }
+        }
+        catch (Exception ex)
+        {
+            message = "An error occurred: " + ex.Message;
+            OpenNested();
+        }
+    }
+
+    void Cancel() => MudDialog.Cancel();
+}
