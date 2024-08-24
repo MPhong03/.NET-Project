@@ -48,10 +48,4 @@ ASP.NET REST API, Blazor, SQL, Firebase.
 | UC31   | Xem phim              | Tất cả       | Tất cả các tác nhân có thể xem phim được chọn và sẽ tăng lượt xem cho bộ phim đó                                                                      |
 | UC32   | Lưu phim              | Tất cả       | Tất cả các tác nhân có thể thêm phim vào bộ sưu tập của bản thân                                                                                      |
 
-## Phân chia công việc
-| MSSV     | Tên SV          | Công việc                                                                                                                                                                                                                                                                                                               | Mức độ hoàn thành |
-|----------|-----------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------|
-| 52100033 | Lê Gia Huy      | Thiết kế cơ sở dữ liệu, vẽ ERD Giao diện Website Trang thông tin phim Trang danh sách phim bộ, phim lẻ Trang thông tin diễn viên  Trang thông tin đạo diễn Trang xem phim Kiểm thử Làm báo cáo                                                                                                                          | 100%              |
-| 52100987 | Đặng Minh Phong | Đăng nhập, đăng ký, đổi mật khẩu bằng OTP Tạo Firebase Services Giao diện các trang Admin Tạo API Tìm kiếm phim Quản lý diễn viên, đạo diễn, thể loại, quốc gia Quản lý tài khoản người dùng Quản lý phim lẻ, phim bộ, tập phim Áp dụng Authentication và Authorization Lưu phim vào bộ sưu tập Trang xem phim Kiểm thử | 100%              |
-
 [XEM DEMO](https://www.dropbox.com/scl/fi/f3246vdqp7zrz2qaqvjx2/DEMO-CU-I-K-C-NG-NGH-.NET.mp4?rlkey=hk6ja9jpjtmgpb9tjrk76fvvi&dl=0)
